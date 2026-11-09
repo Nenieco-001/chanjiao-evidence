@@ -32,4 +32,4 @@ python -m build
 chanjiao run --panel data/examples/panel.csv --metadata data/examples/metadata.json --plans data/examples/plans.json --output artifacts/pr-check
 ```
 
-PR 写清问题、改了什么、实际跑了哪些命令、结果和没验证的部分。先看 `git diff --cached` 有没有不该公开的内容。CI 管代码和复现；因果识别和外推合理性要人工审查。
+PR 写清问题、改了什么、实际跑了哪些命令、结果和没验证的部分。先看 `git diff --cached` 有没有不该公开的内容。CI 管代码和复现；因果识别和外推合理性要人工审查。PR 创建或更新后在评论中 `@codex review` 请求评审；若 DeepSeek 提供评审入口也一并请求，优先 Codex。

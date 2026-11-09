@@ -63,6 +63,7 @@
 - Python 3.11–3.13，src 布局，默认离线运行。
 - 产物先写临时目录，完整后原子改名；已有路径拒绝覆盖。单写者，不做并发锁。
 - 不直接提交 main：所有修改走特性分支和 PR，CI 通过后按人类贡献者授权合并。
+- PR 创建或更新后在评论中 `@codex review` 请求评审；若 DeepSeek 提供评审入口也一并请求，优先 Codex。
 - 提交前跑 `python -m pytest -q`、`python -m ruff check .`、`python -m ruff format --check .`、`python -m build` 和正常 CLI。
 - 原始受限数据、邮件、凭据、个人级记录不进 Git；`data/raw/` 已忽略。
 - 远端操作按人类贡献者的授权执行；没有明确授权不 push、不改远端设置。
