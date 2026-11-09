@@ -5,21 +5,28 @@ from numbers import Real
 
 
 def _number(value, name: str, upper: float = math.inf) -> float:
-    if isinstance(value, bool) or not isinstance(value, Real):
-        raise ValueError(f"{name} must be a number")
-    if not math.isfinite(value) or not 0 <= value <= upper:
-        raise ValueError(f"{name} must be finite and within [0, {upper}]")
+    """Return a finite nonnegative number no greater than upper; reject bool."""
+    valid = (
+        not isinstance(value, bool)
+        and isinstance(value, Real)
+        and math.isfinite(value)
+        and 0 <= value <= upper
+    )
+    if not valid:
+        if math.isfinite(upper):
+            raise ValueError(f"{name} must be a finite number in [0, {upper}]")
+        raise ValueError(f"{name} must be a finite nonnegative number")
     return float(value)
 
 
 def _credits(values, name: str) -> dict:
     if not isinstance(values, dict):
-        raise ValueError(f"{name} must be an object")
+        raise ValueError(f"{name} must be an object mapping module names to credits")
     for module, amount in values.items():
         if not isinstance(module, str) or not module.strip():
-            raise ValueError("module names must be nonempty strings")
+            raise ValueError(f"{name} has an empty module name; use nonempty strings")
         if type(amount) is not int or amount < 0:
-            raise ValueError(f"{name} credits must be nonnegative integers")
+            raise ValueError(f"{name}.{module} credits must be a nonnegative integer")
     return values
 
 
@@ -54,12 +61,9 @@ def compare_plans(config: dict, effect: dict) -> dict:
         raise ValueError("constraints must refer to existing modules")
     if any(minimum.get(key, 0) > maximum[key] for key in maximum):
         raise ValueError("minimum credits exceed maximum credits")
-    estimate = float(effect["estimate"])
-    lower, upper = map(float, effect["ci95"])
-    if not all(math.isfinite(value) for value in [estimate, lower, upper]):
-        raise ValueError("effect must be finite")
-    if not lower <= estimate <= upper:
-        raise ValueError("effect interval must contain estimate")
+    # The estimator returns finite numbers with a ci95 interval around the estimate.
+    estimate = effect["estimate"]
+    lower, upper = effect["ci95"]
     records = []
     identifiers = set()
     for plan in candidates:

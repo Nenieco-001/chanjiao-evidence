@@ -23,6 +23,12 @@ def test_transfer_zero_does_not_hide_harm(plans):
     assert result["plans"][1]["conservative_gain"] == pytest.approx(-0.06)
 
 
+def test_infeasible_baseline_is_rejected(plans):
+    plans["plans"][0]["credits"]["foundation"] = 10
+    with pytest.raises(ValueError, match="baseline"):
+        compare_plans(plans, {"estimate": 0.06, "ci95": [0.03, 0.09]})
+
+
 @pytest.mark.parametrize("corruption", ["budget", "credits", "foundation", "capacity"])
 def test_resource_violations_are_reported(plans, corruption):
     candidate = plans["plans"][1]

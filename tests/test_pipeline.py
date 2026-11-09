@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import subprocess
@@ -32,6 +33,21 @@ def test_normal_entry_point_writes_reproducible_manifest(tmp_path, inputs):
     assert (tmp_path / "first" / "manifest.json").read_bytes() == (
         tmp_path / "second" / "manifest.json"
     ).read_bytes()
+
+
+def test_manifest_input_hashes_match_input_bytes(tmp_path, inputs):
+    run(*inputs, tmp_path / "output")
+    manifest = json.loads((tmp_path / "output" / "manifest.json").read_text(encoding="utf-8"))
+    for role, path in zip(["panel", "metadata", "plans"], inputs, strict=True):
+        assert manifest["inputs"][role] == hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize("content", [b"[]", b"null"])
+def test_plans_json_must_be_object(tmp_path, inputs, content):
+    inputs[2].write_bytes(content)
+    with pytest.raises(ValueError, match="plans JSON must be an object"):
+        run(*inputs, tmp_path / "output")
+    assert not (tmp_path / "output").exists()
 
 
 def test_existing_output_is_preserved(tmp_path, inputs):
