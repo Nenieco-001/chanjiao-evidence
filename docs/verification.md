@@ -39,7 +39,18 @@
 - 独立复算 DiD 0.04、credit_changes 与 25 格 sensitivity 公式；证据卡片结构与 `docs/evidence-findings.md` 数值一致。
 - 已知环境限制：本机默认 TEMP 不可写时 pytest 会回退到仓库根生成临时目录，已在 `.gitignore` 忽略；全量测试曾偶发 Windows 发布 `os.rename` PermissionError，现已对 winerror 5/32 做有上限退避重试并补回归用例。
 
-## 持续核验
+## DSH 交付后的复核
+
+2026-11-09，复核 PR #2 的提交 4210ef9 和 1d63244。
+
+- 在独占临时目录重新执行 pytest，85 项通过。ruff check 和 format --check 通过。
+- 本轮普通隔离构建成功，生成 0.2.0 sdist 与 wheel，补齐前一轮因 PyPI 超时未完成的构建检查。
+- 独立运行带文献两次、不带文献一次、零效应一次，共四次 CLI，并以 cp1252 模拟原 Windows 管道编码，均正常退出。
+- 重复输入的 HTML、Markdown、JSON 和 manifest 字节一致，全部输入与报告内容哈希核对通过。
+- 重新计算正效应 0.04、零效应 0，以及 25 个敏感性格点和学分守恒，均与报告相同。带和不带文献时的估计、方案、趋势和限制一致。
+- 本地文档链接通过检查。Windows 发布重试与输出编码修复的测试和最新远端 CI 均通过，代码复核未发现新的阻断项。
+
+## 远端 CI
 
 提交 c93b3c7 在 Windows、Linux 和 Python 3.11、3.13 四组 CI 均通过，包含安装、测试、静态检查、构建和两个 CLI 示例。[首次远端核验](https://github.com/Nenieco-001/chanjiao-evidence/actions/runs/42586502611)
 
