@@ -45,7 +45,7 @@ python -m build
 
 ## 继续开发
 
-先读 [研究规划](docs/research-plan.md)、[架构](docs/architecture.md) 和 [数据契约](docs/data-contract.md)，再从 [路线图](docs/roadmap.md) 选择任务。提交遵循 [贡献指南](CONTRIBUTING.md)，协作代理同时遵循 [AGENTS.md](AGENTS.md)。
+先读 [研究规划](docs/research-plan.md)、[架构](docs/architecture.md) 和 [数据契约](docs/data-contract.md)，再从 [路线图](docs/roadmap.md) 选择任务。已运行项目见 [核验记录](docs/verification.md)。提交遵循 [贡献指南](CONTRIBUTING.md)，协作代理同时遵循 [AGENTS.md](AGENTS.md)。
 
 ```text
 src/chanjiao_evidence/  数据校验、估计、方案比较、CLI
