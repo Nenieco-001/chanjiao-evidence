@@ -268,3 +268,132 @@ def test_backtest_run_requires_explicit_years_and_is_deterministic(wb, tmp_path)
     with pytest.raises(ValueError, match="2023.*2024.*2025"):
         wb.run({2026: inputs[2025]}, tmp_path / "bad", backtest=True)
     assert not (tmp_path / "bad").exists()
+
+
+def matched_record(**changes):
+    row = {
+        "platform": "平台4",
+        "month": "01",
+        "city": "北京",
+        "industry": "软件和信息技术服务业",
+        "education": "本科",
+        "experience": "3-5年",
+        "family": "软件开发",
+        "skills": ["Python"],
+        "salary": 10000,
+        "description": True,
+        "company_key": "synthetic-company-hash",
+        "job_key": "synthetic-job-hash",
+    }
+    return row | changes
+
+
+@pytest.mark.parametrize(
+    "dimension,value",
+    [
+        ("platform", "平台2"),
+        ("month", "02"),
+        ("city", "上海"),
+        ("industry", "计算机、通信和其他电子设备制造业"),
+        ("education", "硕士"),
+        ("experience", "5-10年"),
+    ],
+)
+def test_matched_stops_at_first_unsupported_layer(wb, dimension, value):
+    records = {2023: [matched_record()], 2024: [matched_record(**{dimension: value})]}
+    records[2025] = records[2024]
+    fold = wb.comparable_backtest(records)["folds"][0]
+    assert fold["status"] == "no_common_support"
+    assert fold["stopped_at"] == dimension
+    assert fold["methods"]["latest_year"]["family_mae"] is None
+    assert fold["stages"][-1]["samples"]["2024"]["n"] == 0
+
+
+def test_matched_requires_joint_cells_not_only_marginal_overlap(wb):
+    records = {
+        2023: [matched_record(), matched_record(city="上海", education="硕士")],
+        2024: [matched_record(education="硕士"), matched_record(city="上海")],
+        2025: [matched_record()],
+    }
+    fold = wb.comparable_backtest(records)["folds"][0]
+    assert fold["stopped_at"] == "joint_cell"
+    assert fold["actual"]["n"] == 0
+    assert fold["full_year"]["actual"]["n"] == 2
+
+
+def test_matched_empty_groups_and_missing_platform_are_not_comparable(wb):
+    records = {
+        2023: [matched_record(platform="")],
+        2024: [matched_record(platform="")],
+        2025: [],
+    }
+    fold = wb.comparable_backtest(records)["folds"][0]
+    assert fold["stopped_at"] == "platform"
+    assert fold["stages"][0]["samples"]["2024"]["missing_n"] == 1
+    empty = next(g for g in fold["groups"] if g["dimension"] == "city" and g["value"] == "上海")
+    assert empty["actual"]["n"] == 0
+    assert empty["coverage"] is None
+    assert empty["methods"]["annual_mean"]["salary_absolute_error"] is None
+
+
+def test_matched_hand_metrics_coverage_zero_hits_and_group_stability(wb):
+    records = {
+        2016: [matched_record(salary=5000)],
+        2023: [matched_record()],
+        2024: [
+            matched_record(family="软件测试", skills=[], salary=20000),
+            matched_record(platform="新平台"),
+        ],
+        2025: [matched_record()],
+        2026: [matched_record(platform="不应参与")],
+    }
+    report = wb.comparable_backtest(records)
+    fold = report["folds"][0]
+    assert fold["train_years"] == [2016, 2023]
+    assert fold["actual"]["n"] == 1
+    assert fold["coverage"] == 0.5
+    group = next(
+        g for g in fold["groups"] if g["dimension"] == "platform" and g["value"] == "平台4"
+    )
+    assert group["small_sample"] is True
+    metrics = group["methods"]["latest_year"]
+    assert metrics["family_mae"] == pytest.approx(0.4)
+    assert metrics["family_tvd"] == 1
+    assert metrics["skill_mae"] == pytest.approx(1 / 12)
+    assert metrics["skill_top5_overlap_n"] == 0
+    assert metrics["salary_absolute_error"] == 10000
+    assert metrics["salary_relative_error"] == 0.5
+    assert group["actual"]["skills"]["Git"] == 0
+    assert group["methods"]["annual_mean"]["improves_baseline"]["salary_absolute_error"] is False
+    assert fold["leakage"]["target_company_overlap_n"] == 2
+    assert fold["leakage"]["target_job_overlap_n"] == 2
+    assert fold["leakage"]["matched_target_job_overlap_n"] == 1
+    reordered = {year: list(reversed(rows)) for year, rows in reversed(list(records.items()))}
+    assert wb.comparable_backtest(reordered) == report
+
+
+def test_matched_run_keeps_baseline_hashes_and_normalizes_platform_missing(wb, tmp_path):
+    inputs = {year: make_input(tmp_path, year) for year in (2023, 2024, 2025)}
+    for path in inputs.values():
+        with path.open(encoding="utf-8-sig", newline="") as stream:
+            rows = list(csv.reader(stream))
+        for row in rows[1:]:
+            row[rows[0].index("来源")] = "NA"
+        with path.open("w", encoding="utf-8-sig", newline="") as stream:
+            csv.writer(stream).writerows(rows)
+    wb.run(inputs, tmp_path / "baseline", backtest=True)
+    before = {path: path.read_bytes() for path in inputs.values()}
+    for name in ("matched-a", "matched-b"):
+        wb.run(inputs, tmp_path / name, matched_backtest=True)
+    a, b = tmp_path / "matched-a", tmp_path / "matched-b"
+    assert {p.name: p.read_bytes() for p in a.iterdir()} == {
+        p.name: p.read_bytes() for p in b.iterdir()
+    }
+    assert (a / "backtest.json").read_bytes() == (tmp_path / "baseline/backtest.json").read_bytes()
+    report = json.loads((a / "matched-backtest.json").read_text(encoding="utf-8"))
+    assert report["folds"][0]["stages"][0]["samples"]["2023"]["missing_n"] == 2
+    assert all(path.read_bytes() == content for path, content in before.items())
+    manifest = json.loads((a / "manifest.json").read_text(encoding="utf-8"))
+    assert "matched-backtest.json" in manifest["outputs"]
+    with pytest.raises(ValueError, match="2023.*2024.*2025"):
+        wb.run({2026: inputs[2025]}, tmp_path / "bad-matched", matched_backtest=True)

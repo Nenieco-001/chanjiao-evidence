@@ -192,7 +192,7 @@ def _quantile(values, probability):
     return values[lower] + (values[upper] - values[lower]) * (index - lower)
 
 
-def _analyse(year, path, evidence):
+def _analyse(year, path, evidence, records=None):
     groups = {scope: _new_group() for scope in ("两市合计", *CITIES)}
     summary = dict.fromkeys(
         (
@@ -276,6 +276,36 @@ def _analyse(year, path, evidence):
             salary = salary_midpoint(row["最低月薪"], row["最高月薪"])
             summary["description_nonmissing"] += int(present)
             summary["salary_valid"] += int(salary is not None)
+            if records is not None:
+                # 仅留紧凑特征在内存；企业和岗位标识散列后只输出重叠数量。
+                company = "" if missing(row["企业名称"]) else row["企业名称"]
+                degree = education(row["学历要求"])
+                records.append(
+                    {
+                        "platform": "" if missing(row["来源"]) else row["来源"],
+                        "month": f"{published.month:02d}",
+                        "city": city,
+                        "industry": row["上市公司行业"],
+                        "education": "" if degree in ("缺失", "其他未映射") else degree,
+                        "experience": "" if missing(row["要求经验"]) else row["要求经验"],
+                        "family": family,
+                        "skills": sorted(skills),
+                        "salary": salary,
+                        "description": present,
+                        "company_key": (
+                            hashlib.sha256(company.encode("utf-8")).hexdigest() if company else None
+                        ),
+                        "job_key": (
+                            hashlib.sha256(
+                                json.dumps(
+                                    [company, row["招聘岗位"], city], ensure_ascii=False
+                                ).encode("utf-8")
+                            ).hexdigest()
+                            if company
+                            else None
+                        ),
+                    }
+                )
             for scope in ("两市合计", city):
                 group = groups[scope]
                 group["n"] += 1
@@ -418,6 +448,32 @@ def _prediction_metrics(prediction, actual):
     return metrics
 
 
+def _backtest_methods(training, actual):
+    latest = training[-1]
+    prediction = {}
+    for field in ("families", "skills"):
+        prediction[field] = {}
+        for key in latest[field]:
+            values = [p[field][key] for p in training if p[field][key] is not None]
+            prediction[field][key] = statistics.mean(values) if values else None
+    values = [p["salary_median"] for p in training if p["salary_median"] is not None]
+    prediction["salary_median"] = statistics.mean(values) if values else None
+    methods = {
+        "latest_year": _prediction_metrics(latest, actual),
+        "annual_mean": _prediction_metrics(prediction, actual),
+    }
+    for metrics in methods.values():
+        metrics["improves_baseline"] = {
+            key: (
+                metrics[key] < methods["latest_year"][key]
+                if metrics[key] is not None and methods["latest_year"][key] is not None
+                else None
+            )
+            for key in ("family_mae", "skill_mae", "salary_absolute_error")
+        }
+    return methods
+
+
 def retrospective_backtest(year_groups):
     """冻结的朴素基线；年份等权均值不按样本数加权，也不是因果估计。"""
     profiles = {year: _profile(group) for year, group in sorted(year_groups.items())}
@@ -425,29 +481,8 @@ def retrospective_backtest(year_groups):
     for target in (2024, 2025):
         train_years = [year for year in profiles if year < target]
         training = [profiles[year] for year in train_years]
-        latest = training[-1]
-        prediction = {}
-        for field in ("families", "skills"):
-            prediction[field] = {}
-            for key in latest[field]:
-                values = [p[field][key] for p in training if p[field][key] is not None]
-                prediction[field][key] = statistics.mean(values) if values else None
-        values = [p["salary_median"] for p in training if p["salary_median"] is not None]
-        prediction["salary_median"] = statistics.mean(values) if values else None
         actual = profiles[target]
-        methods = {
-            "latest_year": _prediction_metrics(latest, actual),
-            "annual_mean": _prediction_metrics(prediction, actual),
-        }
-        for metrics in methods.values():
-            metrics["improves_baseline"] = {
-                key: (
-                    metrics[key] < methods["latest_year"][key]
-                    if metrics[key] is not None and methods["latest_year"][key] is not None
-                    else None
-                )
-                for key in ("family_mae", "skill_mae", "salary_absolute_error")
-            }
+        methods = _backtest_methods(training, actual)
         folds.append(
             {
                 "target_year": target,
@@ -469,7 +504,221 @@ def retrospective_backtest(year_groups):
     }
 
 
-def run(inputs, output, *, backtest=False):
+MATCH_DIMENSIONS = ("platform", "month", "city", "industry", "education", "experience")
+ERROR_DIMENSIONS = ("city", "industry", "platform", "education", "experience")
+
+
+def _record_profile(records):
+    group = _new_group()
+    group["n"] = len(records)
+    group["descriptions"] = sum(row["description"] for row in records)
+    group["structures"]["岗位族"] = Counter(row["family"] for row in records)
+    for row in records:
+        group["skills"].update(row["skills"])
+    group["salaries"] = [row["salary"] for row in records if row["salary"] is not None]
+    return _profile(group)
+
+
+def _slice_metrics(records, original, train_years, target):
+    profiles = {year: _record_profile(rows) for year, rows in records.items()}
+    actual = profiles[target]
+    supported = all(profile["n"] for profile in profiles.values())
+    training = [profiles[year] for year in train_years]
+    # 空组仍输出两个方法及 null 指标，不借用其他组或全年分数。
+    methods = _backtest_methods(training if supported else [_record_profile([])], actual)
+    for method in methods.values():
+        for key, higher in (
+            ("family_tvd", False),
+            ("skill_top5_overlap_rate", True),
+            ("salary_relative_error", False),
+        ):
+            value, baseline = method[key], methods["latest_year"][key]
+            method["improves_baseline"][key] = (
+                (value > baseline if higher else value < baseline)
+                if value is not None and baseline is not None
+                else None
+            )
+    return {
+        "status": "supported" if supported else "no_common_support",
+        "actual": actual,
+        "training": {str(year): profiles[year] for year in train_years},
+        "n": actual["n"],
+        "original_n": len(original[target]),
+        "coverage": actual["n"] / len(original[target]) if original[target] else None,
+        "description_coverage": (
+            actual["description_nonmissing"] / actual["n"] if actual["n"] else None
+        ),
+        "small_sample": any(profile["n"] < 30 for profile in profiles.values()),
+        "methods": methods,
+    }
+
+
+def _error_groups(records, original, train_years, target):
+    groups = []
+    for dimension in ERROR_DIMENSIONS:
+        values = {row[dimension] for rows in original.values() for row in rows}
+        if dimension == "city":
+            values.update(CITIES)
+        elif dimension == "industry":
+            values.update(INDUSTRIES)
+        for value in sorted(values):
+            before = {
+                year: [row for row in rows if row[dimension] == value]
+                for year, rows in original.items()
+            }
+            after = {
+                year: [row for row in rows if row[dimension] == value]
+                for year, rows in records.items()
+            }
+            groups.append(
+                {
+                    "dimension": dimension,
+                    "value": value or "缺失/未映射",
+                    **_slice_metrics(after, before, train_years, target),
+                    "share_of_matched_target": (
+                        len(after[target]) / len(records[target]) if records[target] else None
+                    ),
+                }
+            )
+    return groups
+
+
+def _leakage(original, matched, train_years, target):
+    result = {}
+    for field, label in (("company_key", "company"), ("job_key", "job")):
+        training = {row[field] for year in train_years for row in original[year] if row[field]}
+        for prefix, rows in (("", original[target]), ("matched_", matched[target])):
+            hits = sum(row[field] in training for row in rows if row[field])
+            result[f"{prefix}target_{label}_overlap_n"] = hits
+            result[f"{prefix}target_{label}_overlap_rate"] = hits / len(rows) if rows else None
+        result[f"target_missing_{label}_key_n"] = sum(not row[field] for row in original[target])
+    result["definition"] = (
+        "在原年度目标切片中：企业精确去首尾空白同名；疑似重复岗位=同企业+岗位原名+城市，"
+        "忽略日期/薪资/来源。计数为目标记录数，同一企业多岗位可重复计；不是确认转发。"
+        "matched计数仍对照全部训练切片，不隔离企业；只输出计数，不输出标识。"
+    )
+    return result
+
+
+def comparable_backtest(year_records):
+    """按所有训练年和目标年共同协变量支持切片；只做回顾性描述。"""
+    folds = []
+    for target in (2024, 2025):
+        train_years = sorted(year for year in year_records if year < target)
+        years = [*train_years, target]
+        original = {year: year_records[year] for year in years}
+        current = original.copy()
+        stages, stopped_at = [], None
+        for dimension in (*MATCH_DIMENSIONS, "joint_cell"):
+            if dimension == "joint_cell":
+
+                def key(row):
+                    return tuple(row[field] for field in MATCH_DIMENSIONS)
+
+            else:
+
+                def key(row, field=dimension):
+                    return row[field]
+
+            supports = [{key(row) for row in current[year] if key(row)} for year in years]
+            common = set.intersection(*supports)
+            filtered = {
+                year: [row for row in rows if key(row) in common] for year, rows in current.items()
+            }
+            stages.append(
+                {
+                    "dimension": dimension,
+                    "common_values": sorted(common) if dimension != "joint_cell" else None,
+                    "common_value_n": len(common),
+                    "samples": {
+                        str(year): {
+                            "before_n": len(current[year]),
+                            "missing_n": sum(not key(row) for row in current[year]),
+                            "original_missing_n": (
+                                sum(not row[dimension] for row in original[year])
+                                if dimension != "joint_cell"
+                                else sum(
+                                    any(not row[field] for field in MATCH_DIMENSIONS)
+                                    for row in original[year]
+                                )
+                            ),
+                            "n": len(filtered[year]),
+                            "coverage": (
+                                len(filtered[year]) / len(original[year])
+                                if original[year]
+                                else None
+                            ),
+                            "retention": (
+                                len(filtered[year]) / len(current[year]) if current[year] else None
+                            ),
+                        }
+                        for year in years
+                    },
+                }
+            )
+            current = filtered
+            if not common:
+                stopped_at = dimension
+                break
+        folds.append(
+            {
+                "target_year": target,
+                "cutoff_year": target - 1,
+                "train_years": train_years,
+                "original_samples": {
+                    str(year): {
+                        "n": len(original[year]),
+                        "missing": {
+                            field: sum(not row[field] for row in original[year])
+                            for field in MATCH_DIMENSIONS
+                        },
+                    }
+                    for year in years
+                },
+                **_slice_metrics(current, original, train_years, target),
+                "stopped_at": stopped_at,
+                "unreached_layers": list((*MATCH_DIMENSIONS, "joint_cell")[len(stages) :]),
+                "stages": stages,
+                "groups": _error_groups(current, original, train_years, target),
+                "full_year": {
+                    **_slice_metrics(original, original, train_years, target),
+                    "groups": _error_groups(original, original, train_years, target),
+                },
+                "leakage": _leakage(original, current, train_years, target),
+            }
+        )
+    return {
+        "schema_version": 1,
+        "evidence_mode": "historical",
+        "baseline": "latest_year",
+        "support_rule": (
+            "按platform/month/city/industry/education/experience顺序取所有训练年和目标年的交集，"
+            "最后取六维完整组合交集；每年各自保留原权重，不平衡各年或各月样本数。"
+            "月度使用逐层收缩后的共同月份；不是固定1–3月，不评价2026。缺失/未映射不算支持。"
+        ),
+        "group_rule": (
+            "单维误差组枚举原切片各年取值并集及固定城市/行业，含匹配后空组。coverage=组内匹配n/"
+            "目标年该组原n；总coverage=匹配n/目标年原n；原n=0则null；小样本=任一年n<30，"
+            "仅描述提示，不是显著性门槛。经验保留原文精确层，不合并近义类目。"
+        ),
+        "leakage_risks": [
+            "匿名平台同号只是标签匹配，缺平台身份与采集规则说明，不能确认同源。",
+            "支持选择查看了目标年协变量，是回顾性可比性诊断，不是事前可部署评价。",
+            "2026已参与词表/规则探索；未进入预测计算，也不是未触碰留出。",
+            "企业/岗位跨年疑似重复未隔离，年内跨平台去重保留首遇来源，可能改变平台归属。",
+            "岗位与技能分组依赖探索规则，尚无独立人工标签；零提及不代表无技能要求。",
+        ],
+        "cannot_conclude": [
+            "样本外误差不等于真实因果；不能推断课程改革的就业率、起薪或能力效果。",
+            "共同支持不代表代表性或同等采样；不能推断市场总量、趋势或全部学校。",
+            "企业重叠不证明复制，低误差不证明独立泛化；不支持四年前瞻准确性声明。",
+        ],
+        "folds": folds,
+    }
+
+
+def run(inputs, output, *, backtest=False, matched_backtest=False):
+    backtest = backtest or matched_backtest
     output = Path(output)
     if output.exists():
         raise FileExistsError(f"输出路径已存在：{output}；请换一个新目录，已有产物不覆盖。")
@@ -492,9 +741,12 @@ def run(inputs, output, *, backtest=False):
             "holdout_status": "2026 已用于探索，不再是未触碰留出；正式评价需冻结规则和独立样本",
         }
         structures, skills_rows, salaries, evidence = [], [], [], []
-        annual_groups = {}
+        annual_groups, annual_records = {}, {}
         for year, path in sorted(inputs.items()):
-            sample, groups = _analyse(year, Path(path), evidence)
+            records = [] if matched_backtest else None
+            sample, groups = _analyse(year, Path(path), evidence, records)
+            if records is not None:
+                annual_records[year] = records
             annual_groups[year] = groups
             summary["years"][str(year)] = sample
             for scope, group in groups.items():
@@ -554,6 +806,8 @@ def run(inputs, output, *, backtest=False):
                     }
                 },
             )
+        if matched_backtest:
+            write_json(temporary / "matched-backtest.json", comparable_backtest(annual_records))
         write_json(temporary / "summary.json", summary)
         write_csv(
             temporary / "structures.csv",
@@ -664,6 +918,9 @@ def main():
     )
     parser.add_argument("--backtest", action="store_true", help="显式年度输入的2024/2025回顾性回测")
     parser.add_argument(
+        "--matched-backtest", action="store_true", help="共同支持切片与误差分组；同时保留全年回测"
+    )
+    parser.add_argument(
         "--annual-input-dir", type=Path, help="2024/2025 CSV目录，默认同--input-dir"
     )
     parser.add_argument("--output", type=Path, required=True)
@@ -681,6 +938,7 @@ def main():
             },
             args.output,
             backtest=args.backtest,
+            matched_backtest=args.matched_backtest,
         )
     except (ValueError, OSError, csv.Error) as error:
         parser.exit(

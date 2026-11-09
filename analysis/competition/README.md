@@ -75,7 +75,46 @@ python analysis/competition/workbench.py --years 2016 2023 2024 2025 --annual-in
 Top-5 只排正提及率，并列按技能名排序；重叠数除以 5，即便不足五项也不改分母。
 薪资误差为报价区间中点中位数的绝对差及除以实际中位数的相对差，同时列实际有效区间覆盖率。
 `improves_baseline` 逐指标按严格小于最近年度基线判定，相同或更差均为 false。
-本版只比较未经来源/月度匹配的年度原切片，没有把误差当作真实培养效果。
+该开关只比较未经来源/月度匹配的年度原切片，没有把误差当作真实培养效果。
+
+### 共同支持切片与误差组
+
+第 4 批在原有去重后，增加可选的回顾性诊断；包含原全年 `backtest.json`，
+不替换全年对照。下列两个输出目录必须为新路径：
+
+```powershell
+python analysis/competition/workbench.py --years 2016 2023 2024 2025 --annual-input-dir .local/analysis-data --matched-backtest --output artifacts/competition-analysis/verified-matched-final-01
+python analysis/competition/workbench.py --years 2016 2023 2024 2025 --annual-input-dir .local/analysis-data --matched-backtest --output artifacts/competition-analysis/verified-matched-final-02
+```
+
+新增 `matched-backtest.json`，这组四年输入共生成 14 个文件。
+按平台标签、月份、城市、上市公司行业、学历、经验的顺序，取**每个训练年和目标年**的共同值，
+每层都在上一层保留的样本中重新取交集；最后要求六维完整组合也共同出现。
+不是把训练年度合并后只要有一次出现就接受，也不是只检查各字段的边际重合。
+月份使用各年共同出现的月份，具体窗口写入 `stages`，不自动称为 1–3 月同期。
+每年仍保留切片内部原权重，未平衡平台、月份或完整组合的样本数。
+
+`original_samples` 记录各年原切片 n 及六个字段缺失；`stages` 逐层列共同值/数量、
+各年 before_n、剩余 n、相对原切片的 coverage、相对上一层的 retention、当前及原切片缺失数。
+某层没有共同值时，`status=no_common_support`、`stopped_at` 写明断层，
+未执行层写入 `unreached_layers`，匹配评分全部为 null。不会用全年误差填补。
+平台空值与 NA/null 等缺失标记不视为同源；学历缺失/未映射不算支持。
+经验按去首尾空白后的原文精确匹配，不把“3-5年”和“3至5年”强行合并。
+匿名平台同号尚未确认真实身份，本轮匹配以同号可比为条件。
+
+`groups` 按城市、行业、平台、学历、经验枚举原切片各年取值并集，额外保留固定城市/行业。
+每组列目标 n、原组 n、组内保留覆盖率、在匹配总样本中的占比、各训练年画像、描述与薪资覆盖，
+以及岗位族 MAE/TVD、技能 MAE/Top-5、薪资绝对/相对误差。
+分组两个方法均要求每个训练年和目标年非空；缺一年的组保留并标无支持，不借其他组补分数。
+`full_year.groups` 给同口径的全年分组对照，原全年方法仍在 `backtest.json`。
+原组 n=0 时 coverage 为 null；原组非空、匹配后为空时 coverage=0。
+任一年 n<30 标 `small_sample=true`，仅作描述提示，不是显著性检验。
+Top-5 改善按重叠率严格大于基线，误差类指标按严格小于；零命中、相同与更差均保留。
+
+`leakage` 只输出跨年企业同名、同企业+岗位原名+城市的目标记录重叠数/率及缺键数；
+不输出企业、岗位文本或散列标识，不把疑似重复当确认转发，也不自动剔除重复企业。
+匹配选择使用了目标年协变量，2026 又参与过词表探索，因此只能作回顾性描述。
+实际样本、误差、泄漏数字与不可下的结论统一见 [分析报告](../../docs/competition-analysis.md)。
 
 ## 固定分析口径
 

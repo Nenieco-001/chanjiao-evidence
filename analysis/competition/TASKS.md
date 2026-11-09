@@ -1,4 +1,30 @@
-# 第 2 批需求侧工作台任务板
+# 需求侧工作台任务板
+
+## 第 4 批：共同支持与泄漏检查（revision 8）
+
+本批实施计划使用 writing-plans 技能，沿用本任务板。负责人 Codex（实现者），
+外部协调者负责独立验收与提交；本轮不执行 add/commit/push/gh，不修改 src、数据或数据库。
+下列任务串行执行，写范围只由本实现者写入；旧批次验收记录保留。
+协调者独立验收：173 passed、ruff/format 通过；可比切片正式产物为 verified-matched-final-01/02。
+
+- C7，Codex，完成，协调者验收通过。写范围：`workbench.py`、`tests/test_competition_analysis.py`。
+  前置：指定文档、模块及调用方已读，分支/HEAD 核对一致，工作区干净。
+  步骤：先补无共同支持、平台缺失、空组、联合支持与稳定性失败用例；
+  实现可选匹配模式，逐层与完整组合均要求所有训练年和目标年共同支持；
+  保留全年对照和两种方法，输出五维误差组与跨年重复风险；再跑对应测试。
+  验收：断层停止评分、缺失不算共同平台；分母、覆盖、零命中、小样本、无优势均保留。
+- C8，Codex，完成，协调者验收通过（Codex 环境 Ruff 阻断；协调者正常环境通过）。写范围：Git 忽略的 `artifacts/competition-analysis/`、
+  `.local/competition-batch4/`。前置 C7。
+  步骤：实际运行到两个新目录，逐文件比较字节和 manifest；全仓 pytest、Ruff、
+  format、build、正常 CLI；核对输入哈希、指标与失败情况，不覆盖旧目录。
+  验收：至少 163 项全过；运行证据如实记录，环境失败不算通过。
+- C9，Codex，完成，协调者验收通过。写范围：本文件、`README.md`、`docs/competition-analysis.md`、
+  `CHANGELOG.md`。前置 C8。
+  步骤：定稿共同支持口径、实际样本和误差、泄漏与不可下的结论、复现命令及未完成项；
+  检查链接、diff 与敏感内容。
+  验收：报告数字来自实际产物，无因果外推，交接标为待外部独立验收。
+
+## 第 2/3 批历史记录
 
 revision 6；本批实现者 Codex，提交与 PR 的协调者仍为人类指定的外部协调者。
 协调者独立验收：163 passed、ruff/format 通过；正式产物为 verified-final-01/02 与 verified-backtest-01/02。
@@ -201,3 +227,83 @@ D:\Python\python.exe -m black --check --line-length 100 --target-version py311 a
 企业簇区间、真实技能人工标签、独立留出、新机器/其他 Python 安装和图形渲染验收。
 2026 已参与探索，回测不形成因果或培养效果结论；完整限制统一见分析报告。
 最终独立验收、Ruff 复验、CHANGELOG 定稿及提交/PR 均交协调者。
+
+## revision 8 交接：第 4 批共同支持回测
+
+这是第 4 批最新交接，C7–C9 均已由协调者独立验收通过。
+修改六个受版本控制的文件：`workbench.py`、对应测试、本目录 README/TASKS、
+`docs/competition-analysis.md`、`CHANGELOG.md`。没有改 src、原始 CSV、数据库、依赖或忽略规则。
+开始时分支 `feat/local-data-warehouse`、HEAD `2b76d5e`、工作区干净；本轮没有 Git 写入或 gh 调用。
+
+### 为什么这样改
+
+原年度聚合无法检查联合支持。现在可选保留年内去重后的紧凑特征，逐层取所有训练年与目标年交集，
+再取完整组合交集；断层即停止，不借全年分数补齐。两种方法复用同一计算，全年对照保持原口径。
+五维分组枚举原值并集，空组、小样本、零命中和无优势均保留；跨年企业/岗位只输出疑似重叠计数。
+完整算法、机器字段与分母见 [README](README.md#共同支持切片与误差组)，
+实际样本流、指标、失败组和泄漏边界统一见 [分析报告](../../docs/competition-analysis.md#第-4-批共同支持的可比切片)。
+
+### 命令、环境与输出
+
+基础解释器配本机已有临时用户站点；没有修改全局配置或 `.venv`：
+
+```powershell
+$env:PYTHONUSERBASE = (Resolve-Path .local/competition-env).Path
+$env:PYTHONPATH = (Resolve-Path src).Path
+D:\Python\python.exe -m pytest -q -o cache_dir=.local/competition-batch4/full-pytest-cache
+D:\Python\python.exe analysis/competition/workbench.py --years 2016 2023 2024 2025 --annual-input-dir .local/analysis-data --matched-backtest --output artifacts/competition-analysis/verified-matched-final-01
+D:\Python\python.exe analysis/competition/workbench.py --years 2016 2023 2024 2025 --annual-input-dir .local/analysis-data --matched-backtest --output artifacts/competition-analysis/verified-matched-final-02
+D:\Python\python.exe .local/competition-batch4/verify.py
+D:\Python\python.exe -m build --outdir .local/competition-batch4/dist
+D:\Python\python.exe -m chanjiao_evidence run --panel data/examples/panel.csv --metadata data/examples/metadata.json --plans data/examples/plans.json --evidence data/evidence/internships.json --output .local/competition-batch4/cli-01
+```
+
+- 新增 10 个测试实例，首先观察到函数/开关缺失失败；实现后相关文件 **29 passed**。
+  覆盖六种断层、联合组合无支持、缺失平台/空组、手算误差/零命中/稳定性、入口/确定性/输入不变。
+  一个空组用例先误设零分母覆盖率为 0，按既定口径修正为 null；不把此修改说成实现修复。
+- 全仓自测先为 **173 passed in 26.02s**，Black 整理后最终 **173 passed in 24.75s**，退出 0。
+  日志 `.local/competition-batch4/pytest.log`、`pytest-final.log`。
+- 两次实际分析均退出 0，原入选数为 12,678 / 4,035 / 3,272 / 3,560。
+  共同支持后 2024 为 543 / 89 / 597，2025 为 358 / 42 / 486 / 39；
+  目标覆盖 18.25% / 1.10%。低覆盖、平台13单条、电子行业两条和大量空组均未删去。
+- `verified-matched-final-01/02` 各 **14 文件逐字节一致**，包括 3.35 MB 的分组 JSON 与 manifest。
+  manifest 输出集合、当前脚本哈希、课程占位哈希、四份原 CSV 的实际字节数与 SHA-256 重算一致。
+  第一遍扫描期间仅执行 Black 格式整理，Black 默认安全模式检查语义；最终两遍产物字节一致且脚本哈希一致。
+  没有覆盖或修改 verified-final-01/02、verified-backtest-01/02。
+- `.local/competition-batch4/verify.py` 不导入当前工作台，依据输出另算 **880 个方法块**的
+  MAE/TVD/Top-5/薪资误差与改善标记，核对分层覆盖率、分组样本守恒。
+  另用只读 `git show HEAD:analysis/competition/workbench.py` 加当前聚合 CSV 重建全年画像，
+  三地区两折全年结果与旧 HEAD 实现完全一致；不是重复调用当前实现来证明自己。
+  结果 `.local/competition-batch4/verification.json`；仍属于实现者自检，不代替协调者验收。
+- 隔离构建退出 0，生成 sdist/wheel，日志 `.local/competition-batch4/build.log`；
+  检查 sdist 包含分析脚本和测试。正常 CLI 退出 0，输出 synthetic / internship。
+  这些不是新机器安装或跨 Python 版本验证。
+
+以下命令在 `.venv` 和基础解释器两种入口均退出 **-1073741502（0xC0000142）**，无检查输出：
+
+```powershell
+.venv\Scripts\python.exe -m ruff check .
+.venv\Scripts\python.exe -m ruff format --check .
+D:\Python\python.exe -m ruff check .
+D:\Python\python.exe -m ruff format --check .
+```
+
+**Ruff check/format 未完成，不宣称通过。** 只使用已存在的 Black 辅助工具：
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path .local/competition-format-tools).Path
+$env:BLACK_CACHE_DIR = (Resolve-Path .local/competition-black-cache).Path
+D:\Python\python.exe -m black --check --line-length 100 --target-version py311 analysis/competition/workbench.py tests/test_competition_analysis.py
+```
+
+退出 0，`2 files would be left unchanged`，两个文件无超过 100 字符行；不替代 Ruff。
+`git diff --check` 退出 0，21 个本地 Markdown 链接存在；外部链接未访问。
+六个交接文件未命中常见令牌、私钥、邮箱模式；原始数据与证据定位文件均留在忽略目录。
+
+### 尚未完成与交接结论
+
+平台真实身份及采集口径未确认；没有隔离企业/跨年转发、簇区间、人工技能标签或独立留出，
+没有做新机器/其他 Python 版本安装和 SVG 图形渲染验收。
+2026 已参与探索，目标年协变量参与了支持选择，只作回顾性描述，不写因果与四年收益结论。
+协调者已完成正常环境 Ruff check/format、独立验收、CHANGELOG 定稿与提交。
+本轮结论：**实现、实际运行与协调者验收已通过。**
