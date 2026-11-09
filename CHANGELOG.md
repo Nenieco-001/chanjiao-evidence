@@ -4,6 +4,8 @@
 
 后续 PR 在此记录行为、假设及数据迁移。
 
+- 新增[五分钟逐字稿与 10 题口播演练](docs/competition-speech.md)，沿用 12 页大纲和六段 300 秒预算，逐段标注字数、转场、证据与打断短答；时长为文本估算，录制计时与协调者验收待完成。状态见[任务板 C12](analysis/competition/TASKS.md)。
+
 - 新增赛前[20 问答卡](docs/competition-qa.md)、[七组供给数据申请单](docs/competition-data-request.md)和[最终提交检查表](docs/competition-final-checklist.md)：按四交付物与五维评分登记证据、责任和缺口；本机 PPTX/DOCX/PDF 仅为未入 Git 初稿，真实供给与学生结果仍缺。状态见[任务板 C11](analysis/competition/TASKS.md)。
 
 - 新增[参赛报告骨架](docs/competition-report-draft.md)与[答辩及视频大纲](docs/competition-defense-outline.md)：按赛题四任务整理已验收需求结果，提供课程/方向/招生待填模板、验证失败条件与风险应对；保留真实供给、学生结果和四年效果缺口，不新增学校收益结论。验收状态见[分析任务板](analysis/competition/TASKS.md)。
