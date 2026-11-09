@@ -1,0 +1,41 @@
+{
+  "outcome_id": "employment_rate",
+  "action_id": "supervised_internship",
+  "total_credits": 30,
+  "minimum_credits": {
+    "foundation": 12
+  },
+  "maximum_credits": {
+    "internship": 6
+  },
+  "budget": 10,
+  "transfer_factors": [
+    0.5,
+    0.75,
+    1.0
+  ],
+  "bias_budget": 0.01,
+  "assumption_notes": "Credits, costs, transfer factors and bias budget are synthetic assumptions.",
+  "plans": [
+    {
+      "plan_id": "unchanged",
+      "action_id": null,
+      "cost": 0,
+      "credits": {
+        "foundation": 14,
+        "specialty": 14,
+        "internship": 2
+      }
+    },
+    {
+      "plan_id": "internship",
+      "action_id": "supervised_internship",
+      "cost": 8,
+      "credits": {
+        "foundation": 14,
+        "specialty": 10,
+        "internship": 6
+      }
+    }
+  ]
+}

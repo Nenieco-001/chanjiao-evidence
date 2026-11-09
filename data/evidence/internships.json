@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "purpose": "Literature evidence cards, not calibrated inputs to the synthetic demonstration",
+  "cards": [
+    {
+      "evidence_id": "margaryan_2022_internships",
+      "title": "Do Internships Pay Off? The Effects of Student Internships on Earnings",
+      "authors": ["Shushanik Margaryan", "Nils Saniter", "Mathias Schumann", "Thomas Siedler"],
+      "year": 2022,
+      "publication": "Journal of Human Resources 57(4), 1242–1275",
+      "doi": "https://doi.org/10.3368/jhr.57.4.0418-9460R2",
+      "source_url": "https://docs.iza.org/dp12478.pdf",
+      "source_version": "author working paper; verify final-paper estimates before numerical use",
+      "population": "German university graduates in the study cohorts",
+      "action": "student internship participation induced by mandatory internship requirements",
+      "outcomes": ["earnings", "early-career unemployment"],
+      "design": "instrumental variables using changes in mandatory internship requirements",
+      "assumptions": ["instrument relevance", "exclusion restriction", "monotonicity", "no confounding simultaneous reform invalidating the instrument"],
+      "transfer_limits": ["local effect for participation induced by requirements", "internship quality, students and labor markets may differ", "earnings effects do not directly specify employment-rate or skill effects"],
+      "reusable": "use historical institutional changes and linked graduate outcomes; inspect concurrent reforms",
+      "related_work": "The earlier Door Opener or Waste of Time? working paper is an earlier version, not independent replication.",
+      "data_status": "replication data not acquired by this project"
+    },
+    {
+      "evidence_id": "baert_2021_internships",
+      "title": "Student internships and employment opportunities after graduation: A field experiment",
+      "authors": ["Stijn Baert", "Brecht Neyt", "Thomas Siedler", "Ilse Tobback", "Dieter Verhaest"],
+      "year": 2021,
+      "publication": "Economics of Education Review 83, 102141",
+      "doi": "https://doi.org/10.1016/j.econedurev.2021.102141",
+      "source_url": "https://backoffice.biblio.ugent.be/download/8734103/8739692",
+      "population": "fictional graduate applications to real job vacancies in the study setting",
+      "action": "random assignment of internship experience on resumes",
+      "outcomes": ["invitation to a job interview"],
+      "design": "randomized correspondence field experiment",
+      "assumptions": ["randomized applications remain comparable", "employer responses represent the studied vacancy context"],
+      "transfer_limits": ["resume signaling does not establish acquired skills", "interview invitations do not establish final employment or earnings"],
+      "reusable": "separate employer-response mechanisms from student learning and final employment",
+      "data_status": "replication data not acquired by this project"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "synthetic",
+  "outcome_id": "employment_rate",
+  "outcome_unit": "proportion",
+  "outcome_window": "six months after graduation",
+  "population": "16 synthetic departments, 8 per group; no real students",
+  "action_id": "supervised_internship",
+  "adoption_year": 2022,
+  "data_license": "MIT, original synthetic data",
+  "sources": [
+    {
+      "title": "data/examples/generate.py",
+      "url": "synthetic://generator/v1"
+    }
+  ],
+  "known_synthetic_effect": 0.0,
+  "generation": "Fixed group levels and shared trend distribution, with additive reform effect."
+}
