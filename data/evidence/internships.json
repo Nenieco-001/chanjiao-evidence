@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
-  "purpose": "Literature evidence cards, not calibrated inputs to the synthetic demonstration",
+  "purpose": "公开文献背景证据，分别记录收入、失业和面试邀请，不参与合成示例估计或当前学校收益计算",
+  "verified_on": "2026-11-09",
   "cards": [
     {
       "evidence_id": "margaryan_2022_internships",
@@ -10,16 +11,88 @@
       "publication": "Journal of Human Resources 57(4), 1242–1275",
       "doi": "https://doi.org/10.3368/jhr.57.4.0418-9460R2",
       "source_url": "https://docs.iza.org/dp12478.pdf",
-      "source_version": "author working paper; verify final-paper estimates before numerical use",
-      "population": "German university graduates in the study cohorts",
-      "action": "student internship participation induced by mandatory internship requirements",
-      "outcomes": ["earnings", "early-career unemployment"],
-      "design": "instrumental variables using changes in mandatory internship requirements",
-      "assumptions": ["instrument relevance", "exclusion restriction", "monotonicity", "no confounding simultaneous reform invalidating the instrument"],
-      "transfer_limits": ["local effect for participation induced by requirements", "internship quality, students and labor markets may differ", "earnings effects do not directly specify employment-rate or skill effects"],
-      "reusable": "use historical institutional changes and linked graduate outcomes; inspect concurrent reforms",
-      "related_work": "The earlier Door Opener or Waste of Time? working paper is an earlier version, not independent replication.",
-      "data_status": "replication data not acquired by this project"
+      "source_version": "2019年7月 IZA Discussion Paper 12478。期刊书目信息由 IZA 出版记录核对，下面的表格数值只归于工作论文。2020年4月1日 JHR 补充文件为在线附录，期刊正文表格尚未取得。",
+      "population": "德国 DZHW 2001、2005、2009届高校毕业生。前两届使用毕业约1年及5至6年的调查，2009届使用第一轮。主收入回归有19,736个人次观测。",
+      "action_id": "internship",
+      "action": "以培养方案要求的校外实习作为工具变量，估计由要求促成的实习参与效应",
+      "outcomes": ["earnings", "early-career unemployment", "monthly employment status"],
+      "summary": "德国毕业生调查的工具变量估计显示约6%的收入回报，并显示毕业首年失业风险下降。工作论文同时报告，前两年的月度就业状态效应未达统计显著。收入回报、失业和就业状态须分开解释，当前学校毕业半年就业率的收益仍缺直接证据。",
+      "design": "工具变量法（IV）。以是否有强制校外实习要求预测实习参与，控制届别、学校、专业及个人背景，并按院系聚类标准误。比较的是受要求影响的实习参与者，识别依赖工具变量假设。",
+      "assumptions": ["实习要求确实改变参与概率", "实习要求只通过实习参与影响结果，未混入同时改革", "不存在因要求而反向停止实习的群体", "控制学校、专业和背景后，实习要求与未观测结果决定因素独立"],
+      "reported_results": [
+        {
+          "outcome_id": "earnings",
+          "label": "月税前实际收入的对数",
+          "value": 0.065,
+          "unit": "log_points",
+          "standard_error": 0.019,
+          "interpretation": "2019工作论文表5第(4)列的完整IV模型，论文概括为约6%的收入回报。测量时点平均在毕业约3年后，单位为对数点。",
+          "source_location": "正文第8页、第36页表5第(4)列，对应PDF第10、38页",
+          "source_url": "https://docs.iza.org/dp12478.pdf"
+        },
+        {
+          "outcome_id": "early-career unemployment",
+          "label": "毕业初期月度失业状态",
+          "interpretation": "工作论文图2及第7节报告首年失业风险下降，之后大多接近零且不显著。本卡未从图形反推数值。",
+          "source_location": "正文第20页第7节及第31页图2，对应PDF第22、33页",
+          "source_url": "https://docs.iza.org/dp12478.pdf"
+        },
+        {
+          "outcome_id": "monthly employment status",
+          "label": "毕业后月度就业状态",
+          "interpretation": "工作论文报告前两年效应不显著，第三年部分月份为正且在5%水平显著。缺少本项目所需的毕业半年就业率估计。",
+          "source_location": "正文第20页第7节及第31页图2，对应PDF第22、33页",
+          "source_url": "https://docs.iza.org/dp12478.pdf"
+        }
+      ],
+      "source_locations": [
+        {
+          "label": "作者工作论文",
+          "url": "https://docs.iza.org/dp12478.pdf",
+          "location": "第3至4节为数据和识别，第5节及表5为收入，第7节及图2为劳动市场过渡",
+          "version": "IZA DP 12478，2019年7月"
+        },
+        {
+          "label": "IZA 出版记录",
+          "url": "https://www.iza.org/publications/dp/12478/do-internships-pay-off-the-effects-of-student-internships-on-earnings",
+          "location": "论文出版信息及摘要",
+          "version": "标注发表于 JHR 2022年57(4)，1242至1275页"
+        },
+        {
+          "label": "JHR 在线附录",
+          "url": "https://journals.uwpress.wisc.edu/JHR/supp/0418-9460R2_supp.pdf",
+          "location": "封面及 Appendix A 至 C",
+          "version": "2020年4月1日，17页，属于补充材料"
+        }
+      ],
+      "transfer_limits": ["工具变量结果针对被实习要求改变参与决定的群体", "德国当年的学制、实习质量和劳动市场与目标学校不同", "月收入、月度失业及就业状态的定义和时间窗须分别保留", "缺少独立能力测量，无法据此估计技能提高多少", "期刊正文数值尚未逐表核对，数值引用保留工作论文版本"],
+      "reusable": "收集培养方案变动及配套改革，连接毕业生追踪结果，并核验实习要求的测量误差和识别条件",
+      "related_work": "Door Opener or Waste of Time? 为本研究的较早版本，同一研究在证据数量中只计一次。",
+      "data_status": "已查阅工作论文、期刊附录及DZHW官方数据文档。微观数据和作者复现代码尚未取得，需向FDZ-DZHW申请科研用数据并核对作者处理流程。",
+      "data_access": {
+        "status": "documented_application_route",
+        "materials_obtained": ["2019工作论文PDF，供本地核验", "2020年JHR在线附录，已查阅", "DZHW 2001、2005、2009数据说明，已查阅"],
+        "microdata_acquired": false,
+        "public_download_verified": false,
+        "access_routes": [
+          {
+            "label": "2001届官方数据说明",
+            "url": "https://metadata.fdz.dzhw.eu/public/files/data-packages/stu-gra2001%24-1.0.0/attachments/gra2001_Overview_en.pdf",
+            "detail": "1.0.0版，DOI 10.21249/DZHW:gra2001:1.0.0，列出科研用文件SUF下载途径"
+          },
+          {
+            "label": "2005届官方方法及数据使用说明",
+            "url": "https://metadata.fdz.dzhw.eu/public/files/data-packages/stu-gra2005%24-2.0.1/attachments/gra2005_MethodReport_en.pdf",
+            "detail": "第III节。科研用文件SUF须签署数据协议，未受雇于科研机构的学生需与导师共同签约。教学用CUF须注册，其用途限教学练习。"
+          },
+          {
+            "label": "2009届官方数据说明",
+            "url": "https://metadata.fdz.dzhw.eu/public/files/data-packages/stu-gra2009%24-2.0.0/attachments/gra2009_Overview_en.pdf",
+            "detail": "2.0.0版，DOI 10.21249/DZHW:gra2009:2.0.0，列出SUF下载、远程和现场访问，以及教学用CUF"
+          }
+        ],
+        "next_step": "通过FDZ-DZHW提交研究问题与机构/导师信息，确认各届SUF、院系标识及培养方案连接许可，再向作者索取版本一致的变量构造和复现代码。已公布的数据包与论文使用版本仍需逐项对应。"
+      }
     },
     {
       "evidence_id": "baert_2021_internships",
@@ -29,14 +102,61 @@
       "publication": "Economics of Education Review 83, 102141",
       "doi": "https://doi.org/10.1016/j.econedurev.2021.102141",
       "source_url": "https://backoffice.biblio.ugent.be/download/8734103/8739692",
-      "population": "fictional graduate applications to real job vacancies in the study setting",
-      "action": "random assignment of internship experience on resumes",
+      "source_version": "Economics of Education Review 83 (2021) 102141 正式出版版，Ghent University 存档标为 Publisher version",
+      "population": "2015年11月至2016年4月，比利时弗拉芒地区624个真实职位收到的1,248份虚构硕士毕业生申请",
+      "action_id": "internship",
+      "action": "在配对简历中随机加入硕士阶段3个月无薪、自愿、课程内企业实习经历",
       "outcomes": ["invitation to a job interview"],
-      "design": "randomized correspondence field experiment",
-      "assumptions": ["randomized applications remain comparable", "employer responses represent the studied vacancy context"],
-      "transfer_limits": ["resume signaling does not establish acquired skills", "interview invitations do not establish final employment or earnings"],
-      "reusable": "separate employer-response mechanisms from student learning and final employment",
-      "data_status": "replication data not acquired by this project"
+      "summary": "随机简历实验中，有实习经历的申请获面试邀请的比例为22.9%，对照为20.4%。论文报告增加2.5个百分点，相对增加12.6%。结果度量雇主对简历的反应，真实学生的技能、最终录用、收入及毕业半年就业率仍缺观测。",
+      "design": "随机配对简历实地实验。同一职位收到一份有实习和一份无实习的申请，记录30天内面试邀请。实习经历为虚构，实验直接识别简历信息引起的雇主反应。",
+      "assumptions": ["配对申请按设计随机赋予实习信息", "雇主未识破实验，处理组和对照组的响应记录口径一致", "结果的适用范围限所测试硕士项目和职位"],
+      "reported_results": [
+        {
+          "outcome_id": "invitation to a job interview",
+          "label": "面试邀请率差",
+          "value": 0.025,
+          "unit": "proportion_difference",
+          "treated_rate": 0.229,
+          "control_rate": 0.204,
+          "invitation_ratio": 1.126,
+          "p_value": 0.016,
+          "interpretation": "表3全样本行，624个职位、1,248份申请。差值为2.5个百分点，比例比1.126对应相对增加12.6%。这些均为论文报告的四舍五入值。",
+          "source_location": "第7页表3全样本行及第4.1节",
+          "source_url": "https://backoffice.biblio.ugent.be/download/8734103/8739692"
+        }
+      ],
+      "source_locations": [
+        {
+          "label": "正式论文",
+          "url": "https://backoffice.biblio.ugent.be/download/8734103/8739692",
+          "location": "第4至5页第3.1至3.5节为随机化和回邀定义，第7页表3为主结果，第8页表4及第4.2节为异质性检验",
+          "version": "2021正式出版版，共11页"
+        },
+        {
+          "label": "Ghent University 存档条目",
+          "url": "https://biblio.ugent.be/publication/8734103",
+          "location": "Downloads 中的 Publisher version.pdf 及作者入口",
+          "version": "正式出版版公开存档"
+        }
+      ],
+      "transfer_limits": ["只观察面试邀请，未观察最终录用、就业率或收入", "虚构实习经历无法测量真实学生技能增量", "自愿课程内实习的结果外推到强制实习缺少依据", "样本限比利时弗拉芒地区所选硕士项目和职位", "多变量模型的群体交互项未显著，按性别、专业等分组的显著性差异不足以确定群体效应差异"],
+      "reusable": "把雇主对简历信息的反应、学生实际学习和最终就业分别测量",
+      "data_status": "已取得正式出版论文供本地核验。所查大学存档列出论文PDF，尚未定位公开应用级数据或复现包。正文允许依申请索取响应记录，完整数据与代码的可提供范围需向作者确认。",
+      "data_access": {
+        "status": "author_enquiry_needed",
+        "materials_obtained": ["2021正式出版论文PDF，供本地核验", "Ghent University 书目及下载记录，已查阅"],
+        "microdata_acquired": false,
+        "public_download_verified": false,
+        "access_routes": [
+          {
+            "label": "大学存档及作者入口",
+            "url": "https://biblio.ugent.be/publication/8734103",
+            "detail": "已核对的条目列出1份正式论文PDF。论文第3.5节称具体雇主响应内容可依申请提供，第8页脚注21称详细估计结果可依申请提供。"
+          }
+        ],
+        "next_step": "通过论文首页的通讯作者或大学存档作者入口，询问去标识应用级数据、职位配对编号、随机化及回邀编码、分析代码和使用许可。确认完整复现包的范围，取得许可后再决定可公开的汇总。",
+        "rights_note": "论文首页标注CC BY-NC-ND 4.0。微观数据许可尚未确认，仓库只保存原创摘要、书目、论文报告值及来源链接。"
+      }
     }
   ]
 }

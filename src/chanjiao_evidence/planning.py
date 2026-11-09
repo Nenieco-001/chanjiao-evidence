@@ -30,6 +30,16 @@ def _credits(values, name: str) -> dict:
     return values
 
 
+def _conservative_gain(lower: float, factors: list[float], bias: float) -> float:
+    return min(factor * lower - bias for factor in factors)
+
+
+def _select_plan(baseline_id: str, candidate: dict, gain: float) -> str:
+    if candidate["feasible"] and gain > 1e-12:
+        return candidate["plan_id"]
+    return baseline_id
+
+
 def compare_plans(config: dict, effect: dict) -> dict:
     """Use declared transfer scenarios and a bias budget, without combining reforms."""
     if not isinstance(config, dict):
@@ -96,7 +106,7 @@ def compare_plans(config: dict, effect: dict) -> dict:
         conservative = 0.0
         scenarios = []
         if not is_baseline:
-            conservative = min(factor * lower - bias for factor in factors)
+            conservative = _conservative_gain(lower, factors, bias)
             scenarios = [
                 {
                     "transfer_factor_assumption": factor,
@@ -117,15 +127,41 @@ def compare_plans(config: dict, effect: dict) -> dict:
             }
         )
     baseline_record = next(row for row in records if row["plan_id"] == baseline[0]["plan_id"])
-    eligible = [row for row in records if row["feasible"] and row["conservative_gain"] > 1e-12]
-    chosen = baseline_record
-    if eligible:
-        chosen = min(
-            eligible, key=lambda row: (-row["conservative_gain"], row["cost"], row["plan_id"])
-        )
+    candidate = next(row for row in records if row is not baseline_record)
+    sensitivity = []
+    for factor in sorted({0.0, 0.25, 0.5, 0.75, 1.0, *factors}):
+        for bias_assumption in sorted({0.0, 0.005, 0.01, 0.02, 0.04, bias}):
+            gain = _conservative_gain(lower, [factor], bias_assumption)
+            sensitivity.append(
+                {
+                    "transfer_factor_assumption": factor,
+                    "bias_budget_assumption": bias_assumption,
+                    "conservative_gain": gain,
+                    "selected_plan": _select_plan(baseline_record["plan_id"], candidate, gain),
+                }
+            )
     return {
-        "selected_plan": chosen["plan_id"],
+        "selected_plan": _select_plan(
+            baseline_record["plan_id"], candidate, candidate["conservative_gain"]
+        ),
         "plans": records,
         "bias_budget_assumption": bias,
         "selection_rule": "largest positive conservative gain, otherwise unchanged baseline",
+        "baseline_plan_id": baseline_record["plan_id"],
+        "constraints": {
+            "total_credits": total,
+            "minimum_credits": minimum,
+            "maximum_credits": maximum,
+            "budget": budget,
+        },
+        "credit_changes": [
+            {
+                "module": module,
+                "baseline": baseline_record["credits"][module],
+                "candidate": candidate["credits"][module],
+                "delta": candidate["credits"][module] - baseline_record["credits"][module],
+            }
+            for module in sorted(modules)
+        ],
+        "sensitivity": sensitivity,
     }

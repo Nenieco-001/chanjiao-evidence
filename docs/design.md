@@ -23,7 +23,7 @@
 5. 逐单位删除，检查单个单位对结论的影响。
 6. 报告“需要多大的未观测差异趋势才能抵消估计优势”，让读者知道结论有多稳。
 
-输出 JSON 报告、输入和源码哈希、依赖版本、研究限制。所有结果标明 `synthetic` 或 `historical`。
+输出 JSON、中文 HTML 和 Markdown 报告，以及输入和源码哈希、依赖版本、研究限制。所有结果标明 synthetic 或 historical。可选论文卡片只作为背景，与面板估计分开，具体格式和敏感性格点见 [数据契约](data-contract.md)。
 
 ## 识别假设与边界
 
@@ -56,7 +56,7 @@ Python 3.11–3.13，statsmodels 0.15.0，默认离线运行。示例只用合�
 | `parse_panel(csv_bytes, metadata_bytes)` | 解析并校验同一份输入字节；pipeline 用它保证报告与清单同源。 |
 | `analyze_panel(frame, adoption_year)` | 返回主估计、改革前伪改革和逐单位删除诊断。 |
 | `compare_plans(config, effect)` | 返回每个方案的可行性、资源约束和敏感性排序。 |
-| `run(panel_path, metadata_path, plans_path, output_dir)` | 校验全部输入后发布一个全新产物目录。 |
+| `run(panel_path, metadata_path, plans_path, output_dir, *, evidence_path=None)` | 校验输入和可选文献后，发布 JSON、HTML、Markdown 与清单。 |
 
 效应是比例差值，0.01 对应 1 个百分点。区间和方案优势只说明当前设计和样本，不能直接解释为真实学校效果；真实数据接入前，这些数字只验证实现。
 
