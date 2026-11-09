@@ -8,9 +8,10 @@
 
 ## R2 · Codex 评审触发修复
 
-- 负责人为 root，状态为等待评审回应，revision 3。已定位本仓库缺少 GitHub 集成授权，按用户批准加入指定仓库列表并保存。
+- 负责人为 root，状态为完成，revision 3。已定位本仓库缺少 GitHub 集成授权，按用户批准加入指定仓库列表。重新请求后，Codex 添加了 👀 并发布 Running 状态，触发链路已恢复。
 - 范围为 GitHub 集成、仓库评审设置、PR #2 评审评论和响应，不改代码。
 - 用户已授权检查和修复；涉及新增安全访问的授权由用户完成。验收为定位配置问题、完成允许的修复并观察重新请求的实际回应。合并仍由用户执行。
+- 触发核验见 [PR #2 的评审请求](https://github.com/Nenieco-001/chanjiao-evidence/pull/2#issuecomment-6741175577) 和 [Codex 状态](https://github.com/Nenieco-001/chanjiao-evidence/pull/2#issuecomment-6741184787)。评审是否完成及其发现以 PR 最新记录为准。
 
 本轮协调者为 root。任务版本为 revision 2，D1–D4 已于 2026-11-09 完成并通过独立验收。特性分支为 `feat/analysis-workbench`，基于已合并 PR #1 的 main。用户授权本轮验收后推送、创建 PR 和评论 `@codex review`，合并由用户执行。
 
