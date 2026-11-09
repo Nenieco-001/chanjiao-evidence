@@ -4,6 +4,8 @@
 
 后续 PR 在此记录行为、假设及数据迁移。
 
+- 新增[参赛报告骨架](docs/competition-report-draft.md)与[答辩及视频大纲](docs/competition-defense-outline.md)：按赛题四任务整理已验收需求结果，提供课程/方向/招生待填模板、验证失败条件与风险应对；保留真实供给、学生结果和四年效果缺口，不新增学校收益结论。验收状态见[分析任务板](analysis/competition/TASKS.md)。
+
 - 需求侧工作台新增 `--matched-backtest`：逐层与完整组合共同支持、五维误差分组及跨年疑似重复计数；保留全年对照、空组、小样本和无优势结果。平台同号仅作条件假设，2026 已参与探索，只报告回顾性描述。实际运行与验收状态见[分析任务板](analysis/competition/TASKS.md)。
 
 - 新增本地 DuckDB 招聘仓库、明确版本入库、质量汇总和 Parquet 导出。
