@@ -85,7 +85,9 @@ def test_cli_accepts_literature_and_writes_readable_report(tmp_path, inputs):
         "--output",
         str(tmp_path / "readable"),
     ]
-    completed = subprocess.run(command, env=env, capture_output=True, text=True, check=False)
+    completed = subprocess.run(
+        command, env=env, capture_output=True, text=True, encoding="utf-8", check=False
+    )
     assert completed.returncode == 0, completed.stderr
     assert "report.html" in completed.stdout
     details = json.loads((tmp_path / "readable" / "report.json").read_text(encoding="utf-8"))
@@ -167,7 +169,11 @@ def test_mismatched_action_is_rejected(tmp_path, inputs):
 
 
 def test_cli_failure_and_success_exit_codes(tmp_path, inputs):
-    env = dict(os.environ, PYTHONPATH=str(Path(__file__).parents[1] / "src"))
+    env = dict(
+        os.environ,
+        PYTHONPATH=str(Path(__file__).parents[1] / "src"),
+        PYTHONIOENCODING="cp1252",
+    )
     command = [
         sys.executable,
         "-m",
@@ -182,8 +188,12 @@ def test_cli_failure_and_success_exit_codes(tmp_path, inputs):
         "--output",
         str(tmp_path / "cli"),
     ]
-    result = subprocess.run(command, capture_output=True, text=True, env=env, check=False)
+    result = subprocess.run(
+        command, capture_output=True, text=True, encoding="utf-8", env=env, check=False
+    )
     assert result.returncode == 0, result.stderr
     assert json.loads((tmp_path / "cli" / "report.json").read_text(encoding="utf-8"))["analysis"]
-    result = subprocess.run(command, capture_output=True, text=True, env=env, check=False)
+    result = subprocess.run(
+        command, capture_output=True, text=True, encoding="utf-8", env=env, check=False
+    )
     assert result.returncode == 2

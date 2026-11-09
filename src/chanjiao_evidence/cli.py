@@ -7,7 +7,20 @@ from pathlib import Path
 from .pipeline import run
 
 
+def _configure_utf8_output() -> None:
+    """Keep Chinese messages printable when output is redirected on Windows."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is None:
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            continue
+
+
 def main(argv=None) -> int:
+    _configure_utf8_output()
     parser = argparse.ArgumentParser(prog="chanjiao")
     commands = parser.add_subparsers(dest="command", required=True)
     command = commands.add_parser("run", help="分析改革面板并生成培养方案比较报告")

@@ -35,6 +35,7 @@
 - CLI 带/不带 `--evidence` 均生成 `report.json`、`report.html`、`report.md` 和 `manifest.json`；带文献时 manifest 输入多一项 `evidence` 哈希；四份产物哈希与实际文件一致；相同输入两次运行字节一致。
 - 带与不带文献的 `analysis`、`planning`、`trajectory`、`limitations` 相同，只有 `evidence` 与 manifest 输入不同；`used_for_estimation=false`，两张卡片当前 `matches_target_outcome=false`。
 - HTML 无 script、link、svg 等外部资源，外部文本转义，链接仅 http/https；Markdown 无原始 HTML 或危险链接；已存在输出目录重跑 exit 2，产物不变。
+- CLI 在 `PYTHONIOENCODING=cp1252` 的模拟旧版 Windows 输出下以 0 退出，中文提示不再触发 `UnicodeEncodeError`。
 - 独立复算 DiD 0.04、credit_changes 与 25 格 sensitivity 公式；证据卡片结构与 `docs/evidence-findings.md` 数值一致。
 - 已知环境限制：本机默认 TEMP 不可写时 pytest 会回退到仓库根生成临时目录，已在 `.gitignore` 忽略；全量测试曾偶发 Windows 发布 `os.rename` PermissionError，现已对 winerror 5/32 做有上限退避重试并补回归用例。
 
