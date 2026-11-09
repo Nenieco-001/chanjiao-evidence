@@ -1,5 +1,6 @@
 build==1.6.1
 colorama==0.4.6
+duckdb==2.0.0
 formulaic==1.2.2
 iniconfig==2.3.1
 interface_meta==2.0.1

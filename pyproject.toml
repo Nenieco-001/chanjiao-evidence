@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "chanjiao-evidence"
-version = "0.2.0"
+version = "0.3.0"
 description = "Reproducible historical-reform evidence for curriculum planning"
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
 license = "MIT"
-dependencies = ["statsmodels==0.15.0", "pandas>=2.2,<4"]
+dependencies = ["statsmodels==0.15.0", "pandas>=2.2,<4", "duckdb==2.0.0"]
 
 [project.optional-dependencies]
 dev = ["pytest==9.2.0", "ruff==0.17.4", "build==1.6.1"]

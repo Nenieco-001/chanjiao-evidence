@@ -51,7 +51,23 @@ python -m build
 
 `requirements-py313.txt` 是本次 Windows / Python 3.13 环境的精确版本，其他受支持解释器按 `pyproject.toml` 解析依赖。
 
-## 目录
+## 本地招聘数据仓库
+
+`warehouse` 子命令把复制来的候选数据按来源和版本登记，先校验再查询。DuckDB 在本机执行扫描与聚合，LLM 只读取元数据和限定数量的汇总。完整说明见 [本地数据仓库](docs/local-data-warehouse.md)。
+
+```powershell
+# 先比对可能重复的两个 ZIP，结果只保存完整性和成员差异
+chanjiao warehouse compare-zip --left "左侧数据包.zip" --right "右侧数据包.zip" --output .local/warehouse/zip-comparison.json
+
+# 将已校验的一个 CSV 版本入库，按源和版本查询
+chanjiao warehouse ingest --csv .local/warehouse/input/jobs.csv --database .local/warehouse/jobs.duckdb --dataset-id campus-jobs --version annual-2026 --expected-year 2026 --output .local/warehouse/import.json
+chanjiao warehouse summary --database .local/warehouse/jobs.duckdb --dataset-id campus-jobs --version annual-2026 --limit 10 --output .local/warehouse/summary.json
+chanjiao warehouse export --database .local/warehouse/jobs.duckdb --dataset-id campus-jobs --version annual-2026 --destination .local/warehouse/jobs-2026.parquet --output .local/warehouse/export.json
+```
+
+示例路径需换成实际输入。每次生成元数据报告使用新路径，同一数据版本重复导入可复用已有内容。各版本分开查询，减少总表和分年版重复计数。原始字段及质量异常保留在数据库中，汇总报告提供异常计数。
+
+## 项目文件
 
 ```text
 src/chanjiao_evidence/  数据校验、估计、方案比较、文献接入、报告与 CLI
