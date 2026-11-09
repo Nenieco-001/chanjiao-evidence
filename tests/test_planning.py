@@ -5,6 +5,33 @@ import pytest
 from chanjiao_evidence.planning import compare_plans
 
 
+def test_records_credit_reallocation_and_resource_limits(plans):
+    result = compare_plans(plans, {"estimate": 0.06, "ci95": [0.03, 0.09]})
+    changes = {row["module"]: row["delta"] for row in result["credit_changes"]}
+    assert changes == {"foundation": 0, "internship": 4, "specialty": -4}
+    assert sum(changes.values()) == 0
+    assert result["baseline_plan_id"] == "unchanged"
+    assert result["constraints"]["budget"] == 10
+
+
+def test_sensitivity_exposes_when_baseline_wins(plans):
+    result = compare_plans(plans, {"estimate": 0.06, "ci95": [0.03, 0.09]})
+    points = {
+        (row["transfer_factor_assumption"], row["bias_budget_assumption"]): row
+        for row in result["sensitivity"]
+    }
+    assert points[(0.5, 0.01)]["conservative_gain"] == pytest.approx(0.005)
+    assert points[(0.5, 0.01)]["selected_plan"] == "internship"
+    assert points[(0.5, 0.02)]["selected_plan"] == "unchanged"
+    assert points[(0, 0)]["selected_plan"] == "unchanged"
+
+
+def test_infeasible_candidate_never_wins_sensitivity(plans):
+    plans["plans"][1]["cost"] = 100
+    result = compare_plans(plans, {"estimate": 0.06, "ci95": [0.03, 0.09]})
+    assert {point["selected_plan"] for point in result["sensitivity"]} == {"unchanged"}
+
+
 def test_selects_feasible_reform_with_positive_lower_bound(plans):
     result = compare_plans(plans, {"estimate": 0.06, "ci95": [0.03, 0.09]})
     assert result["selected_plan"] == "internship"

@@ -70,6 +70,22 @@
 
 ## 产物
 
-`report.json` 包含：元数据、估计与诊断、方案比较、研究限制。`manifest.json` 包含：三个输入的内容哈希、包源码哈希、报告哈希、包版本与依赖版本。
+`report.json` 保留元数据、估计与诊断、方案比较和研究限制，并新增三年组均值 `trajectory` 与文献背景 `evidence`。`planning` 新增学分变化、资源约束和敏感性格点。数值使用比例原值，HTML 与 Markdown 显示效果时换算为百分点。
 
-哈希使用固定角色名（`panel`、`metadata`、`plans`），不写机器路径和运行时刻，这样同一环境相同输入能得到字节一致的产物。manifest 的输入哈希对应实际参与解析的字节，报告和清单不会来自两次不同的读取。跨版本浮点差异用数值测试判断，不靠字节比较。
+`report.html` 与 `report.md` 使用同一份内部结果渲染。HTML 是离线单文件，外部文字会转义，链接仅允许 http/https。没有文献时明确列出缺失输入。
+
+`manifest.json` 包含三个必选输入、可选文献输入的内容哈希，包源码哈希，三个报告的内容哈希，包版本与依赖版本。输入契约 v1 保持兼容，旧命令仍生成新增的可读报告。
+
+哈希使用固定角色名（`panel`、`metadata`、`plans`），提供 `--evidence` 时增加 `evidence`，不写机器路径和运行时刻，这样同一环境相同输入能得到字节一致的产物。manifest 的输入哈希对应实际参与解析的字节，报告和清单不会来自两次不同的读取。跨版本浮点差异用数值测试判断，不靠字节比较。
+
+## 可选文献输入
+
+`--evidence` 读取 schema_version=1 的 JSON，cards 至少一项。每张卡片的 evidence_id 唯一，title、design、source_url、data_status 为非空文字，outcomes 与 transfer_limits 为非空文字列表。source_url 必须为 https 原始来源。现有卡片可保留作者、版本、中文总结、已报道结果和数据获取说明。
+
+系统只按 outcome_id 的精确名称标记 `matches_target_outcome`。同名指标仍需人工核对人群、时间窗和识别设计。`used_for_estimation` 固定为 false，文献结果不自动代入当前面板或改变方案排序。
+
+若提供 reported_results，每项需有 outcome_id、label、interpretation 和 source_location；有 value 时保留 unit，定性结果可省略 value，报告写明未提取数值。source_locations 每项包含 label、url、location 和 version。data_access 为对象，可记录取得状态、材料、申请入口和下一步。缺少可选扩展时仍可读取旧卡片。
+
+## 敏感性格点
+
+后端在输入的迁移系数基础上补充 0、0.25、0.5、0.75、1，在偏差预算基础上补充 0、0.005、0.01、0.02、0.04，去重排序后逐组合比较。每行固定一个系数和预算，保守增量沿用上文公式，资源不可行的候选在所有格点都保留原方案。格点说明选择对假设的依赖。

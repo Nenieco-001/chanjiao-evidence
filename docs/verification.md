@@ -1,6 +1,6 @@
-# 首版本地核验
+# 核验记录
 
-这份文档记录 2026-11-09 在 Windows / Python 3.13.7 上实际跑过什么、结果是什么。精确依赖见 `requirements-py313.txt`。上面的首版记录对应提交 a14e06a；去过度防御的复验在最终改动提交前的工作区完成，见下文。核验使用公开合成示例，真实历史面板尚未取得。
+这份文档记录 2026-11-09 在 Windows / Python 3.13.7 上实际跑过什么、结果是什么。精确依赖见 `requirements-py313.txt`。首版记录对应提交 a14e06a；去过度防御复验对应 0.2.0 之前的工作区；0.2.0 记录对应当前 `feat/analysis-workbench` 工作区，见下文。核验使用公开合成示例，真实历史面板尚未取得。
 
 ## 已运行
 
@@ -25,7 +25,32 @@
 - 对已存在输出目录重跑仍以退出码 2 拒绝，原目录内容不变，没有暂存目录残留。
 - 面板、元数据和方案配置的边界拒绝路径全部保留，测试覆盖未减少。
 
-## 持续核验
+## 0.2.0 · 中文报告与文献证据
+
+2026-11-09，对 `feat/analysis-workbench` 工作区做独立验收（提交前状态）：
+
+- `pytest -q`：85 项通过（原 83 项，新增 Windows 发布重试与 HTML 标题用例）。
+- `ruff check .` 与 `ruff format --check .` 通过。
+- 离线构建：0.2.0 sdist 与 wheel 成功；隔离构建因本机访问 PyPI 超时未验证。
+- CLI 带/不带 `--evidence` 均生成 `report.json`、`report.html`、`report.md` 和 `manifest.json`；带文献时 manifest 输入多一项 `evidence` 哈希；四份产物哈希与实际文件一致；相同输入两次运行字节一致。
+- 带与不带文献的 `analysis`、`planning`、`trajectory`、`limitations` 相同，只有 `evidence` 与 manifest 输入不同；`used_for_estimation=false`，两张卡片当前 `matches_target_outcome=false`。
+- HTML 无 script、link、svg 等外部资源，外部文本转义，链接仅 http/https；Markdown 无原始 HTML 或危险链接；已存在输出目录重跑 exit 2，产物不变。
+- CLI 在 `PYTHONIOENCODING=cp1252` 的模拟旧版 Windows 输出下以 0 退出，中文提示不再触发 `UnicodeEncodeError`。
+- 独立复算 DiD 0.04、credit_changes 与 25 格 sensitivity 公式；证据卡片结构与 `docs/evidence-findings.md` 数值一致。
+- 已知环境限制：本机默认 TEMP 不可写时 pytest 会回退到仓库根生成临时目录，已在 `.gitignore` 忽略；全量测试曾偶发 Windows 发布 `os.rename` PermissionError，现已对 winerror 5/32 做有上限退避重试并补回归用例。
+
+## DSH 交付后的复核
+
+2026-11-09，复核 PR #2 的提交 4210ef9 和 1d63244。
+
+- 在独占临时目录重新执行 pytest，85 项通过。ruff check 和 format --check 通过。
+- 本轮普通隔离构建成功，生成 0.2.0 sdist 与 wheel，补齐前一轮因 PyPI 超时未完成的构建检查。
+- 独立运行带文献两次、不带文献一次、零效应一次，共四次 CLI，并以 cp1252 模拟原 Windows 管道编码，均正常退出。
+- 重复输入的 HTML、Markdown、JSON 和 manifest 字节一致，全部输入与报告内容哈希核对通过。
+- 重新计算正效应 0.04、零效应 0，以及 25 个敏感性格点和学分守恒，均与报告相同。带和不带文献时的估计、方案、趋势和限制一致。
+- 本地文档链接通过检查。Windows 发布重试与输出编码修复的测试和最新远端 CI 均通过，代码复核未发现新的阻断项。
+
+## 远端 CI
 
 提交 c93b3c7 在 Windows、Linux 和 Python 3.11、3.13 四组 CI 均通过，包含安装、测试、静态检查、构建和两个 CLI 示例。[首次远端核验](https://github.com/Nenieco-001/chanjiao-evidence/actions/runs/42586502611)
 
