@@ -262,6 +262,27 @@ def _strategy_markdown(report: dict) -> str:
     lines += ["## 风险与应对"]
     for risk in strategy["risk_matrix"]:
         lines.append(text(json.dumps(risk, ensure_ascii=False, sort_keys=True)))
+    comparison = report.get("comparison")
+    if comparison is not None:
+        lines += [
+            "## 三维条件分析",
+            text(comparison["demand"]["scope"]),
+            "技能覆盖按课程显式文本证据计算，学生掌握与真实学校规模差额保持未识别。",
+            f"词面提及分母 {text(comparison['skills']['mention_denominator'])}，"
+            f"现有覆盖区间 {text(comparison['skills']['baseline_coverage_interval'])}，"
+            f"拟定内容覆盖区间 {text(comparison['skills']['proposed_coverage_interval'])}。",
+        ]
+        for row in comparison["directions"]["conditional_comparisons"]:
+            lines.append(
+                f"- 方向基线假设 {text(row['scenario_id'])}，原距离 {text(row['baseline_tvd'])}，"
+                f"新距离 {text(row['proposed_tvd'])}，距离减少量 {text(row['improvement'])}。"
+            )
+        for row in comparison["scale"]["conditional_scenarios"]:
+            lines.append(
+                f"- 规范化规模情景 {text(row['scenario_id'])}，机会与求职指数差 "
+                f"{text(row['opportunity_minus_jobseekers'])}，盈亏平衡样本可达份额 "
+                f"{text(row['break_even_sample_access_share'])}。"
+            )
     lines += ["## 正式提交缺项"]
     lines.extend(f"- {text(item)}" for item in report["unmet_requirements"])
     lines += ["课程事实、情景、完整过程和数值依据统一保存在 strategy-review.json。"]
@@ -275,10 +296,12 @@ def _run_strategy(args) -> None:
     destination = args.output.absolute()
     if os.path.lexists(destination):
         raise FileExistsError(f"输出目录已存在 {destination}，请换一个新路径")
-    inputs = {
-        name: getattr(args, name).read_bytes()
-        for name in ["plan", "program", "policy", "evidence", "effects"]
-    }
+    if bool(args.demand) != bool(args.comparison):
+        raise ValueError("三维比较输入不完整，请同时提供 --demand 与 --comparison")
+    names = ["plan", "program", "policy", "evidence", "effects"]
+    if args.demand is not None:
+        names += ["demand", "comparison"]
+    inputs = {name: getattr(args, name).read_bytes() for name in names}
     parsed = {name: json.loads(value) for name, value in inputs.items()}
     report = {
         "schema_version": 1,
@@ -289,12 +312,19 @@ def _run_strategy(args) -> None:
             "T1.skills",
             "T1.directions",
             "T1.scale",
-            "T2.school_approval_and_resources",
+            "T2.program_rules_and_resource_assumptions",
             "T2.admissions_calibration_and_long_run_stability",
-            "T3.target_action_applicability_and_student_outcomes",
-            "C.data_rights_and_official_test_set",
+            "T3.target_action_applicability_and_quantified_validation",
+            "S.data_driven_candidate_discovery",
+            "C.data_rights_and_submission_specification",
         ],
     }
+    if args.demand is not None:
+        from .comparison import compare_supply_demand
+
+        report["comparison"] = compare_supply_demand(
+            parsed["program"], parsed["demand"], parsed["comparison"]
+        )
     outputs = {
         "strategy-review.json": _json_bytes(report),
         "review.md": _strategy_markdown(report).encode("utf-8"),
@@ -338,6 +368,8 @@ def main(argv=None) -> int:
     strategy = commands.add_parser("strategy", help="审查专业模块、政策机制与历史证据情景")
     for name in ["plan", "program", "policy", "evidence", "effects", "output"]:
         strategy.add_argument(f"--{name}", type=Path, required=True)
+    strategy.add_argument("--demand", type=Path, help="可选的限定需求聚合JSON")
+    strategy.add_argument("--comparison", type=Path, help="与需求聚合一同提供的比较假设JSON")
     bundle = commands.add_parser("bundle", help="按验收清单生成材料审阅包或正式提交包")
     for name in ["checklist", "materials", "output"]:
         bundle.add_argument(f"--{name}", type=Path, required=True)

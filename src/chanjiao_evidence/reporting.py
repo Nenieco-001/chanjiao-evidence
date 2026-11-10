@@ -376,42 +376,138 @@ def _sections(report: dict) -> list[dict]:
 
 
 _STYLE = """
-:root { color-scheme: light; font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-  color: #243442; background: #edf1f3; line-height: 1.75; }
+:root {
+  --ink: #1f2a30; --muted: #657077; --paper: #f3efe7; --card: #fffdf9;
+  --line: #e2dacd; --accent: #0f6b60; --accent-soft: #e7f1ee; --warm: #b7793b;
+  --sans: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  color-scheme: light;
+}
 * { box-sizing: border-box; }
-body { margin: 0; padding: 32px 20px; }
-main { max-width: 1040px; margin: auto; background: white; padding: 44px 56px; }
-header { border-top: 5px solid #24665f; padding-top: 18px; }
-h1 { font-size: 30px; line-height: 1.4; margin: 8px 0 16px; }
-h2 { font-size: 21px; margin: 34px 0 12px; line-height: 1.5; }
+body {
+  margin: 0; padding: 40px 24px 64px; color: var(--ink);
+  font-family: var(--sans); font-size: 16px; line-height: 1.8;
+  background:
+    radial-gradient(circle at 10% 0%, #fbf7ee 0, transparent 36%),
+    linear-gradient(180deg, #f5f1e9 0%, #eceae3 100%);
+}
+main {
+  max-width: 1080px; margin: 0 auto; overflow: hidden;
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(42, 36, 24, .12);
+}
+header {
+  padding: 46px 56px 34px; border-top: 6px solid var(--accent);
+  background: linear-gradient(180deg, #fffdf8 0%, #fffdf9 60%, #fbf8f1 100%);
+}
+.eyebrow {
+  display: flex; align-items: center; gap: 10px; margin: 0 0 18px;
+  color: var(--accent); font-size: 12px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+}
+.eyebrow .dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(15, 107, 96, .12);
+}
+h1 {
+  max-width: 100%; margin: 0 0 18px; font-family: var(--serif);
+  font-size: 38px; font-weight: 700; line-height: 1.3; letter-spacing: -.02em;
+  text-wrap: balance;
+}
+h2 {
+  margin: 0 0 14px; font-family: var(--serif); font-size: 25px;
+  font-weight: 700; line-height: 1.4; letter-spacing: -.01em;
+}
+section { padding: 30px 56px 34px; border-top: 1px solid var(--line); }
+section:first-of-type { border-top: 0; }
 p { margin: 10px 0; overflow-wrap: anywhere; }
-.mode { color: #24665f; font-weight: 700; letter-spacing: .08em; }
-.summary { padding: 16px 20px; background: #eef5f2; border-left: 3px solid #24665f; }
-.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
-.metric { border: 1px solid #d6e1df; padding: 12px 16px; }
-.metric span { display: block; font-size: 13px; color: #566575; }
-.metric strong { font-size: 25px; font-variant-numeric: tabular-nums; }
-.effect { font-size: 18px; }
-.table-wrap { overflow-x: auto; margin: 16px 0; }
-table { border-collapse: collapse; width: 100%; font-size: 14px; }
-th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid #dfe5e8;
-  vertical-align: top; overflow-wrap: anywhere; }
-th { background: #f0f4f5; font-weight: 700; }
+.summary {
+  margin: 0 0 24px; padding: 18px 20px; background: var(--accent-soft);
+  border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0;
+  font-size: 17px; line-height: 1.8;
+}
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 26px 0 22px; }
+.metric {
+  position: relative; min-height: 98px; padding: 16px 16px 14px;
+  background: #fffefb; border: 1px solid var(--line); border-radius: 12px;
+}
+.metric span {
+  display: block; margin-bottom: 6px; color: var(--muted);
+  font-size: 12px; line-height: 1.5;
+}
+.metric strong {
+  display: block; color: var(--ink); font-family: var(--serif);
+  font-size: 28px; line-height: 1.1; font-variant-numeric: tabular-nums;
+}
+.metric::after {
+  content: ""; position: absolute; left: 16px; bottom: 0; width: 28px;
+  height: 3px; background: var(--accent); border-radius: 3px 3px 0 0;
+}
+.effect {
+  display: inline-flex; align-items: baseline; gap: 10px; margin: 2px 0 0;
+  padding: 12px 16px; background: #fff; border: 1px solid var(--line);
+  border-radius: 999px; font-size: 15px;
+}
+.effect-label {
+  padding: 3px 8px; border-radius: 999px; background: var(--accent-soft);
+  color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .12em;
+}
+.table-wrap {
+  overflow-x: auto; margin: 18px 0;
+  border: 1px solid var(--line); border-radius: 12px;
+}
+table { width: 100%; border-collapse: collapse; background: #fffefb; font-size: 14px; }
+th, td {
+  padding: 11px 14px; border-bottom: 1px solid #eee7db; text-align: left;
+  vertical-align: top; overflow-wrap: anywhere;
+}
+th {
+  background: #f6f1e7; color: #4d5b60; font-size: 12px;
+  font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+}
+tr:last-child td { border-bottom: 0; }
+tbody tr:nth-child(even) { background: #fcfaf5; }
+tbody tr:hover { background: #f7f2e8; }
 td { font-variant-numeric: tabular-nums; }
-a { color: #155f76; text-underline-offset: 3px; overflow-wrap: anywhere; }
-.source { font-size: 13px; color: #566575; }
-footer { margin-top: 36px; padding-top: 14px; border-top: 1px solid #dfe5e8;
-  font-size: 12px; color: #566575; }
-@media (max-width: 700px) {
-  body { padding: 0; } main { padding: 24px 20px; }
-  .metrics { grid-template-columns: repeat(2, 1fr); } h1 { font-size: 25px; }
+a {
+  color: #0b6373; text-decoration-thickness: 1px;
+  text-underline-offset: 3px; overflow-wrap: anywhere;
+}
+a:hover { color: var(--accent); }
+.source { color: var(--muted); font-size: 12.5px; }
+footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px;
+  padding: 22px 56px 28px; border-top: 1px solid var(--line);
+  background: #fbf8f1; color: var(--muted); font-size: 12px;
+}
+.footer-mark { color: var(--accent); font-family: var(--serif); }
+@media (max-width: 760px) {
+  body { padding: 0; background: var(--card); }
+  main { border: 0; border-radius: 0; box-shadow: none; }
+  header, section { padding-left: 22px; padding-right: 22px; }
+  header { padding-top: 32px; }
+  h1 { font-size: 31px; }
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  footer { padding: 18px 22px; }
 }
 @media print {
-  @page { margin: 16mm; } body { background: white; padding: 0; font-size: 10pt; }
-  main { max-width: none; padding: 0; } h2 { break-after: avoid; }
-  header, .metrics, tr { break-inside: avoid; } .table-wrap { overflow: visible; }
-  thead { display: table-header-group; } th { background: #f1f1f1; }
-  a { color: inherit; } footer { margin-top: 20px; }
+  @page { margin: 16mm; }
+  body { background: #fff; padding: 0; font-size: 10pt; }
+  main { max-width: none; border: 0; border-radius: 0; box-shadow: none; }
+  header { padding: 0 0 18px; border-top: 0; background: none; }
+  section { padding: 18px 0; }
+  h1 { font-size: 24pt; }
+  h2 { font-size: 15pt; break-after: avoid; }
+  .metrics { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .metric { min-height: auto; padding: 10px; border-color: #ddd; }
+  .metric strong { font-size: 16pt; }
+  .metric::after { display: none; }
+  .summary { background: #f4f4f4; border-left-color: #666; }
+  .table-wrap { overflow: visible; border: 0; border-radius: 0; }
+  table { font-size: 8.8pt; }
+  th { background: #f1f1f1; color: #000; }
+  a { color: inherit; text-decoration: none; }
+  footer { margin-top: 22px; padding: 12px 0 0; border-top: 1px solid #ccc; background: none; }
 }
 """
 
@@ -431,7 +527,7 @@ def render_html(report: dict) -> str:
         '<!doctype html>\n<html lang="zh-CN">\n<head>\n<meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width, initial-scale=1">',
         f"<title>产教智对 · 改革证据与方案比较</title><style>{_STYLE}</style></head>",
-        f'<body><main><header><p class="mode">{html.escape(mode)}</p>',
+        f'<body><main><header><p class="eyebrow"><span class="dot"></span>{html.escape(mode)}</p>',
         f"<h1>{html.escape(_plain_action_name(report['metadata']['action_id']))}，值得调整培养方案吗？</h1>",
         f'<p class="summary">{html.escape(summary)}</p><div class="metrics">',
     ]
@@ -440,8 +536,9 @@ def render_html(report: dict) -> str:
         for label, value in metrics
     )
     parts.append(
-        f'</div><p class="effect">DiD <strong>{_pp(main["estimate"])}</strong>'
-        f" · 95% 置信区间 {_interval(main)}</p></header>"
+        f'</div><div class="effect"><span class="effect-label">DiD</span>'
+        f"<strong>{_pp(main['estimate'])}</strong>"
+        f"<span>95% 置信区间 {_interval(main)}</span></div></header>"
     )
     for section in _sections(report):
         parts.append(f"<section><h2>{html.escape(section['title'])}</h2>")
@@ -467,7 +564,8 @@ def render_html(report: dict) -> str:
             parts.append(f'<p class="source">{content}</p>')
         parts.append("</section>")
     parts.append(
-        "<footer>产教智对 · 离线研究报告 · 数值与来源以同目录 report.json 为准</footer>"
+        '<footer><span class="footer-mark">产教智对 · 离线研究报告</span>'
+        "<span>数值与来源以同目录 report.json 为准</span></footer>"
         "</main></body></html>\n"
     )
     return "\n".join(parts)

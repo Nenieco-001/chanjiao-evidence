@@ -10,6 +10,7 @@ import re
 import shutil
 import statistics
 import tempfile
+import time
 from collections import Counter
 from datetime import date
 from pathlib import Path
@@ -903,7 +904,15 @@ def run(inputs, output, *, backtest=False, matched_backtest=False):
             "outputs": {p.name: sha256(p) for p in sorted(temporary.iterdir())},
         }
         write_json(temporary / "manifest.json", manifest)
-        temporary.rename(output)
+        # Keep this standalone entry standard-library-only, including publication retries.
+        for attempt in range(4):
+            try:
+                temporary.rename(output)
+                break
+            except PermissionError as error:
+                if getattr(error, "winerror", None) not in {5, 32} or attempt == 3:
+                    raise
+                time.sleep(0.05 * (attempt + 1))
     except BaseException:
         shutil.rmtree(temporary)
         raise

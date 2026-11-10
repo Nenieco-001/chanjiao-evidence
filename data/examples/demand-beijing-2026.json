@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "historical_sample",
+  "scope": "北京，2026-01-01至2026-03-10，限定两行业上市公司关联招聘样本",
+  "source": "analysis/competition/RESULTS.md；既有核验聚合skills.csv与structures.csv",
+  "source_hashes": {
+    "skills.csv": "c0718f47fb61205044cec7358cfedcfce2e0b9908a29502df650ba967f155bd4",
+    "structures.csv": "296efac5fdab99801046f1f8a7de4a24c94ed70b4ecf4460d96f0975a44d3a33"
+  },
+  "job_records": 152,
+  "skill_counts": {
+    "Python": 38,
+    "Java": 55,
+    "JavaScript": 17,
+    "SQL": 41,
+    "C++": 19,
+    "Linux": 31,
+    "Git": 13,
+    "Docker": 15,
+    "机器学习": 10,
+    "深度学习": 8,
+    "数据结构": 8,
+    "软件测试": 1
+  },
+  "job_family_counts": {
+    "数据分析与工程": 18,
+    "算法与机器学习": 23,
+    "系统运维与安全": 20,
+    "软件开发": 87,
+    "软件测试": 4
+  },
+  "rights_status": "原始数据许可待核定。本文件仅含已有公开分析的去标识聚合，原始记录不随包提供。",
+  "limitations": [
+    "样本包含有经验岗位，未确认为中财或应届生可达岗位。",
+    "岗位记录数与招聘人数分别度量，平台覆盖未知，不能推全年市场总量。"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "scenario_assumptions",
+  "action_id": "structured_course_project",
+  "target_population": "中财2025级计算机专业的课程项目参与者",
+  "target_action": "课程内项目的验收、测试、评审与反馈重组，额外16学时的独立剂量效应尚未识别",
+  "applicability": {
+    "status": "unverified",
+    "rationale": "现有课程本来含实验，大学元分析的对照教学方式和混合学习结果尚未与本课程逐项对应。当前只作保守文献量级参照。",
+    "source_locations": [
+      "data/curricula/cufe-2025-program.json 的0630137与0610110课程",
+      "course-projects.json 的大学亚组与67人流程对照"
+    ]
+  },
+  "effect_reference": {
+    "evidence_id": "zhang_ma_2023_project_learning",
+    "outcome_id": "learning_outcomes_smd"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "pessimistic",
+      "transfer_factor": 0,
+      "bias": 0.03,
+      "assumption_source": "分析者压力假设，允许零迁移和0.03标准差的内容损失；未校准。"
+    },
+    {
+      "scenario_id": "base",
+      "transfer_factor": 0,
+      "bias": 0,
+      "assumption_source": "对照教学方式未对齐，基准取零增益，保持保守参照。"
+    },
+    {
+      "scenario_id": "optimistic",
+      "transfer_factor": 0.5,
+      "bias": 0,
+      "assumption_source": "分析者将大学亚组量级收缩一半作上行情景；0.5未由目标校数据估计。"
+    }
+  ]
+}

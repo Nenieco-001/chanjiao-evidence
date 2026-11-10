@@ -1,7 +1,10 @@
 import hashlib
 import json
+import stat
 import struct
 import zipfile
+from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -85,7 +88,16 @@ def test_missing_material_or_research_requirement_stays_review_only(tmp_path):
 
 @pytest.mark.parametrize(
     "bad_path",
-    ["../outside.txt", "/absolute.txt", "C:/private.txt", ".env", "raw/jobs.csv", "manifest.json"],
+    [
+        "../outside.txt",
+        "/absolute.txt",
+        "C:/private.txt",
+        ".env",
+        "raw/jobs.csv",
+        "RAW/jobs.csv",
+        "Processed/table.csv",
+        "manifest.json",
+    ],
 )
 def test_unsafe_archive_names_are_rejected(tmp_path, bad_path):
     root, path, checklist = materials(tmp_path)
@@ -148,6 +160,47 @@ def test_truncated_presentation_directory_is_user_error(tmp_path):
     assert zipfile.is_zipfile(root / "slides.pptx")
     with pytest.raises(ValueError, match="slides"):
         build_submission(path, root, tmp_path / "bad-slides.zip")
+
+
+def test_parent_symlink_cannot_alias_a_raw_directory(tmp_path):
+    root, path, checklist = materials(tmp_path)
+    raw = root / "raw"
+    raw.mkdir()
+    (raw / "jobs.csv").write_text("synthetic-private-sentinel")
+    alias = root / "approved"
+    try:
+        alias.symlink_to(raw, target_is_directory=True)
+    except OSError as error:
+        pytest.skip(f"当前环境不能创建原生符号链接 {error}")
+    checklist["files"].append({"role": "data", "path": "approved/jobs.csv", "permission": "public"})
+    path.write_text(json.dumps(checklist), encoding="utf-8")
+    with pytest.raises(ValueError, match="链接|重解析"):
+        build_submission(path, root, tmp_path / "leak.zip")
+    assert not (tmp_path / "leak.zip").exists()
+
+
+@pytest.mark.parametrize("attribute", ["symlink", "reparse"])
+def test_each_parent_link_is_rejected_before_reading(tmp_path, monkeypatch, attribute):
+    root, path, checklist = materials(tmp_path)
+    parent = root / "approved"
+    parent.mkdir()
+    (parent / "jobs.csv").write_text("synthetic-private-sentinel")
+    checklist["files"].append({"role": "data", "path": "approved/jobs.csv", "permission": "public"})
+    path.write_text(json.dumps(checklist), encoding="utf-8")
+    original_lstat = Path.lstat
+
+    def controlled_lstat(self):
+        if self == parent:
+            return SimpleNamespace(
+                st_mode=stat.S_IFLNK if attribute == "symlink" else stat.S_IFDIR,
+                st_file_attributes=0x400 if attribute == "reparse" else 0,
+            )
+        return original_lstat(self)
+
+    monkeypatch.setattr(Path, "lstat", controlled_lstat)
+    with pytest.raises(ValueError, match="链接|重解析"):
+        build_submission(path, root, tmp_path / "blocked.zip")
+    assert not (tmp_path / "blocked.zip").exists()
 
 
 def test_publish_failure_cleans_staging(tmp_path, monkeypatch):

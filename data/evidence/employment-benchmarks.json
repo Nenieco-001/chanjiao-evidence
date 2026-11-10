@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "published_external_aggregates",
+  "source": {
+    "title": "2026年中国本科生就业报告",
+    "authors": "麦可思研究院，王伯庆、王梦萍",
+    "publisher": "社会科学文献出版社",
+    "publication_year": 2026,
+    "isbn": "978-7-5228-7673-3",
+    "publication_url": "https://mycos.com/index.php/Index/service_info/nav/2/i/4.html",
+    "publication_notice_url": "https://mycos.com/index.php/Index/news_info/nav/3/id/2026082501.html",
+    "local_pdf_sha256": "72ef256f25b790062a9c970d3554539ea9a9e3b1468a9cca17ae834d998ffbfb",
+    "verification": "本机原书对应页核对数字，出版信息与作者公开产品页及发布通知交叉核对。"
+  },
+  "observations": [
+    {
+      "metric": "mean_monthly_income",
+      "population": "全国本科毕业生",
+      "cohort_year": 2025,
+      "window": "毕业半年后",
+      "value": 6435,
+      "unit": "CNY_per_month",
+      "source_location": "PDF第52页正文、第54页表4-1全国本科行",
+      "definition": "工资、奖金、业绩提成和现金福利补贴等月度现金收入均值。"
+    },
+    {
+      "metric": "mean_monthly_income",
+      "population": "全国计算机类本科毕业生",
+      "cohort_year": 2025,
+      "window": "毕业半年后",
+      "value": 6897,
+      "unit": "CNY_per_month",
+      "source_location": "PDF第56页表4-3续表计算机类行",
+      "definition": "专业类层级，未单列目标学校或计算机科学与技术专业。"
+    },
+    {
+      "metric": "major_alignment_among_fulltime_employed",
+      "population": "全国本科毕业生中受雇全职工作者",
+      "cohort_year": 2025,
+      "window": "毕业半年后",
+      "value": 0.71,
+      "unit": "proportion",
+      "source_location": "PDF第78页三、工作与专业相关度",
+      "definition": "自报工作与所学专业相关的受雇全职毕业生人数占受雇全职工作者比例。"
+    },
+    {
+      "metric": "graduation_destination_rate",
+      "population": "全国本科毕业生",
+      "cohort_year": 2025,
+      "window": "毕业半年后",
+      "value": 0.851,
+      "unit": "proportion",
+      "source_location": "PDF第13页总报告（一）本科生就业落实周期延长",
+      "definition": "毕业去向落实指标，包含升学等去向，使用时须保留原定义。"
+    }
+  ],
+  "used_for_target_effect": false,
+  "target_school_observations_available": false,
+  "limitations": [
+    "报告年份2026对应2025届半年后观测。",
+    "这些是全国或专业类汇总，目标学校与具体措施的结果仍需另行识别。",
+    "各指标的人群与分母不同，收入、专业相关度与毕业去向落实率分别解释。",
+    "标准误与目标校分层未取得，不自动形成目标校置信区间。",
+    "原书PDF和版式留在本机，公开文件仅保存原创指标说明、少量事实与引用位置。"
+  ]
+}

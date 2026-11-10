@@ -28,7 +28,21 @@ admissions 指定原规模、上下界、固定时间窗的就业比例及观测
 
 风险至少三项，按唯一 risk_id、关联 action_id、概率范围、影响、责任、触发和应对登记。概率范围是显式假设，默认 [0,1] 表示未知。专业约束检查通过只覆盖登记路径和条件，学校批准状态为 pending_school_review。
 
+学校实施批准与竞赛材料完备性分别登记。效果验证可采用有来源、可复核的条件情景，真实校内试点和未来观测继续按研究范围标记。
+
 输出 strategy-review.json、review.md、manifest.json。清单登记五份实际输入、所有包源码和两个结果哈希，原子发布并拒绝覆盖。当前入口保留三维差距、资源核定与效果迁移缺项，状态为 review_only。
+
+## 三维条件比较
+
+strategy 可选 `--demand ... --comparison ...`，两项必须同时提供。demand 模式为 historical_sample，包含范围与来源、job_records、skill_counts 和互斥的 job_family_counts。岗位族合计必须等于记录数，每项技能计数不超过记录数。同一岗位可以提及多个技能。
+
+comparison 模式为 scenario_assumptions。skill_links 逐项登记技能、课程ID和原文位置。planned_skills 为拟定课程内容。技能权重分母是词面提及总数，已证实的课程目录文本权重形成覆盖下界，未知内容保留为区间。选修课程可用性与学生实际修读分开。拟定覆盖增量区间以既有证据保留、计划执行且没有覆盖损失为条件，学生掌握效果仍为未识别。
+
+proposed_direction_shares 与 baseline_direction_hypotheses 保留所有岗位族并各自合计1。以总变差距离衡量结构差异，值为对应岗位族比例绝对差之和的一半。比较保留劣于基线、无优势与改善的条件结果，正优势判定用1e-12绝对零容差。实际学校方向分布未取得时，observed_school_gap 保留 null。
+
+scale_scenarios 指定假设届别指数、求职比例、每条记录对应人数与样本可达份额。条件机会为岗位记录数乘每条人数再乘可达份额，条件求职规模为届别指数乘求职比例。输出差额及盈亏平衡可达份额，允许不可达到的阈值大于1。零岗位保留空组及不可识别阈值，实际学校规模缺口为 null。所有乘积与阈值溢出按字段报错。
+
+employment-benchmarks.json 单独登记全国或专业类公开汇总。报告年份、毕业届别、半年后时间窗、指标分母和本机原文位置分别保留，used_for_target_effect 为 false。该卡不自动填充校级就业反馈或把全国值转为校级结果。
 
 ## 文献参照的三情景
 

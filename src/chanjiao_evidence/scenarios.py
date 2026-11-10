@@ -121,9 +121,10 @@ def evaluate_scenarios(evidence: dict, config: dict) -> dict:
     reported_result = matches[0]
     estimate = _number(reported_result.get("value"), "evidence.reported_results.value")
     unit = reported_result.get("unit")
-    if unit not in ("log_points", "proportion_difference"):
+    if unit not in ("log_points", "proportion_difference", "standardized_mean_difference"):
         raise ValueError(
-            "evidence.reported_results.unit 不支持，请保留 log_points 或 proportion_difference"
+            "evidence.reported_results.unit 不支持，请保留 log_points、proportion_difference "
+            "或 standardized_mean_difference"
         )
     if unit == "proportion_difference" and not -1 <= estimate <= 1:
         raise ValueError("evidence.reported_results.value 比例差值越界，请以[-1,1]原始比例填写")
@@ -133,6 +134,22 @@ def evaluate_scenarios(evidence: dict, config: dict) -> dict:
         standard_error = _number(
             reported_result["standard_error"], "evidence.reported_results.standard_error", 0
         )
+    reported_interval = "reported_ci95" in reported_result
+    if reported_interval:
+        bounds = reported_result["reported_ci95"]
+        if not isinstance(bounds, list) or len(bounds) != 2:
+            raise ValueError(
+                "evidence.reported_results.reported_ci95 无效，请填写原文95%区间的两个端点"
+            )
+        ci95 = [
+            _number(value, f"evidence.reported_results.reported_ci95[{index}]")
+            for index, value in enumerate(bounds)
+        ]
+        if ci95[0] > ci95[1]:
+            raise ValueError(
+                "evidence.reported_results.reported_ci95 顺序错误，请按原文填写下限、上限"
+            )
+    elif standard_error is not None:
         ci95 = [
             _number(estimate - 1.96 * standard_error, "evidence.reported_results.ci95"),
             _number(estimate + 1.96 * standard_error, "evidence.reported_results.ci95"),
@@ -172,6 +189,16 @@ def evaluate_scenarios(evidence: dict, config: dict) -> dict:
     }
     reference_interval = ci95 if ci95 is not None else [estimate, estimate]
     interval_kind = "transferred_reference_normal_95" if ci95 is not None else "reported_value_only"
+    identification_status = (
+        "reported_normal_95_reference_only"
+        if ci95 is not None
+        else "reported_value_only_no_sampling_ci"
+    )
+    interval_description = "文献报告值未在本项目中重估，抽样区间采用报告标准误的正态近似。"
+    if reported_interval:
+        interval_kind = "transferred_reported_ci95"
+        identification_status = "reported_ci95_reference_only"
+        interval_description = "文献报告值未在本项目中重估，参考区间直接保留原文95%区间。"
     advantage_tolerance = 1e-12
     records = []
     for index, scenario in enumerate(scenarios):
@@ -214,7 +241,7 @@ def evaluate_scenarios(evidence: dict, config: dict) -> dict:
         missing.append(
             "措施、人群和时间窗适用性尚未得到支持，请补齐逐项对应材料后再评价目标条件性效果。"
         )
-    if standard_error is None:
+    if ci95 is None:
         missing.append("所选论文报告值缺标准误，请取得同一估计的标准误或复现数据后计算抽样区间。")
     return {
         "schema_version": 1,
@@ -232,11 +259,7 @@ def evaluate_scenarios(evidence: dict, config: dict) -> dict:
             "status": "conditional_projection" if supported else "unidentified",
             "observed_causal_effect": False,
         },
-        "identification_status": (
-            "reported_normal_95_reference_only"
-            if ci95 is not None
-            else "reported_value_only_no_sampling_ci"
-        ),
+        "identification_status": identification_status,
         "reference": reference,
         "scenarios": records,
         "advantage_zero_tolerance": advantage_tolerance,
@@ -247,7 +270,7 @@ def evaluate_scenarios(evidence: dict, config: dict) -> dict:
         ),
         "missing_evidence": missing,
         "limitations": [
-            "文献报告值未在本项目中重估，抽样区间采用报告标准误的正态近似。",
+            interval_description,
             "区间只传播文献抽样范围和显式假设，不含迁移参数不确定性，无法作为本校效果置信区间。",
             "收入、面试邀请、就业率及学生能力分别度量，当前结果只覆盖所选原指标。",
             "收入百分比换算仅支持earnings收入指标，其他对数指标保留原名称和单位。",

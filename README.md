@@ -39,11 +39,13 @@ chanjiao curriculum --plan data/curricula/official-cs-extract.json --scenario da
 ## 专业方案审阅与提交打包
 
 ```powershell
-chanjiao strategy --plan data/curricula/official-cs-extract.json --program data/curricula/cufe-2025-program.json --policy data/examples/program-policy.json --evidence data/evidence/internships.json --effects data/examples/effect-scenarios.json --output artifacts/strategy-review
+chanjiao strategy --plan data/curricula/official-cs-extract.json --program data/curricula/cufe-2025-program.json --policy data/examples/program-policy.json --evidence data/evidence/internships.json --effects data/examples/effect-scenarios.json --demand data/examples/demand-beijing-2026.json --comparison data/examples/comparison-assumptions.json --output artifacts/strategy-review
 chanjiao bundle --checklist data/examples/submission-checklist.json --materials artifacts/submission-materials --output artifacts/submission-review.zip
 ```
 
 策略入口检查147学分与模块底线、三条选课路径、实际修订、方向与招生规则，保留本校未识别效果。清单样例中的十五项均待核验。材料未齐时生成审阅包，`--require-ready` 强制拒绝未满足正式条件的包。输入与研究范围见[数据契约](docs/data-contract.md)。
+
+需求聚合与比较配置为可选的一对输入。它们量化课程文本覆盖界限、不同方向基线假设及规范化规模情景，保留未知观测和不优于基线结果。全国就业汇总保存在独立证据卡中。
 
 ## 合成改革基线
 

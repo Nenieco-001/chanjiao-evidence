@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "purpose": "课程项目设计与效果依据，原单位参照和目标措施适用性分开",
+  "target_action_review": {
+    "baseline": "公开方案中专业综合实践已有32实验学时，软件工程已有48总学时。",
+    "proposal": "将16学时及1学分在同核心模块内转移，并审查项目教学内容承接。",
+    "hour_dose_effect_status": "unidentified",
+    "design_elements": [
+      "需求与验收判据先冻结",
+      "同一任务比较产物质量与完成效率",
+      "客观测量、同伴评价和自评分列",
+      "失败方案及不利结果保留"
+    ],
+    "proposed_added_hour_budget": {
+      "evidence_mode": "scenario_assumptions",
+      "requirements_and_acceptance": 4,
+      "testing_and_defect_analysis": 4,
+      "code_review_and_integration": 4,
+      "demonstration_and_reflection": 4
+    },
+    "budget_note": "4×4学时是分析者的教学设计，需检查原软件工程内容、总负荷与资源；综述未估计该分配的收益。"
+  },
+  "cards": [
+    {
+      "evidence_id": "tenhunen_2023_capstones",
+      "title": "A systematic literature review of capstone courses in software engineering",
+      "authors": [
+        "Saara Tenhunen",
+        "Tomi Männistö",
+        "Matti Luukkainen",
+        "Petri Ihantola"
+      ],
+      "year": 2023,
+      "source_url": "https://arxiv.org/pdf/2301.03554",
+      "source_version": "arXiv:2301.03554v1，2023-01-09，27页；同时核对HTML版",
+      "source_sha256": "49e5afd853a41b01a4f0691572effed653e936b5cb664f5243b4775aead4e862",
+      "verification_level": "primary_full_text",
+      "design": "127项原始研究的系统综述，归纳课程组织和评价方式。",
+      "action": "软件工程综合项目的团队、客户、产物与持续反馈设计",
+      "outcomes": [
+        "capstone_course_design"
+      ],
+      "summary": "可借鉴一学期项目、4至5人团队、客户需求和多来源评价。",
+      "transfer_limits": [
+        "综述提供设计分类，未给出增加16学时的因果效应。",
+        "实施者参与评价和发表选择影响证据客观性。"
+      ],
+      "data_status": "已取得原文作本地核验，尚未独立重编码127项研究。",
+      "reported_results": [
+        {
+          "outcome_id": "capstone_course_design",
+          "label": "设计经验",
+          "interpretation": "采用持续反馈及教师、同伴和客户评价的组合，另行冻结客观任务判据。",
+          "source_location": "PDF第2页摘要、第17至20页评价与局限；HTML第4.5与5.3.4节"
+        }
+      ],
+      "source_locations": [
+        {
+          "label": "作者预印本",
+          "url": "https://arxiv.org/pdf/2301.03554",
+          "location": "第4.5、5.3节",
+          "version": "v1"
+        }
+      ],
+      "quantitative_effect_usable": false
+    },
+    {
+      "evidence_id": "wlodarski_2021_process",
+      "title": "Assessment of a hybrid software development process for student projects: a controlled experiment",
+      "authors": [
+        "Rafał Włodarski",
+        "Jean-Rémy Falleri",
+        "Corinne Parvéry"
+      ],
+      "year": 2021,
+      "source_url": "https://arxiv.org/pdf/2103.03534",
+      "source_version": "arXiv:2103.03534v1，2021-03-05，11页预印本",
+      "source_sha256": "389436e9346269338b5c1755bdd464460ad069fd241da0b9fc139b56160bf9fd",
+      "verification_level": "primary_full_text",
+      "design": "67名法国工程学生在10周项目中比较迭代、顺序和混合流程。处理组按姓氏划分，组内再随机组队。",
+      "treatment_assignment": "alphabetical_laboratory_groups",
+      "group_sizes": {
+        "iterative": 23,
+        "sequential": 23,
+        "hybrid": 21
+      },
+      "action": "相同项目任务中的开发流程重组",
+      "outcomes": [
+        "technical_self_report",
+        "project_quality"
+      ],
+      "summary": "可借鉴统一任务、预设验收和产物质量测量。技术能力结果依赖自评。",
+      "transfer_limits": [
+        "组别处理分配与随机组队分别审查。",
+        "小样本、自评及组内相关限制效应识别。"
+      ],
+      "null_or_adverse_results": [
+        "作者报告技术技能总体自评无一致优势，未开展统计推断。",
+        "表II混合组总体正向自评89.47%，低于顺序组92.94%。"
+      ],
+      "data_status": "已核对原文，未取得团队或学生级复现数据。",
+      "quantitative_effect_usable": false,
+      "reported_results": [
+        {
+          "outcome_id": "technical_self_report",
+          "label": "无一致技术技能优势",
+          "interpretation": "保留作者的无一致模式结论，未将跨题目自评均值转换为学生通过率。",
+          "source_location": "PDF第8页表II，第9页Learning outcomes与效度威胁"
+        }
+      ],
+      "source_locations": [
+        {
+          "label": "作者预印本",
+          "url": "https://arxiv.org/pdf/2103.03534",
+          "location": "第5页G与III.B、第6页评价、第8至9页表II/III",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "evidence_id": "zhang_ma_2023_project_learning",
+      "title": "A study of the impact of project-based learning on student learning effects: a meta-analysis study",
+      "authors": [
+        "Lu Zhang",
+        "Yan Ma"
+      ],
+      "year": 2023,
+      "doi": "10.3389/fpsyg.2023.1202728",
+      "source_url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1202728/pdf",
+      "source_version": "Frontiers in Psychology 14:1202728，2023-07-17，14页",
+      "source_sha256": "a76d5036369a70d35ec6eb067aaf9a9e1e71e15dba0620d6ece36eecb19fb70c",
+      "verification_level": "primary_full_text",
+      "design": "66项实验或准实验研究、190个效应的随机效应元分析。",
+      "action": "项目式学习相对于原有教学方式",
+      "outcomes": [
+        "learning_outcomes_smd"
+      ],
+      "summary": "大学亚组报告较小效应，适合保守量级参照。",
+      "transfer_limits": [
+        "大学亚组跨学科和结果，未识别当前课程的16学时边际效应。",
+        "大学、工科和团队规模为不同亚组，未联合识别。"
+      ],
+      "quality_flags": [
+        "PDF表4部分地区行的点值与区间不相容，讨论的P=0.101<0.05表述存在笔误。大学行已按第9页核对，作为次级参照。",
+        "57为大学亚组效应数量，独立研究数量与原始重估数据尚未取得。"
+      ],
+      "data_status": "已核对PDF大学亚组行与限制，原效应数据及分析代码尚未取得。",
+      "reported_results": [
+        {
+          "outcome_id": "learning_outcomes_smd",
+          "label": "大学亚组学习结果标准化均值差",
+          "value": 0.116,
+          "unit": "standardized_mean_difference",
+          "reported_ci95": [
+            0.027,
+            0.204
+          ],
+          "effect_count": 57,
+          "independent_study_count": null,
+          "interpretation": "原文大学亚组报告值与95%区间，保持标准差单位。",
+          "source_location": "PDF第9页表4 Learning period—University行",
+          "source_url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1202728/pdf"
+        }
+      ],
+      "source_locations": [
+        {
+          "label": "正式出版原文",
+          "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1202728/full",
+          "location": "第4.2节表4大学行、第7节局限",
+          "version": "2023出版版"
+        }
+      ],
+      "quantitative_effect_usable": true,
+      "evidence_role": "secondary_reference"
+    },
+    {
+      "evidence_id": "freeman_2014_active_learning",
+      "title": "Active learning increases student performance in science, engineering, and mathematics",
+      "authors": [
+        "Scott Freeman",
+        "Sarah L. Eddy",
+        "Miles McDonough",
+        "Michelle K. Smith",
+        "Nnadozie Okoroafor",
+        "Hannah Jordt",
+        "Mary Pat Wenderoth"
+      ],
+      "year": 2014,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24821756/",
+      "source_version": "PNAS 111(23):8410–8415，DOI 10.1073/pnas.1319030111",
+      "verification_level": "primary_abstract_only",
+      "design": "225项本科STEM研究的元分析，比较主动学习与传统讲授。",
+      "action": "传统讲授转向主动学习",
+      "outcomes": [
+        "broad_active_learning_background"
+      ],
+      "summary": "支持检查教学组织方式，控制条件需与现有实验课对应。",
+      "transfer_limits": [
+        "当前公开课程已含实验教学。",
+        "该总体比较未提供额外16学时的剂量效应。"
+      ],
+      "data_status": "本轮核对作者摘要，未重读全部原研究。",
+      "quantitative_effect_usable": false,
+      "reported_results": [
+        {
+          "outcome_id": "broad_active_learning_background",
+          "label": "对照定义审查",
+          "interpretation": "作为宽背景设计经验，当前案例保留适用性缺项。",
+          "source_location": "正式作者摘要"
+        }
+      ]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import io
 import json
 import os
 import shutil
+import stat
 import struct
 import tempfile
 import zipfile
@@ -46,7 +47,8 @@ def _safe_name(value):
         or "\\" in value
         or ":" in value
         or any(
-            part in {"", ".", "..", "raw", "processed", "artifacts"} for part in value.split("/")
+            part.casefold() in {"", ".", "..", "raw", "processed", "artifacts"}
+            for part in value.split("/")
         )
         or any(part.startswith(".") for part in path.parts)
         or path.suffix.lower() in {".eml", ".pem", ".key", ".p12", ".duckdb"}
@@ -181,6 +183,27 @@ def _write_entry(archive, name, content):
     archive.writestr(info, content)
 
 
+def _material_path(root, name):
+    path = root
+    for part in PurePosixPath(name).parts:
+        path = path / part
+        try:
+            metadata = path.lstat()
+        except FileNotFoundError:
+            break
+        attributes = getattr(metadata, "st_file_attributes", 0)
+        if stat.S_ISLNK(metadata.st_mode) or attributes & getattr(
+            stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400
+        ):
+            raise ValueError(f"files.path 包含链接或重解析路径 {name}，请复制可公开文件")
+    path = root / name
+    resolved = path.resolve()
+    if not resolved.is_relative_to(root):
+        raise ValueError(f"files.path 指向材料目录之外 {name}，请复制可公开文件")
+    _safe_name(resolved.relative_to(root).as_posix())
+    return path
+
+
 def build_submission(checklist_path, materials_root, destination, *, require_ready=False):
     """Check declared evidence and file metadata, then atomically publish a ZIP."""
     destination = Path(destination).absolute()
@@ -201,9 +224,7 @@ def build_submission(checklist_path, materials_root, destination, *, require_rea
     video_durations = []
     for row in sorted(checklist["files"], key=lambda r: r["path"]):
         name = row["path"]
-        path = root / name
-        if path.is_symlink() or not path.resolve().is_relative_to(root):
-            raise ValueError(f"files.path 指向材料目录之外或符号链接 {name}，请复制可公开文件")
+        path = _material_path(root, name)
         if not path.is_file():
             unmet.append("file:" + name)
             continue
