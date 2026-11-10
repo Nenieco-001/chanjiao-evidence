@@ -213,3 +213,65 @@ def test_publish_failure_cleans_staging(tmp_path, monkeypatch):
     with pytest.raises(OSError):
         build_submission(path, root, tmp_path / "failed.zip")
     assert not list(tmp_path.glob(".submission-*"))
+
+
+def test_stale_research_source_keeps_an_otherwise_complete_package_in_review(tmp_path):
+    root, path, checklist = materials(tmp_path)
+    (root / "research.json").write_bytes(b"{}")
+    (root / "model.py").write_bytes(b"changed source\n")
+    frozen = {
+        "inputs": {},
+        "outputs": {"result": hashlib.sha256(b"{}").hexdigest()},
+        "source_sha256": {"model.py": hashlib.sha256(b"original source\n").hexdigest()},
+    }
+    (root / "research-manifest.json").write_text(json.dumps(frozen), encoding="utf-8")
+    checklist["files"] += [
+        {"role": "data", "path": "research.json", "permission": "public"},
+        {"role": "source", "path": "model.py", "permission": "public"},
+        {"role": "data", "path": "research-manifest.json", "permission": "public"},
+    ]
+    checklist["provenance"] = [
+        {
+            "manifest_path": "research-manifest.json",
+            "inputs": {},
+            "outputs": {"result": "research.json"},
+            "source_sha256": {"model.py": "model.py"},
+        }
+    ]
+    path.write_text(json.dumps(checklist), encoding="utf-8")
+    result = build_submission(path, root, tmp_path / "review.zip")
+    assert result["status"] == "review_only"
+    assert any("source_sha256:model.py" in gap for gap in result["unmet_requirements"])
+    with zipfile.ZipFile(tmp_path / "review.zip") as archive:
+        assert json.loads(archive.read("manifest.json"))["provenance"] == checklist["provenance"]
+    with pytest.raises(ValueError, match="正式提交"):
+        build_submission(path, root, tmp_path / "formal.zip", require_ready=True)
+    assert not (tmp_path / "formal.zip").exists()
+
+
+def test_matching_research_manifest_can_release_a_complete_package(tmp_path):
+    root, path, checklist = materials(tmp_path)
+    (root / "research.json").write_bytes(b"{}")
+    frozen = {
+        "inputs": {},
+        "outputs": {"result": hashlib.sha256(b"{}").hexdigest()},
+        "source_sha256": {},
+    }
+    (root / "research-manifest.json").write_text(json.dumps(frozen), encoding="utf-8")
+    checklist["files"] += [
+        {"role": "data", "path": "research.json", "permission": "public"},
+        {"role": "data", "path": "research-manifest.json", "permission": "public"},
+    ]
+    checklist["provenance"] = [
+        {
+            "manifest_path": "research-manifest.json",
+            "inputs": {},
+            "outputs": {"result": "research.json"},
+            "source_sha256": {},
+        }
+    ]
+    path.write_text(json.dumps(checklist), encoding="utf-8")
+    assert (
+        build_submission(path, root, tmp_path / "complete.zip", require_ready=True)["status"]
+        == "ready"
+    )

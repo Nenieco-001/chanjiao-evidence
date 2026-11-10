@@ -46,9 +46,9 @@ employment-benchmarks.json 单独登记全国或专业类公开汇总。报告�
 
 ## 文献参照的三情景
 
-effects 配置包含目标措施/人群、applicability、唯一 effect_reference，以及 pessimistic/base/optimistic 三项情景。每项的 transfer_factor 在 [0,1] 内，bias 使用原指标单位，assumption_source 说明参数由何处确定。原文标准误存在时用正态近似形成文献参考区间，缺失时仅保留报告点值。
+effects 配置包含目标措施/人群、applicability、唯一 effect_reference，以及 pessimistic/base/optimistic 三项情景。每项的 transfer_factor 在 [0,1] 内，bias 使用原指标单位，assumption_source 说明参数由何处确定。优先采用原文 reported_ci95，区间端点须有序且为有限数。其缺失且存在标准误时用正态近似形成文献参考区间，两者均缺失时保留报告点值。
 
-计算值为 transfer_factor 乘报告效应后扣 bias。端点同式计算，保留零、负值与无优势结果。正优势使用 1e-12 绝对零容差，原始浮点值和优势消失阈值保留。支持 log_points 与 proportion_difference。只有 earnings 的对数结果派生相对收入百分比。比例差点值需在 [-1,1]，正态近似区间越界时保留其统计近似含义。
+计算值为 transfer_factor 乘报告效应后扣 bias。端点同式计算，保留零、负值与无优势结果。正优势使用 1e-12 绝对零容差，原始浮点值和优势消失阈值保留。支持 log_points、proportion_difference 与 standardized_mean_difference。标准化均值差以论文所用标准差为单位，与收入对数及比例差分别解释。只有 earnings 的对数结果派生相对收入百分比。比例差点值需在 [-1,1]，正态近似区间越界时保留其统计近似含义。
 
 适用性 unverified 或 mismatch 时只给 literature_reference_scenarios，本校效果为 unidentified。人工声明 supported 时也只给 conditional_projection。所有状态的 observed_causal_effect 均为 false。参考区间传播的是论文抽样范围和显式情景，迁移参数未经校准时不构成本校效果置信区间。
 
@@ -59,6 +59,12 @@ effects 配置包含目标措施/人群、applicability、唯一 effect_referenc
 files 是显式白名单，每项提供 role、path、permission=public。role 为 report、slides、video、data、source 或 readme。路径使用安全相对路径，拒绝目录逃逸、隐藏目录、原始目录、受限文件、重复路径、符号链接和覆盖。PDF/PPTX 检查文件结构，MP4 检查影片头、画面轨道和时长。时长超过300秒、缺材料、缺依据或任一要求未通过时，包状态为 review_only。`--require-ready` 在这些情况下报错并不发布。
 
 ZIP 使用固定元数据，同一输入生成相同字节。manifest.json 登记实际文件字节、SHA-256、清单字节哈希、视频容器时长、缺项及要求状态。程序核对材料与贡献者登记的结论，科学证据、视觉质量和实际播放由独立审核记录支持。十五项形式与记录通过后状态为 ready，最终赛事模板、报名资格和提交通道另按官方要求核对。
+
+### G8 冻结清单绑定
+
+提交清单可增加 provenance 列表。每项提供 manifest_path，以及 inputs、outputs、source_sha256 三组“原清单角色到白名单文件”的绑定。三组角色须与研究清单完整对应，所有路径已列入 files。打包器使用本次实际读取的字节核对 SHA-256，输入、结果或源码失配记为 provenance 缺项。review_only 包保留该缺项，正式模式拒绝发布。未声明 provenance 的既有清单保持兼容。
+
+研究结果更新应重新执行同版源码的正常入口，再绑定新清单。来源哈希核对覆盖冻结一致性，研究识别、适用性与材料内容分别验收。
 
 ## 历史改革面板
 

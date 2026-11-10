@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "title": "产教智对 revision17 条件分析审阅材料",
+  "title": "产教智对 G8 冻结一致性审阅材料",
   "requirements": [
     {
       "requirement_id": "T1.skills",
@@ -57,13 +57,15 @@
       "evidence": [
         "数据支撑/strategy-review.json",
         "数据支撑/data/evidence/course-projects.json",
-        "数据支撑/data/examples/project-effect-scenarios.json"
+        "数据支撑/data/examples/project-effect-scenarios.json",
+        "数据支撑/G7/strategy-review.json",
+        "数据支撑/G7/metric-scope.json"
       ]
     },
     {
       "requirement_id": "T4.risks",
       "status": "partial",
-      "note": "补动作绑定的影响量、概率依据、责任时点和触发处置。",
+      "note": "复核至少三项动作绑定风险与具体应对，补影响依据与执行安排。概率量化作为内部完善项。",
       "evidence": [
         "数据支撑/strategy-review.json"
       ]
@@ -586,6 +588,108 @@
       "role": "source",
       "path": "代码/tests/test_project_evidence.py",
       "permission": "public"
+    },
+    {
+      "path": "代码/src/chanjiao_evidence/provenance.py",
+      "role": "source",
+      "permission": "public"
+    },
+    {
+      "path": "代码/tests/test_provenance.py",
+      "role": "source",
+      "permission": "public"
+    },
+    {
+      "path": "数据支撑/G7/manifest.json",
+      "role": "data",
+      "permission": "public"
+    },
+    {
+      "path": "数据支撑/G7/review.md",
+      "role": "data",
+      "permission": "public"
+    },
+    {
+      "path": "数据支撑/G7/strategy-review.json",
+      "role": "data",
+      "permission": "public"
+    },
+    {
+      "path": "数据支撑/G7/metric-scope.json",
+      "role": "data",
+      "permission": "public"
+    }
+  ],
+  "provenance": [
+    {
+      "manifest_path": "数据支撑/manifest.json",
+      "inputs": {
+        "comparison": "数据支撑/data/examples/comparison-assumptions.json",
+        "demand": "数据支撑/data/examples/demand-beijing-2026.json",
+        "effects": "数据支撑/data/examples/effect-scenarios.json",
+        "evidence": "数据支撑/data/evidence/internships.json",
+        "plan": "数据支撑/data/curricula/official-cs-extract.json",
+        "policy": "数据支撑/data/examples/program-policy.json",
+        "program": "数据支撑/data/curricula/cufe-2025-program.json"
+      },
+      "outputs": {
+        "review.md": "数据支撑/review.md",
+        "strategy-review.json": "数据支撑/strategy-review.json"
+      },
+      "source_sha256": {
+        "__init__.py": "代码/src/chanjiao_evidence/__init__.py",
+        "__main__.py": "代码/src/chanjiao_evidence/__main__.py",
+        "archives.py": "代码/src/chanjiao_evidence/archives.py",
+        "cli.py": "代码/src/chanjiao_evidence/cli.py",
+        "comparison.py": "代码/src/chanjiao_evidence/comparison.py",
+        "curriculum.py": "代码/src/chanjiao_evidence/curriculum.py",
+        "dataset.py": "代码/src/chanjiao_evidence/dataset.py",
+        "estimation.py": "代码/src/chanjiao_evidence/estimation.py",
+        "evidence.py": "代码/src/chanjiao_evidence/evidence.py",
+        "pipeline.py": "代码/src/chanjiao_evidence/pipeline.py",
+        "planning.py": "代码/src/chanjiao_evidence/planning.py",
+        "provenance.py": "代码/src/chanjiao_evidence/provenance.py",
+        "reporting.py": "代码/src/chanjiao_evidence/reporting.py",
+        "scenarios.py": "代码/src/chanjiao_evidence/scenarios.py",
+        "strategy.py": "代码/src/chanjiao_evidence/strategy.py",
+        "submission.py": "代码/src/chanjiao_evidence/submission.py",
+        "warehouse.py": "代码/src/chanjiao_evidence/warehouse.py"
+      }
+    },
+    {
+      "manifest_path": "数据支撑/G7/manifest.json",
+      "inputs": {
+        "comparison": "数据支撑/data/examples/comparison-assumptions.json",
+        "demand": "数据支撑/data/examples/demand-beijing-2026.json",
+        "effects": "数据支撑/data/examples/project-effect-scenarios.json",
+        "evidence": "数据支撑/data/evidence/course-projects.json",
+        "plan": "数据支撑/data/curricula/official-cs-extract.json",
+        "policy": "数据支撑/data/examples/program-policy.json",
+        "program": "数据支撑/data/curricula/cufe-2025-program.json"
+      },
+      "outputs": {
+        "review.md": "数据支撑/G7/review.md",
+        "strategy-review.json": "数据支撑/G7/strategy-review.json"
+      },
+      "source_sha256": {
+        "__init__.py": "代码/src/chanjiao_evidence/__init__.py",
+        "__main__.py": "代码/src/chanjiao_evidence/__main__.py",
+        "archives.py": "代码/src/chanjiao_evidence/archives.py",
+        "cli.py": "代码/src/chanjiao_evidence/cli.py",
+        "comparison.py": "代码/src/chanjiao_evidence/comparison.py",
+        "curriculum.py": "代码/src/chanjiao_evidence/curriculum.py",
+        "dataset.py": "代码/src/chanjiao_evidence/dataset.py",
+        "estimation.py": "代码/src/chanjiao_evidence/estimation.py",
+        "evidence.py": "代码/src/chanjiao_evidence/evidence.py",
+        "pipeline.py": "代码/src/chanjiao_evidence/pipeline.py",
+        "planning.py": "代码/src/chanjiao_evidence/planning.py",
+        "provenance.py": "代码/src/chanjiao_evidence/provenance.py",
+        "reporting.py": "代码/src/chanjiao_evidence/reporting.py",
+        "scenarios.py": "代码/src/chanjiao_evidence/scenarios.py",
+        "strategy.py": "代码/src/chanjiao_evidence/strategy.py",
+        "submission.py": "代码/src/chanjiao_evidence/submission.py",
+        "warehouse.py": "代码/src/chanjiao_evidence/warehouse.py"
+      }
     }
   ]
 }

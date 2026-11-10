@@ -1,6 +1,6 @@
 # 当前任务
 
-本文件是唯一活动任务板。协调者为 root，当前 revision 26。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
+本文件是唯一活动任务板。协调者为 root，当前 revision 27。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
 
 ## F1 · 文档收敛
 
@@ -98,9 +98,10 @@
 
 ## G5 · 独立复核与远端
 
-- 负责人为 root 协调独立验证，revision 16，状态为已推送2e849ed且远端CI通过。验证者只读，证据留在独占忽略目录。远端发现的路径P1由revision 17修复并重新评审。
+- 负责人为 root 协调独立验证，revision 26，状态为既有提交基线远端复核完成、G8增量待Lead验收。验证者只读，证据留在独占忽略目录。远端发现的路径P1由revision 17修复并重新评审。
 - 已提交基线 `021e5ff` 并推送，PR #4 已创建，远端 CI 成功，Codex 对该提交评审完成且未发现重大问题。合并留给人类贡献者。
 - 后续每项实现先设待验收，由独立验证者检查契约、反例、数据和材料范围；修复交回原 owner，复验后由 root 统一提交与推送。
+- 2026-11-11只读核对PR #4，远端head与本地HEAD均为 `ffa685b76eed08b641836a26778efe97bb53b990`。Codex摘要明确该提交completed、无新问题，PR工作流42891333132的Ubuntu/Windows × Python3.11/3.13四任务全部成功，逐项pytest、原生Ruff、format、build和正常CLI步骤成功。旧P1线程为outdated但尚未手工resolved，由Lead处理讨论状态。该结论覆盖已提交基线，本工作区G8增量另行验收。原始API记录保存在 `.local/g8-followup-20261111-01/remote-review-raw.json` 和 `remote-jobs.json`。
 
 ### revision 16 实际验收
 
@@ -112,7 +113,7 @@
 
 ## G6 · 公开基线与条件分析
 
-- 负责人为 root，revision 17，状态为本机实现与工程验收通过、待远端独立复核。用户确认暂时无法取得校级规模和就业汇总，继续公开资料与条件分析。写范围为公开来源证据卡、对应分析模块/测试及核心文档；D盘原文只读。
+- 负责人为 root，revision 26，状态为本机实现与既有提交基线远端代码复核完成。远端验收记录见G5，研究证据缺口继续按G9登记。用户确认暂时无法取得校级规模和就业汇总，继续公开资料与条件分析。写范围为公开来源证据卡、对应分析模块/测试及核心文档；D盘原文只读。
 - 先核对全国就业报告的报告年份、毕业届别、半年后指标与专业类层级，交叉检查出版信息。整理可公开引用的少量事实和来源，原书与记录留在本机。
 - 再用课程内容覆盖、方向结构及规范化规模情景分别量化三维指标，保留代理含义、未知观测与参数来源。文献收益与目标措施不对应时继续返回未识别，优先补同定义教学改革证据。
 - 验收为三维输入/输出、分母、公共基线与假设分离，零/负/无优势和参数敏感性保留，无法完成的正式要求继续阻止正式提交包放行。
@@ -139,14 +140,32 @@
 
 ## G8 · 正式材料与提交一致性
 
-- 负责人为 root，revision 21，状态为源清单已同步、待 Codex 复核。写范围为 `src/chanjiao_evidence/submission.py`、`tests/test_submission.py`、`docs/data-contract.md`、`docs/status.md` 和本任务板；不改 H3 的 `.local` 材料生成器，不改 `artifacts/submission-review-r17-polished`。
+- 负责人为 root，revision 27，状态为验收通过。写范围为 `src/chanjiao_evidence/submission.py`、纯字节清单校验辅助模块、相应测试、G9源清单配置及本任务板G段。数据契约与 CHANGELOG 仅同步功能事实，文风与H3材料由Lead负责。
 - Lead 预跑：`data/examples/submission-checklist.json` 已同步为交付包状态，T3 evidence 加入 G7 两个 JSON；候选材料 `artifacts/submission-review-g8-candidate/` 的 review 包为 `review_only`、缺 11 项；`--require-ready` 退出 2；`tests/test_submission.py` 19 passed/1 skipped。
 - 依赖 G7。正式提交清单仍需 Codex 复核：15 个 requirement ID、S.evolution/T3 保持 partial、G7 证据入包、正式模式拒绝未齐包；review_only 与正式提交分列，正式包保持拒绝。
+- 本轮发现旧候选 manifest 登记的 scenarios.py 哈希失配。新增可选 provenance 绑定，复用打包实际字节核对输入、产物与完整源码角色，失配进入审阅缺项并阻止正式发布。旧清单兼容，失配反例先失败后通过。候选 `artifacts/submission-review-g8-verified/` 为 98 项白名单，两组共 52 项绑定全部匹配。主 JSON/Markdown 与原候选逐字节一致，G7 SMD 独立附件注明指标边界，两组均使用正常 strategy 入口两次复现，包内代码再跑的三产物分别一致。
+- 实际命令使用 `.local/g8-audit-20261111/run_py312.py` 和受支持的捆绑 Python 3.12，补充依赖仅在本轮忽略目录。`pytest tests/test_submission.py tests/test_provenance.py -q` 为 37 passed、1 skipped；最新全量 `pytest -q -p no:cacheprovider --basetemp .local/g8-audit-20261111/final-tests` 为 411 passed、1 skipped（35.48s）。原 `.venv` 全量 pytest 退出4，原因是 `_ctypes` DLL 导入失败。原生 `ruff check . --no-cache` 与 `ruff format --check . --no-cache` 均退出 -1073741502。同版官方 Ruff WASM 0.17.4 对四个变更 Python 文件检查零诊断、格式一致，随后对39个公开Python文件只读复查同样通过，该结果单列为补充检查。
+- 两次正常 bundle 退出0，ZIP逐字节一致，CRC、98项文件哈希及15个唯一要求ID通过，11项partial与G9表一致。`--require-ready` 退出2且无产物。标准隔离 build 退出1，pip获取Windows目录时注册表查询失败；捆绑Python的 `-m build --no-isolation` 退出0，生成0.4.0 wheel/sdist，wheel全模块与源码字节一致，sdist含新增模块。G7两文件仍为0问号，高字节3155/600。31个本地链接与锚点有效，git diff --check通过。H段和受保护源码未改，公开差异未带入原始记录、凭据或受限文件。
+- 日志、完整CLI参数、哈希、构建包、同版WASM检查及自检脚本均在 `.local/g8-audit-20261111/`。本轮为实现者自检，Lead独立复验与原生Ruff仍待完成，构建续验见下两条。图文材料继续展示原主指标，G7正式图文整合由Lead负责。G9复核结果见下节，下一步由Lead验收本地增量。
+- 续验记录在 `.local/g8-followup-20261111-01/`。从交付ZIP（SHA-256 `60658e9bec0a463741db085f4250bd43aff6926309551dc3d38562ef5b33784f`）按逐文件哈希提取源码，使用捆绑Python3.12执行 `-m pip install --target <全新依赖目录> <随包代码>[dev]`，默认PEP517隔离构建及安装退出0。项目、NumPy、pandas、SciPy、statsmodels、DuckDB、pytest的导入位置均位于新目录。依赖为pandas3.1.1、NumPy2.5.4，statsmodels0.15.0、DuckDB2.0.0保持仓库指定版本，原项目.venv未注入。
+- 随包代码执行 `-m pytest tests/test_submission.py tests/test_provenance.py -q -p no:cacheprovider --basetemp <独占目录>` 为37 passed、1 skipped（23.60s），全量同参数为411 passed、1 skipped（32.13s）。安装后的正常strategy入口按两套指标各跑两次，三产物分别与冻结值一致；合成旧run入口两次四产物一致；bundle两次退出0且字节与原ZIP完全一致，正式模式退出2且无文件。39个公开Python文件同版WASM补充检查再次通过。原生Ruff新装副本连 `--version` 也以0xC0000142启动失败，`-m ruff`包装进程返回4294967295。默认 `-m build` 仍在临时虚拟环境的pip目录查询处失败，pip默认PEP517隔离构建成功的结果单列。
+- 用同一全新依赖目录回到当前工作区执行 `-m pytest -q -p no:cacheprovider --basetemp .local/g8-followup-20261111-01/pytest-workspace`，退出0，411 passed、1 skipped（29.18s），输出为 `pytest-workspace.log`。最终 `handoff_audit.py` 核对31个本地链接/锚点、11项partial集合、ZIP所有文件哈希和源码字节，git diff --check通过。本轮公开事实更新仅tasks/status两文件，其余开工时未提交文件的字节哈希一致。
+- 交接点续核记录在 `.local/g8-gate-20261111-02/`。当前快照全量 `-m pytest -q -p no:cacheprovider --basetemp <本目录>/pytest` 退出0，411 passed、1 skipped（33.76s）；`-m ruff check . --no-cache` 和 `-m ruff format --check . --no-cache` 均退出4294967295，同版WASM对39个公开Python文件检查及格式复核通过。清单、31个链接/锚点、原ZIP哈希和源码对应、11项partial集合与git diff --check复核通过。实现范围已交付，G8/G9的下一步为Lead独立验收及其反馈，其他G/M任务按现有状态登记。
+- 原生工具续查记录在 `.local/g8-native-launch-20261111/`。默认、隐藏窗口、脱离控制台、独立进程组配合隐藏窗口四种启动模式下，Ruff版本探针均返回0xC0000142，venv的ctypes探针也均失败。专项 `pytest tests/test_submission.py tests/test_provenance.py -q -p no:cacheprovider` 为37 passed、1 skipped（1.76s）；原生 `ruff check . --no-cache` 与 `ruff format --check . --no-cache` 均退出-1073741502。进程启动模式调整未恢复工具，具体DLL初始化根因待宿主环境诊断。G8/G9继续待Lead独立验收。
+
+- 续跑交接诊断记录在 `.local/g8-runner-handoff-20261111/`。只读核对 `.local/codex-runner/run.ps1` 第7、26、42–45行，任务文本固定，正常退出后等待3分钟再重发，调度分支未按G8/G9待验收状态转交。当前重复续跑因此回到同一交接点，H4调度调整交Lead处理。专项pytest续跑为37 passed、1 skipped（1.73s），原生Ruff check/format均返回0xC0000142。脚本字节与实际命令/退出码已留本机证据，具体DLL初始化根因仍待宿主诊断。
+
+- 现有Linux验证入口续查记录在 `.local/g8-linux-check-20261111/`。`wsl.exe --list --quiet` 退出4294967295并返回 `Wsl/E_ACCESSDENIED`，本轮Linux原生Ruff及隔离构建验证受阻。专项pytest为37 passed、1 skipped（1.71s），Windows原生Ruff check/format均返回0xC0000142。待Lead在可用原生工具环境复验，G8/G9保留待独立验收。
+- Lead 验收（2026-11-11）：独立跑全量 411 passed、1 skipped，Ruff check/format 通过，0.4.0 build 成功；用 `artifacts/submission-review-g8-verified/` 打包为 review_only、11 项缺口，`--require-ready` 退出 2；manifest 含 provenance，两组 52 项绑定匹配。G8 改为验收通过。
 
 ## G9 · 正式化缺口与退出条件
 
-- 负责人为 root，revision 23，状态为实现完成、待 Codex 复核。写范围为 `data/examples/submission-checklist.json`、`docs/data-contract.md`、`docs/status.md` 和本任务板；不改 H3 的 `.local` 材料生成器，不改精排版 artifacts。
+- 负责人为 root，revision 27，状态为验收通过。写范围为 `data/examples/submission-checklist.json`、`docs/data-contract.md`、`docs/status.md` 和本任务板；不改 H3 的 `.local` 材料生成器，不改精排版 artifacts。
 - Lead 预跑：`docs/status.md` 已增加 11 项 review_only 缺口分类表，逐项列出缺什么、责任、可接受证据和退出条件；T3 保持 partial，S.evolution 保持 partial；`--require-ready` 继续拒绝。G8 候选包和本表一起交 04:02 Codex 复核。
+- 本轮按官方第3页验证方式核对：T3接受有来源的反事实或三情景论证，退出条件以可复核证据和动作对应为准。方向压力测试可使用显式合成志愿/成绩，容量估计保留来源。研究状态字符串、学校实施批准与未来真实观测分别登记，现有11项partial保持。
+- 已提取本机官方PDF第3页核对任务1至4，原文记录留本轮忽略目录。同步T3段落、招生情景与复现退出条件，任务4的概率和影响量估计列为内部完善项。G9表11个唯一ID与源清单partial集合一致，正式拒绝实测通过。剩余11项依赖在status逐项列出，G5/G6的远端复核交Lead安排。
+- 续验已补同机全新依赖安装、随包全量测试和已安装CLI的哈希复现记录。C.reproduce继续partial，余下是Lead或其他贡献者的独立验收；G5/G6既有提交基线的远端代码复核已只读核对。当前无其他明确开放、归属本写范围的G/M实现任务，下一步为Lead验收G8/G9及G7图文整合。
+- Lead 验收（2026-11-11）：G9 表 11 个唯一 ID 与源清单 partial 集合一致；T3/S.evolution 保持 partial；正式拒绝实测通过；G9 改为验收通过。
 
 ## H1 · 文本去防御口癖
 

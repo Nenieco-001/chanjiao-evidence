@@ -13,6 +13,7 @@ from pathlib import Path, PurePosixPath
 
 from . import __version__
 from .pipeline import _json_bytes, _rename_with_retry
+from .provenance import validate_provenance
 
 REQUIREMENT_IDS = (
     "T1.skills",
@@ -246,6 +247,7 @@ def build_submission(checklist_path, materials_root, destination, *, require_rea
             for name in row["evidence"]
             if name not in contents
         )
+    unmet.extend(validate_provenance(checklist, contents))
     unmet = sorted(set(unmet))
     status = "review_only" if unmet else "ready"
     if require_ready and unmet:
@@ -265,6 +267,8 @@ def build_submission(checklist_path, materials_root, destination, *, require_rea
             "科学识别、内容与视觉质量需独立审核。"
         ),
     }
+    if "provenance" in checklist:
+        manifest["provenance"] = checklist["provenance"]
     destination.parent.mkdir(parents=True, exist_ok=True)
     staged = Path(tempfile.mkdtemp(prefix=".submission-", dir=destination.parent))
     try:
