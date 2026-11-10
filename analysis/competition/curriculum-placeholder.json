@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "synthetic",
+  "label": "示例占位",
+  "school": null,
+  "major": "计算机科学与技术",
+  "source": null,
+  "courses": [
+    {
+      "course_id": "demo-python",
+      "title": "示例占位：程序设计模块",
+      "hours": 16,
+      "credits": null,
+      "semester": null,
+      "prerequisites": [],
+      "skill_mentions": ["Python"],
+      "evidence_location": "人工构造的接口样例，无真实学校来源"
+    }
+  ]
+}

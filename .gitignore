@@ -18,3 +18,7 @@ data/processed/
 *.zip
 .DS_Store
 Thumbs.db
+*.duckdb
+*.duckdb.wal
+*.duckdb.tmp/
+*.parquet

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "需求侧工作台课程接口：仅示例占位",
+  "type": "object",
+  "required": ["schema_version", "evidence_mode", "label", "school", "major", "source", "courses"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "evidence_mode": {"const": "synthetic"},
+    "label": {"const": "示例占位"},
+    "school": {"type": "null", "description": "未取得真实学校培养方案"},
+    "major": {"type": "string", "minLength": 1},
+    "source": {"type": "null", "description": "真实输入另需来源、版本、许可与课程证据定位"},
+    "courses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["course_id", "title", "hours", "credits", "semester", "prerequisites", "skill_mentions", "evidence_location"],
+        "properties": {
+          "course_id": {"type": "string", "minLength": 1},
+          "title": {"type": "string", "minLength": 1},
+          "hours": {"type": "number", "minimum": 0},
+          "credits": {"type": ["number", "null"], "minimum": 0},
+          "semester": {"type": ["integer", "null"], "minimum": 1},
+          "prerequisites": {"type": "array", "items": {"type": "string"}},
+          "skill_mentions": {
+            "type": "array",
+            "items": {"enum": ["Python", "Java", "JavaScript", "SQL", "C++", "Linux", "Git", "Docker", "机器学习", "深度学习", "数据结构", "软件测试"]}
+          },
+          "evidence_location": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

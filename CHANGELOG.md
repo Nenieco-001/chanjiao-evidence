@@ -4,6 +4,21 @@
 
 后续 PR 在此记录行为、假设及数据迁移。
 
+- 新增[五分钟逐字稿与 10 题口播演练](docs/competition-speech.md)，沿用 12 页大纲和六段 300 秒预算，逐段标注字数、转场、证据与打断短答；时长为文本估算，录制计时与协调者验收待完成。状态见[任务板 C12](analysis/competition/TASKS.md)。
+
+- 新增赛前[20 问答卡](docs/competition-qa.md)、[七组供给数据申请单](docs/competition-data-request.md)和[最终提交检查表](docs/competition-final-checklist.md)：按四交付物与五维评分登记证据、责任和缺口；本机 PPTX/DOCX/PDF 仅为未入 Git 初稿，真实供给与学生结果仍缺。状态见[任务板 C11](analysis/competition/TASKS.md)。
+
+- 新增[参赛报告骨架](docs/competition-report-draft.md)与[答辩及视频大纲](docs/competition-defense-outline.md)：按赛题四任务整理已验收需求结果，提供课程/方向/招生待填模板、验证失败条件与风险应对；保留真实供给、学生结果和四年效果缺口，不新增学校收益结论。验收状态见[分析任务板](analysis/competition/TASKS.md)。
+
+- 需求侧工作台新增 `--matched-backtest`：逐层与完整组合共同支持、五维误差分组及跨年疑似重复计数；保留全年对照、空组、小样本和无优势结果。平台同号仅作条件假设，2026 已参与探索，只报告回顾性描述。实际运行与验收状态见[分析任务板](analysis/competition/TASKS.md)。
+
+- 新增本地 DuckDB 招聘仓库、明确版本入库、质量汇总和 Parquet 导出。
+- 新增 ZIP 副本核验与 RAR 单成员校验提取，原始包保留，元数据和实际记录分离。
+- 仓库命令默认输出元数据文件路径，汇总使用有数量上限的结果，保留数据来源与哈希。
+- 补齐本地数据仓库 W1–W4 的实现、试运行与分环境核验记录，见[仓库说明](docs/local-data-warehouse.md)及[任务板](docs/development-tasks.md)；本条不新增验收结论。
+- 新增[赛题解读](docs/competition-brief.md)，整理“产教智对”的任务、交付要求与研究边界。
+- 新增[需求侧工作台](analysis/competition/README.md)和[分析报告](docs/competition-analysis.md)：按年度核对招聘字段、岗位族、技能词面与薪资中点，提供合成课程占位接口；增加显式 2024/2025 映射及时间滚动的回顾性基线回测，保留零命中、空样本和不优于基线的结果。默认三个年度画像的数值口径不变，2026 已参与探索，不作独立留出或真实培养效果解释。
+
 ## 0.2.0 — 2026-11-09
 
 - 新增中文离线 HTML 和 Markdown 报告，连接改革估计、诊断、完整方案学分变化及资源约束。
