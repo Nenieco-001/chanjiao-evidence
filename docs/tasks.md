@@ -1,6 +1,6 @@
 # 当前任务
 
-本文件是唯一活动任务板。协调者为 root，当前 revision 24。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
+本文件是唯一活动任务板。协调者为 root，当前 revision 25。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
 
 ## F1 · 文档收敛
 
