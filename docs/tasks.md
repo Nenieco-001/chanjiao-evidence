@@ -1,6 +1,6 @@
 # 当前任务
 
-本文件是唯一活动任务板。协调者为 root，当前 revision 19。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
+本文件是唯一活动任务板。协调者为 root，当前 revision 20。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
 
 ## F1 · 文档收敛
 
@@ -136,6 +136,13 @@
 - 证据边界：4 张卡片分别承担设计经验、无一致优势的流程对照、大学亚组 SMD 参照和宽背景主动学习对照；reference SMD 0.116、CI [0.027, 0.204]，三情景 -0.03 / 0 / 0.058；目标措施仍为 unidentified，未把文献参照当本校效果。
 - 对照当前本来已有实验/实践课的事实审查文献适用性，避免把实习参与效应或讲授与主动学习的总体比较直接当作增加16学时的收益。
 - 验收需要可复核的措施与结果、零或负结果、单位和时间窗、识别条件与迁移范围。按证据强度收缩参数，补课程增删合并内容、资源与风险量化，再统一更新正式材料。
+
+## G8 · 正式材料与提交一致性
+
+- 负责人为 root，revision 20，状态为下一步。写范围为 `src/chanjiao_evidence/submission.py`、`tests/test_submission.py`、`docs/data-contract.md`、`docs/status.md` 和本任务板；不改 H3 的 `.local` 材料生成器，不改 `artifacts/submission-review-r17-polished`。
+- 依赖 G7。把 G7 的 4 张课程项目证据卡、SMD 参照和“目标效果未识别”状态写入审阅提交清单；逐项核对 15 个 requirement ID 的 verified/partial/missing，S.evolution 保持 partial，正式模式 `--require-ready` 仍须拒绝未齐包。
+- 报告与 JSON 的数字、单位、分母、来源和限制必须一致；不能把 G7 文献参照写成本校效果，不能把 review_only 写成正式提交。
+- 验收为 `tests/test_submission.py` 与相关测试通过；正式模式退出 2 且不发布；审阅包 manifest/说明引用 G7 证据；全量 pytest、Ruff、format 通过。完成后交 Lead 复核，不自行 commit/push。
 
 ## H1 · 文本去防御口癖
 
