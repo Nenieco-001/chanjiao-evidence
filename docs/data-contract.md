@@ -16,6 +16,36 @@
 
 employment_effect.status 为 unidentified，列出改革、学生结果、对照和迁移证据缺项。目标课时增加作为实践教学投入代理，课程切片可行性与培养效果分别评价。
 
+## 专业要求、修订与机制
+
+`cufe-2025-program.json` 的模式为 published_program_requirements。minimum_total_credits 与 module_minimum_credits 记录原文总学分和十类底线。course_modules 将课程连接到模块，courses 记录第5–6页50门目录及讲课、实验和实践列，空白保留 null。选修池与学生实际选择分别处理，美育及《总则》缺项保留。
+
+`chanjiao strategy --plan ... --program ... --policy ... --evidence ... --effects ... --output ...` 分别读取五份 JSON 字节快照。policy 的模式为 scenario_assumptions，包含 curriculum_scenarios、student_paths、directions、selection_semester、admissions 和 risks。每个课程情景复用已有接口，每条选课路径给出 module_credits 和 selected_course_ids。当前路径是显式构造的情景。检查含调出课、未选调出课和富余学分路径，保留失败；失败触发下一个候选情景的实际重算。
+
+方向配置给出岗位族、关联课程、容量和 [0,1] 范围的成绩门槛。评分仅使用分流前已修的切片课程，等权归一化规则为待审议假设。方向规则包含志愿、同分、容量与未分配处置，未取得学生观测时只输出政策。
+
+admissions 指定原规模、上下界、固定时间窗的就业比例及观测年，未知项为 null。建议相对调幅为 gain 乘观测比例与 target_rate 的差值，经 max_relative_change 限幅和规模上下界检查，再按保守整数规则取整。next_intake_year 等于观测年加 feedback_interval_years，expected_graduation_year 再增加 feedback_lag_years。缺反馈保持原规模并返回 awaiting_inputs。synthetic 模式仅返回合成建议。该模块计算单个调整周期，长期闭环收敛需另行验证。
+
+风险至少三项，按唯一 risk_id、关联 action_id、概率范围、影响、责任、触发和应对登记。概率范围是显式假设，默认 [0,1] 表示未知。专业约束检查通过只覆盖登记路径和条件，学校批准状态为 pending_school_review。
+
+输出 strategy-review.json、review.md、manifest.json。清单登记五份实际输入、所有包源码和两个结果哈希，原子发布并拒绝覆盖。当前入口保留三维差距、资源核定与效果迁移缺项，状态为 review_only。
+
+## 文献参照的三情景
+
+effects 配置包含目标措施/人群、applicability、唯一 effect_reference，以及 pessimistic/base/optimistic 三项情景。每项的 transfer_factor 在 [0,1] 内，bias 使用原指标单位，assumption_source 说明参数由何处确定。原文标准误存在时用正态近似形成文献参考区间，缺失时仅保留报告点值。
+
+计算值为 transfer_factor 乘报告效应后扣 bias。端点同式计算，保留零、负值与无优势结果。正优势使用 1e-12 绝对零容差，原始浮点值和优势消失阈值保留。支持 log_points 与 proportion_difference。只有 earnings 的对数结果派生相对收入百分比。比例差点值需在 [-1,1]，正态近似区间越界时保留其统计近似含义。
+
+适用性 unverified 或 mismatch 时只给 literature_reference_scenarios，本校效果为 unidentified。人工声明 supported 时也只给 conditional_projection。所有状态的 observed_causal_effect 均为 false。参考区间传播的是论文抽样范围和显式情景，迁移参数未经校准时不构成本校效果置信区间。
+
+## 提交清单与 ZIP
+
+`chanjiao bundle --checklist ... --materials ... --output ...zip` 读取 schema_version=1 的清单。requirements 恰好包含示例中的十五个唯一 ID，status 为 verified、partial 或 missing，note 记录验收内容，evidence 指向包内依据。通过项必须有已列入白名单的依据文件。
+
+files 是显式白名单，每项提供 role、path、permission=public。role 为 report、slides、video、data、source 或 readme。路径使用安全相对路径，拒绝目录逃逸、隐藏目录、原始目录、受限文件、重复路径、符号链接和覆盖。PDF/PPTX 检查文件结构，MP4 检查影片头、画面轨道和时长。时长超过300秒、缺材料、缺依据或任一要求未通过时，包状态为 review_only。`--require-ready` 在这些情况下报错并不发布。
+
+ZIP 使用固定元数据，同一输入生成相同字节。manifest.json 登记实际文件字节、SHA-256、清单字节哈希、视频容器时长、缺项及要求状态。程序核对材料与贡献者登记的结论，科学证据、视觉质量和实际播放由独立审核记录支持。十五项形式与记录通过后状态为 ready，最终赛事模板、报名资格和提交通道另按官方要求核对。
+
 ## 历史改革面板
 
 这份文档规定面板 CSV、元数据 JSON 和方案 JSON 必须长什么样，以及产物里有什么。规则按“字段—要求—为什么”列，方便直接对照改数据。

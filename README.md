@@ -36,7 +36,16 @@ chanjiao curriculum --plan data/curricula/official-cs-extract.json --scenario da
 
 公开课程输入保留原始出处，情景文件单独标记决策假设。输出课程动作、约束检查、生成与修订日志，以及效果证据缺项。默认保留原方案，候选供教师审议。完整培养方案与资源核定仍需补齐。
 
-## 已有研究基线
+## 专业方案审阅与提交打包
+
+```powershell
+chanjiao strategy --plan data/curricula/official-cs-extract.json --program data/curricula/cufe-2025-program.json --policy data/examples/program-policy.json --evidence data/evidence/internships.json --effects data/examples/effect-scenarios.json --output artifacts/strategy-review
+chanjiao bundle --checklist data/examples/submission-checklist.json --materials artifacts/submission-materials --output artifacts/submission-review.zip
+```
+
+策略入口检查147学分与模块底线、三条选课路径、实际修订、方向与招生规则，保留本校未识别效果。清单样例中的十五项均待核验。材料未齐时生成审阅包，`--require-ready` 强制拒绝未满足正式条件的包。输入与研究范围见[数据契约](docs/data-contract.md)。
+
+## 合成改革基线
 
 ```powershell
 chanjiao run --panel data/examples/panel.csv --metadata data/examples/metadata.json --plans data/examples/plans.json --evidence data/evidence/internships.json --output artifacts/causal-example

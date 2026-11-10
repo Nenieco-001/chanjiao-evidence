@@ -300,3 +300,39 @@ def test_rejects_duplicate_course_ids(curriculum_plan, curriculum_config):
     curriculum_plan["courses"][1]["course_id"] = "target"
     with pytest.raises(ValueError, match="course_id"):
         curriculum.evaluate_curriculum(curriculum_plan, curriculum_config)
+
+
+@pytest.mark.parametrize("value", [10**400, float("inf")])
+def test_rejects_unrepresentable_number_with_field_and_remedy(
+    curriculum_plan, curriculum_config, value
+):
+    curriculum_config["credit_delta"] = value
+    with pytest.raises(ValueError, match="credit_delta.*有限.*请"):
+        curriculum.evaluate_curriculum(curriculum_plan, curriculum_config)
+
+
+def test_rejects_finite_inputs_whose_course_total_overflows(curriculum_plan, curriculum_config):
+    for course in curriculum_plan["courses"]:
+        course["hours"] = 1e308
+    with pytest.raises(ValueError, match="hours.*溢出.*请"):
+        curriculum.evaluate_curriculum(curriculum_plan, curriculum_config)
+
+
+def test_rejects_finite_transfer_whose_target_amount_overflows(curriculum_plan, curriculum_config):
+    curriculum_plan["courses"][2]["hours"] = 1e308
+    curriculum_config["hour_options"] = [1e308]
+    curriculum_config["capacity_added_hours"] = 1e308
+    with pytest.raises(ValueError, match="target.hours.*溢出.*请"):
+        curriculum.evaluate_curriculum(curriculum_plan, curriculum_config)
+
+
+def test_rejects_post_adjustment_integer_overflow_at_course_field(
+    curriculum_plan, curriculum_config
+):
+    for course in curriculum_plan["courses"]:
+        course["hours"] = 0
+    curriculum_plan["courses"][2]["hours"] = 10**308
+    curriculum_config["hour_options"] = [10**308]
+    curriculum_config["capacity_added_hours"] = 10**308
+    with pytest.raises(ValueError, match="courses.target.hours.*溢出.*请"):
+        curriculum.evaluate_curriculum(curriculum_plan, curriculum_config)

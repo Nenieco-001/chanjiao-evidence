@@ -21,6 +21,9 @@ flowchart LR
 ## 模块
 
 - curriculum.py 负责公开课程、情景边界、候选与约束，默认保留原方案。
+- strategy.py 在候选上核对模块与构造路径，按失败触发修订重算，输出方向、招生和风险审阅。
+- scenarios.py 计算原指标单位的文献参照与迁移情景，保留适用性及本校效果状态。
+- submission.py 按显式公开白名单、要求状态和媒体元数据构建确定性ZIP，缺项只放行审阅版。
 - archives.py 核对 ZIP 成员、RAR 目录和明确成员提取，完整性与内容事实分开。
 - warehouse.py 使用 DuckDB 保存招聘字符串原值、版本、类型化视图与质量计数，可导出 Parquet。
 - analysis/competition/workbench.py 负责需求侧固定词面、岗位族和回顾性比较，其结果解释范围见所属模块。

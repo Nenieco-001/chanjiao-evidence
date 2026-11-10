@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "scenario_assumptions",
+  "action_id": "course_project_practice",
+  "target_population": "中央财经大学2025版计算机科学与技术专业学生",
+  "target_action": "增加专业综合实践课程内的项目实践，尚未核定为校外企业实习",
+  "applicability": {
+    "status": "unverified",
+    "rationale": "课程内项目实践与文献校外实习的定义、参与机制、人群和结果时间窗尚未逐项对应。缺少本校学生结果与对照，当前只展示文献条件性参照。",
+    "source_locations": [
+      "data/curricula/official-cs-extract.json 中专业综合实践课程",
+      "data/evidence/internships.json 中 margaryan_2022_internships 的措施、人群及迁移限制"
+    ]
+  },
+  "effect_reference": {
+    "evidence_id": "margaryan_2022_internships",
+    "outcome_id": "earnings"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "pessimistic",
+      "transfer_factor": 0,
+      "bias": 0.01,
+      "assumption_source": "分析者设定的压力情景，允许零迁移并扣减0.01对数点。系数和偏差均为未校准假设，需要本校可比措施、收入追踪和对照材料校准。"
+    },
+    {
+      "scenario_id": "base",
+      "transfer_factor": 0.5,
+      "bias": 0.01,
+      "assumption_source": "分析者设定的中间情景，迁移一半文献效应并扣减0.01对数点。系数和偏差均为未校准假设，名称不表示发生概率或已认证可比性。"
+    },
+    {
+      "scenario_id": "optimistic",
+      "transfer_factor": 1,
+      "bias": 0,
+      "assumption_source": "分析者设定的完全迁移且无额外偏差情景。两项参数均为未校准假设，需要同定义措施、人群、收入时间窗和识别条件的逐项支持。"
+    }
+  ]
+}

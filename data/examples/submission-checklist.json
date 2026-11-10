@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "title": "产教智对提交验收清单",
+  "requirements": [
+    {
+      "requirement_id": "T1.skills",
+      "status": "missing",
+      "note": "补同校同届课程目标、能力观测、需求标签及共同口径的技能差距。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "T1.directions",
+      "status": "missing",
+      "note": "补现行方向人数及岗位族映射，计算方向差异。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "T1.scale",
+      "status": "missing",
+      "note": "补招生与毕业人数、有效岗位规模及代表性说明。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "T2.courses",
+      "status": "missing",
+      "note": "补新增、删减、合并或不采用理由，核定完整选课、内容承接和师资。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "T2.directions",
+      "status": "missing",
+      "note": "补方向容量来源与学生分流压力测试。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "T2.admissions",
+      "status": "missing",
+      "note": "补同窗就业反馈、规模上下界以及长期时滞稳定性。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "T3.validation",
+      "status": "missing",
+      "note": "补对应措施的识别与迁移依据，完成改善效果的量化论证。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "T4.risks",
+      "status": "missing",
+      "note": "补动作绑定的影响量、概率依据、责任时点和触发处置。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "S.evolution",
+      "status": "missing",
+      "note": "保留失败、具体参数修订、重新计算及停止条件。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "D.report",
+      "status": "missing",
+      "note": "方案PDF逐页核对来源、数字、研究口径与缺项。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "D.data",
+      "status": "missing",
+      "note": "提供可复核数据、字典、脚本与输入版本。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "D.video",
+      "status": "missing",
+      "note": "提供实际演示成片，核对可播放且时长不超过300秒。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "D.slides",
+      "status": "missing",
+      "note": "答辩PPTX逐页渲染并核对关键数字。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "C.licensing",
+      "status": "missing",
+      "note": "补数据取得路径、使用范围、组件许可与公开材料核对。",
+      "evidence": []
+    },
+    {
+      "requirement_id": "C.reproduce",
+      "status": "missing",
+      "note": "在新环境重现关键结果并保存命令及哈希。",
+      "evidence": []
+    }
+  ],
+  "files": [
+    {
+      "role": "report",
+      "path": "方案报告_审阅版.pdf",
+      "permission": "public"
+    },
+    {
+      "role": "slides",
+      "path": "答辩_审阅版.pptx",
+      "permission": "public"
+    },
+    {
+      "role": "video",
+      "path": "演示_审阅版.mp4",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "阅读说明.md",
+      "permission": "public"
+    }
+  ]
+}

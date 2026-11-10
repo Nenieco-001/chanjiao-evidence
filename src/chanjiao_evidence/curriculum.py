@@ -13,13 +13,22 @@ def _text(value, field: str) -> None:
 
 
 def _number(value, field: str) -> None:
-    if (
-        isinstance(value, bool)
-        or not isinstance(value, Real)
-        or not math.isfinite(value)
-        or value < 0
-    ):
-        raise ValueError(f"{field} 数值无效，请填写有限非负数")
+    try:
+        finite = math.isfinite(value) if isinstance(value, Real) else False
+    except OverflowError:
+        finite = False
+    if isinstance(value, bool) or not isinstance(value, Real) or not finite or value < 0:
+        raise ValueError(f"{field} 数值非有限或为负，请填写有限非负数")
+
+
+def _finite_sum(values, field: str) -> float:
+    try:
+        result = math.fsum(values)
+    except (OverflowError, ValueError) as error:
+        raise ValueError(f"{field} 聚合溢出，请缩小输入数值并检查单位") from error
+    if not math.isfinite(result):
+        raise ValueError(f"{field} 聚合溢出，请缩小输入数值并检查单位")
+    return result
 
 
 def _validate_inputs(plan: dict, config: dict) -> dict:
@@ -142,6 +151,14 @@ def _evaluate_candidate(
         for field, delta in [("hours", hours), ("credits", credits)]:
             before = course[field]
             after[course_id][field] = None if before is None else before + sign * delta
+            try:
+                finite = after[course_id][field] is None or math.isfinite(after[course_id][field])
+            except OverflowError:
+                finite = False
+            if not finite:
+                raise ValueError(
+                    f"courses.{course_id}.{field} 调整后溢出，请缩小调整数值并检查单位"
+                )
             change[f"{field}_before"] = before
             change[f"{field}_after"] = after[course_id][field]
         changes.append(change)
@@ -156,8 +173,12 @@ def _evaluate_candidate(
         totals[f"{field}_before"] = None
         totals[f"{field}_after"] = None
         if not field_missing:
-            totals[f"{field}_before"] = math.fsum(row[field] for row in courses.values())
-            totals[f"{field}_after"] = math.fsum(row[field] for row in after.values())
+            totals[f"{field}_before"] = _finite_sum(
+                (row[field] for row in courses.values()), f"courses.{field}_before"
+            )
+            totals[f"{field}_after"] = _finite_sum(
+                (row[field] for row in after.values()), f"courses.{field}_after"
+            )
             if not math.isclose(totals[f"{field}_before"], totals[f"{field}_after"], abs_tol=1e-9):
                 violations.append(f"total_{field}")
         for course_id, row in after.items():
