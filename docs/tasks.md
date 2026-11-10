@@ -1,6 +1,6 @@
 # 当前任务
 
-本文件是唯一活动任务板。协调者为 root，当前 revision 21。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
+本文件是唯一活动任务板。协调者为 root，当前 revision 22。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
 
 ## F1 · 文档收敛
 
@@ -142,6 +142,13 @@
 - 负责人为 root，revision 21，状态为源清单已同步、待 Codex 复核。写范围为 `src/chanjiao_evidence/submission.py`、`tests/test_submission.py`、`docs/data-contract.md`、`docs/status.md` 和本任务板；不改 H3 的 `.local` 材料生成器，不改 `artifacts/submission-review-r17-polished`。
 - Lead 预跑：`data/examples/submission-checklist.json` 已同步为交付包状态，T3 evidence 加入 G7 两个 JSON；候选材料 `artifacts/submission-review-g8-candidate/` 的 review 包为 `review_only`、缺 11 项；`--require-ready` 退出 2；`tests/test_submission.py` 19 passed/1 skipped。
 - 依赖 G7。正式提交清单仍需 Codex 复核：15 个 requirement ID、S.evolution/T3 保持 partial、G7 证据入包、正式模式拒绝未齐包；不得把 review_only 写成正式提交。
+
+## G9 · 正式化缺口与退出条件
+
+- 负责人为 root，revision 22，状态为 G8 后下一步。写范围为 `data/examples/submission-checklist.json`、`docs/data-contract.md`、`docs/status.md` 和本任务板；不改 H3 的 `.local` 材料生成器，不改精排版 artifacts。
+- 依赖 G8。以源清单和 `artifacts/submission-review-g8/` 为基线，把 review_only 的 11 项未齐按 T1/T2/T3/T4/S/C 分类，每项写：缺什么、由谁提供、可接受的证据形式、补件后状态如何变化、仍需外部条件时如何保持 partial。
+- 特别确认：T3 已有 G7 文献参照但目标效果 unidentified，不能升级为 verified；S.evolution 保持 partial；正式模式 `--require-ready` 继续拒绝；不得把 G7 文献区间写成本校效果。
+- 验收为 11 项缺口逐项有原因和下一步；不得无证据升级状态；源清单、status、任务板、G8 包说明一致；submission 测试通过。完成后交 Lead，不自行 commit/push。
 
 ## H1 · 文本去防御口癖
 
