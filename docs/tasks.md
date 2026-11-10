@@ -141,7 +141,7 @@
 
 - 负责人为 root，revision 21，状态为源清单已同步、待 Codex 复核。写范围为 `src/chanjiao_evidence/submission.py`、`tests/test_submission.py`、`docs/data-contract.md`、`docs/status.md` 和本任务板；不改 H3 的 `.local` 材料生成器，不改 `artifacts/submission-review-r17-polished`。
 - Lead 预跑：`data/examples/submission-checklist.json` 已同步为交付包状态，T3 evidence 加入 G7 两个 JSON；候选材料 `artifacts/submission-review-g8-candidate/` 的 review 包为 `review_only`、缺 11 项；`--require-ready` 退出 2；`tests/test_submission.py` 19 passed/1 skipped。
-- 依赖 G7。正式提交清单仍需 Codex 复核：15 个 requirement ID、S.evolution/T3 保持 partial、G7 证据入包、正式模式拒绝未齐包；不得把 review_only 写成正式提交。
+- 依赖 G7。正式提交清单仍需 Codex 复核：15 个 requirement ID、S.evolution/T3 保持 partial、G7 证据入包、正式模式拒绝未齐包；review_only 与正式提交分列，正式包保持拒绝。
 
 ## G9 · 正式化缺口与退出条件
 
