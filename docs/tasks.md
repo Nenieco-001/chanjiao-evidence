@@ -1,6 +1,6 @@
 # 当前任务
 
-本文件是唯一活动任务板。协调者为 root，当前 revision 27。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
+本文件是唯一活动任务板。协调者为 root，当前 revision 28。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
 
 ## F1 · 文档收敛
 
@@ -166,6 +166,13 @@
 - 已提取本机官方PDF第3页核对任务1至4，原文记录留本轮忽略目录。同步T3段落、招生情景与复现退出条件，任务4的概率和影响量估计列为内部完善项。G9表11个唯一ID与源清单partial集合一致，正式拒绝实测通过。剩余11项依赖在status逐项列出，G5/G6的远端复核交Lead安排。
 - 续验已补同机全新依赖安装、随包全量测试和已安装CLI的哈希复现记录。C.reproduce继续partial，余下是Lead或其他贡献者的独立验收；G5/G6既有提交基线的远端代码复核已只读核对。当前无其他明确开放、归属本写范围的G/M实现任务，下一步为Lead验收G8/G9及G7图文整合。
 - Lead 验收（2026-11-11）：G9 表 11 个唯一 ID 与源清单 partial 集合一致；T3/S.evolution 保持 partial；正式拒绝实测通过；G9 改为验收通过。
+
+## G10 · 展示材料与提交包独立复核
+
+- 负责人为 root，revision 28，状态为下一步。写范围只读：读取 `artifacts/submission-review-r17-polished`、`artifacts/submission-review-g8-verified`、`artifacts/submission-review-g8-verified.zip` 与 `docs/status.md`；复核记录写入 `.local/g10-review-20261111/`。不改 H1–H3 文本/前端/材料生成器，不改 verified 包，不 commit/push。
+- 核对：报告 PDF 8 页、答辩 PPTX/PDF 12 页；第 10 页 G7 证据；页脚“strategy-review.json 与 G7 证据”；SMD 0.116、CI [0.027,0.204]；三情景 -0.03 / 0 / 0.058。
+- 核对 G8 verified 包：15 个 requirement ID、11 项 partial、manifest provenance、98 项文件、`--require-ready` 退出 2；确认没有把 review_only 写成正式提交。
+- 输出 PASS/FAIL、具体不一致项和建议；如无问题写 `no-work.flag`，避免 runner 重复。更新任务板 G10 状态，不自行提交。
 
 ## H1 · 文本去防御口癖
 
