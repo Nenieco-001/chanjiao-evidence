@@ -168,7 +168,7 @@
 
 ## H4 · Codex 连续运行
 
-- 负责人为 lead，revision 24，状态为等待 04:02 启动持续 runner。runner 已停止；Codex 于 2026-11-11 00:38 触发 5h 限额，提示 04:01 恢复。计划由 `schedule-ed31b02e-e52e-4267-b0d3-b61bd7fbbc63` 在 04:02 启动 `.local/codex-runner/run.ps1`：同 thread、mission 为 G8 复核后接 G9、quota 等 30 分钟、正常结束 3 分钟后继续。写范围为 `.local/codex-runner/` 日志与运行状态；不改业务源码和任务板任务事实。
+- 负责人为 lead，revision 25，状态为等待 04:02 启动持续 runner。runner 已停止；Codex 于 2026-11-11 00:38 触发 5h 限额，提示 04:01 恢复。计划由 `schedule-ed31b02e-e52e-4267-b0d3-b61bd7fbbc63` 在 04:02 启动 `.local/codex-runner/run.ps1`：同 thread、mission 为 G8 复核后接 G9、quota 等 30 分钟、正常结束 3 分钟后继续；`schedule-a5323623-e9cc-4937-ad30-068642edc09f` 在 04:10 只检查、未启动则补启。写范围为 `.local/codex-runner/` 日志与运行状态；不改业务源码和任务板任务事实。
 - 用同一 thread `01a1b15b-2a4d-76c1-8b8c-fb2be5c8b100` 的 `codex exec resume` 连续执行任务；每次 quota 后记录错误与恢复时间，恢复后自动续跑，不新开 thread。
 - 验收为每次运行有开始/结束/退出码/错误日志；不重复启动同一 Codex 进程；配额恢复后能继续原 thread；Lead 可随时停止并保留未提交改动。
 
