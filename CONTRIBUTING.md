@@ -1,35 +1,18 @@
 # 贡献指南
 
-## 开始
+先读 [项目说明](docs/project.md)、[路线图](docs/roadmap.md)、[当前状态](docs/status.md) 和相关契约，再从 [任务板](docs/tasks.md) 认领有独立验收条件的工作。多 Agent 角色与写范围按 [AGENTS.md](AGENTS.md) 执行。
 
-先读 README、研究规划和数据契约，跑通合成示例。研究任务先说清对象、措施、对照、结果指标、数据和验收标准。涉及假设、接口或依赖路线的决定记到 `docs/decisions/`。
+从最新 main 建立特性分支。一项 PR 处理一个可独立审查的变更，提交信息用中文说明具体行为。接口变化保留既有调用，并记录迁移。用户可见、契约或研究假设变化写入 CHANGELOG 的 Unreleased。
 
-多个 agent 为同一个人工作时，按 [AGENTS.md](AGENTS.md) 划分角色、任务和写范围；对外只有协调者提交，只留一套结论。
+数值测试使用手算或独立推导的预期值，覆盖零效应、负效应、缺失和不可行约束。分析规则先定再跑，保留无优势和资料不足。随机方法记录种子、样本划分、配置与版本，按学校或整个改革安排独立验证。
 
-## 分支与变更
-
-从最新 main 开 `feat/<topic>`、`fix/<topic>` 或 `docs/<topic>`。一个 PR 只做一件可以独立审查的事。提交前缀用 feat、fix、docs、test、chore。数据契约变了要说明迁移方式，并在 `CHANGELOG.md` 的 Unreleased 记一条。
-
-## 代码与研究
-
-- 数值测试用能独立推导的预期值，覆盖零效应、负效应、缺失和约束失败。
-- 改变行为先写会失败的测试，再实现。
-- 分析规则先定后跑；无优势、无法识别、资料不足的结果照样保留。
-- 按学校或整个改革划分开发与验证数据；随机算法记录种子、配置、划分和版本。
-- 论文卡片写明来源、对象、措施、结果、识别方法、效应单位、假设和局限。
-- 数据记录 URL、获取日期、哈希、许可、清洗和口径。
-- 新增依赖同步更新 `docs/open-source.md`，说明为什么加。
-- AI 辅助的贡献由人类贡献者核验计算、来源和许可。
-
-## 验收与提交
+真实课程记录学校、专业、版本、原始位置与覆盖范围。历史改革记录对象、措施、对照、结果和识别条件。数据保留来源、许可、哈希、清洗和排除规则，原始记录留在本机。新增依赖同步更新开源清单。
 
 ```powershell
-python -m pip install -e ".[dev]"
 python -m pytest -q
 python -m ruff check .
 python -m ruff format --check .
 python -m build
-chanjiao run --panel data/examples/panel.csv --metadata data/examples/metadata.json --plans data/examples/plans.json --output artifacts/pr-check
 ```
 
-PR 写清问题、改了什么、实际跑了哪些命令、结果和没验证的部分。先看 `git diff --cached` 有没有不该公开的内容。CI 管代码和复现；因果识别和外推合理性要人工审查。PR 创建或更新后在评论中 `@codex review` 请求评审；若 DeepSeek 提供评审入口也一并请求，优先 Codex。
+另跑 README 中受影响的正常入口。数值产物两次运行到新路径并比较，核对 manifest。PR 写明问题、变更、实际命令与结果、研究影响和未验证项。先审查暂存 diff，完成独立验收后由协调者提交并请求 `@codex review`。

@@ -1,4 +1,22 @@
-# 数据契约 v1
+# 数据契约
+
+各命令分别选择自己的 v1 输入类型。公开课程、情景假设、历史面板与招聘数据独立登记，证据含义保留到产物。
+
+## 公开课程与候选情景
+
+`chanjiao curriculum --plan ... --scenario ... --output ...` 读取两份 JSON，写入一个全新目录。课程模式为 published_curriculum，情景模式为 scenario_assumptions，二者均有整数 schema_version=1。
+
+课程输入包含 school、major、program_version、coverage=selected_courses、source 和 courses。source 提供 title、https 原文 url、原文件 sha256 与 location。每门课程提供唯一 course_id、title、credits、hours、semester、prerequisites 和 source_location，数值未公开用 null。周数保留 duration_text，未公开先修写明 prerequisites_status=not_published。
+
+情景包含 label、target_course_id、donor_course_id、hour_options、credit_delta、minimum_hours、minimum_credits、capacity_added_hours、rationale 和 assumption_notes。课程底线与容量是决策假设，单独记录来源与审核需求。
+
+先保留 0 调整原方案，再对正课时选项去重枚举。候选从 donor 转移课时及 credit_delta 学分给 target，检查非负、守恒、底线、容量和已知先修学期。未知关键输入返回 not_evaluable，违反已建模约束返回 infeasible，其余为范围内 feasible。未公开先修与全专业约束列为 unverified_constraints，候选需教师审议。
+
+输出 curriculum-review.json、course-actions.csv、review.md 和 manifest.json。JSON 保存全部候选、约束、生成/评价/反思/修订日志，默认 selected_candidate_id=unchanged。CSV/Markdown 转义外部文字，清单记录实际输入字节、源码与三个结果哈希，已有路径拒绝覆盖。
+
+employment_effect.status 为 unidentified，列出改革、学生结果、对照和迁移证据缺项。目标课时增加作为实践教学投入代理，课程切片可行性与培养效果分别评价。
+
+## 历史改革面板
 
 这份文档规定面板 CSV、元数据 JSON 和方案 JSON 必须长什么样，以及产物里有什么。规则按“字段—要求—为什么”列，方便直接对照改数据。
 
