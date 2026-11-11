@@ -169,10 +169,19 @@
 
 ## G10 · 展示材料与提交包独立复核
 
-- 负责人为 root，revision 28，状态为下一步。写范围只读：读取 `artifacts/submission-review-r17-polished`、`artifacts/submission-review-g8-verified`、`artifacts/submission-review-g8-verified.zip` 与 `docs/status.md`；复核记录写入 `.local/g10-review-20261111/`。不改 H1–H3 文本/前端/材料生成器，不改 verified 包，不 commit/push。
+- 负责人为 root，revision 28，状态为验收通过（最终提交候选包工程与材料一致性）。读取范围包含 `artifacts/产教智对_提交包_20261111.zip`、`artifacts/submission-review-r17-polished`、`artifacts/submission-review-g8-verified`、`artifacts/submission-review-g8-verified.zip` 与 `docs/status.md`；复核记录写入 `.local/g10-review-20261111/`，任务事实更新本段。
 - 核对：报告 PDF 8 页、答辩 PPTX/PDF 12 页；第 10 页 G7 证据；页脚“strategy-review.json 与 G7 证据”；SMD 0.116、CI [0.027,0.204]；三情景 -0.03 / 0 / 0.058。
 - 核对 G8 verified 包：15 个 requirement ID、11 项 partial、manifest provenance、98 项文件、`--require-ready` 退出 2；确认没有把 review_only 写成正式提交。
 - 输出 PASS/FAIL、具体不一致项和建议；如无问题写 `no-work.flag`，避免 runner 重复。更新任务板 G10 状态，不自行提交。
+
+### 最终提交候选包复验（2026-11-11）
+
+- 本轮起点为干净的 main，HEAD `c68528ff19c5774b223f86b055c51dd5c1b4f940`。最终ZIP为1,424,491字节，SHA-256为 `8ACE65A90B526CEAB7699C819CCCCF96F1CCCBD09ADD67D6A13CC1896DA81120`，与指定对象吻合。
+- 62项检查PASS，包括53项静态检查、5项CLI检查及4项源值/图表/页脚交叉检查。98项材料和1份总manifest的CRC、逐文件字节/哈希、公开路径与常见凭据模式扫描通过；两组provenance的52项绑定匹配。15个requirement ID完整，11项partial与unmet_requirements吻合，状态保持review_only。
+- 报告8页、答辩PPTX12页、视频232秒。第10页与G7源JSON的SMD 0.116、CI [0.027,0.204]、三情景-0.03/0/0.058匹配，目标效果为unidentified。报告8页及PPTX12页页脚口径和边界通过，收入图表与嵌入工作簿为-0.01/0.0225/0.065，与主结果一致。
+- 实际执行 `python -B .local/g10-review-20261111/audit_final_package.py`、`python -B .local/g10-review-20261111/verify_final_cli.py` 及源值交叉检查。使用捆绑Python3.12和包内源码，正常bundle两次退出0，重打包字节及哈希均与最终ZIP一致；`python -B -m chanjiao_evidence bundle ... --require-ready` 退出2，formal.zip保持不存在。完整参数与环境字段见 `final-0903/cli-commands.json`、`cli-environment.json`。
+- 结论为可作为赛方审阅的提交候选包，研究与合规完备性继续按11项partial推进。文字建议为补充G7偏差参数，以及明确封面“实施授权”对应的校内实施阶段。报告PDF已渲染目视检查，PPTX已核对逐页XML及页脚边界；Office实际放映、视频完整解码和赛方最终模板/队伍资格列为待核项。
+- 本轮证据与11项缺口逐条说明位于 `.local/g10-review-20261111/final-0903/REPORT.md`。结束时核对归档与受保护文件哈希、G10段外任务文本及git diff --check，并确认 `.local/codex-runner/no-work.flag`。
 
 ## H1 · 文本去防御口癖
 
