@@ -7,27 +7,32 @@
 ## 输入与依赖
 
 - Python 3.11–3.13，仅标准库；运行分析不需要 pandas、DuckDB、LLM、网络或安装新包。
-- 默认读取 `.local/data-audit/extract/上市公司招聘数据2016.csv`、
-  `上市公司招聘数据2023.csv`、`上市公司招聘数据2026.csv`。三个文件合计约 1.10 GB，
-  是已提取的完整年度成员，**不是随机抽样**。回测另只读提取 2024/2025 CSV 到
-  `.local/analysis-data/`；不打开 38 GB 全量总表，不改 D 盘原包。
-- 官方数据字典已于 2026-11-11 取得，字段、分卷、编码与清洗规则见 [官方材料摘要](OFFICIAL-MATERIALS.md)。2022 单年表缺少「来源平台」，不能直接套当前字段校验；实际分析仍用年度 CSV 子集。
+- 输入用 `--input-dir` 显式指定年度 CSV 目录，文件名为 `上市公司招聘数据<年份>.csv`。
+  既有运行使用2016/2023/2026三个完整年度成员，合计约1.10 GB；回测另使用2024/2025年度成员。
+  原包与原始CSV放在使用者自己的只读数据目录，输出和提取记录另选目录。
+- 官方数据字典已于2026-11-11取得，规则见 [官方材料摘要](OFFICIAL-MATERIALS.md)。本轮仅从本机RAR读取表头，核对全量24列与2022单年23列，后者缺「来源平台」。两种表头都包含工作台必需的14列，当前代码使用「来源」，读取不依赖「来源平台」。
+- 合成fixture已验证24/23列表头及重排列序下的读取与汇总。2022年度仍在工作台年份白名单之外，`--years 2022` 会被拒绝；其类别语义尚待审计。仓库导入入口已用2022合成记录验证23/24列兼容。
 - 使用 UTF-8/BOM 和真正的 CSV 解析器，支持描述内换行。按列名读取，
   允许一个末尾空列；非空尾列记录单列计数并排除，损坏记录、缺字段报错。
+- 长字段读取上限提高至至少2³¹−1字符，已有更高进程设置沿用。日期去首尾空白后按ISO日期解析，年度接受整数或尾部`.0...`，职位描述保留原文以核对字符跨度。
 - 脚本、课程占位示例及输入哈希写入产物；输入哈希只读计算。
   输入只读，必须在两次运行之间保持不变。
 - `tests/test_competition_analysis.py` 依赖项目已有 pytest；全仓测试还会加载现有统计依赖。
+- `tests/test_official_recruitment_schema.py` 覆盖官方表头与清洗边界。股票代码`000001`经仓库CSV导入、VARCHAR存储及Parquet导出后保留前导零，仓库测试使用DuckDB。
+- 当前按招聘记录计数，招聘人数保留原字符串。「若干」「3人」「0002」和空值只验证可读及岗位分母；人数数值解析与人数加权另需实现。统一社会信用代码、行政区划代码属于其他数据结构，当前工作台未消费，本轮测试不覆盖其清洗或对齐。
 
 ## 运行
 
-从仓库根目录执行，下列输出目录必须尚不存在。
+从仓库根目录执行，先把占位符替换为本机目录。下列输出子目录必须尚不存在。
 
 ```powershell
-python analysis/competition/workbench.py --output artifacts/competition-analysis/run-01
-python analysis/competition/workbench.py --output artifacts/competition-analysis/run-02
+$inputDir = '<ANNUAL_CSV_DIR>'
+$outputRoot = '<OUTPUT_ROOT>'
+python analysis/competition/workbench.py --input-dir $inputDir --output (Join-Path $outputRoot 'run-01')
+python analysis/competition/workbench.py --input-dir $inputDir --output (Join-Path $outputRoot 'run-02')
 # 只复现一个年度，仍使用同一口径
-python analysis/competition/workbench.py --years 2026 --output artifacts/competition-analysis/year-2026
-python -m pytest -q tests/test_competition_analysis.py
+python analysis/competition/workbench.py --input-dir $inputDir --years 2026 --output (Join-Path $outputRoot 'year-2026')
+python -m pytest -q tests/test_competition_analysis.py tests/test_official_recruitment_schema.py
 ```
 
 可用 `--input-dir` 指向其他只读年度 CSV 目录。2024/2025 已逐年核对表头、类别常见值、
@@ -40,8 +45,8 @@ python -m pytest -q tests/test_competition_analysis.py
 比较两次结果（含 manifest，共 11 个文件）：
 
 ```powershell
-$a = 'artifacts/competition-analysis/run-01'
-$b = 'artifacts/competition-analysis/run-02'
+$a = Join-Path $outputRoot 'run-01'
+$b = Join-Path $outputRoot 'run-02'
 $different = @(Get-ChildItem -LiteralPath $a -File | Where-Object {
   (Get-FileHash -LiteralPath $_.FullName).Hash -ne
   (Get-FileHash -LiteralPath (Join-Path $b $_.Name)).Hash
@@ -53,14 +58,18 @@ if ($different.Count) { throw '产物不一致，请核对输入和脚本版本'
 
 ### 2024/2025 回顾性回测
 
-先用已有仓库接口只提取两个明确成员；需要本机已有 UnRAR，不新增运行依赖。
-以下输出路径均须尚不存在，原始 CSV 和提取元数据留在 Git 忽略目录。
+先用已有仓库接口提取两个明确成员，通过`--archive`和`--unrar`传入归档与已安装解压程序。
+占位目录可使用绝对路径，原始CSV和提取元数据留在使用者的私有目录。若选用仓库内目录，应登记Git忽略规则。以下输出文件均须尚不存在。
 
 ```powershell
-python -m chanjiao_evidence warehouse unpack --archive 'D:\竞赛数据\比赛数据\招聘数据\分年份保存数据.rar' --member '上市公司招聘数据2024.csv' --unrar D:\WinRAR\UnRAR.exe --destination .local/analysis-data/上市公司招聘数据2024.csv --output .local/analysis-data/extract-2024.json
-python -m chanjiao_evidence warehouse unpack --archive 'D:\竞赛数据\比赛数据\招聘数据\分年份保存数据.rar' --member '上市公司招聘数据2025.csv' --unrar D:\WinRAR\UnRAR.exe --destination .local/analysis-data/上市公司招聘数据2025.csv --output .local/analysis-data/extract-2025.json
-python analysis/competition/workbench.py --years 2016 2023 2024 2025 --annual-input-dir .local/analysis-data --backtest --output artifacts/competition-analysis/verified-backtest-01
-python analysis/competition/workbench.py --years 2016 2023 2024 2025 --annual-input-dir .local/analysis-data --backtest --output artifacts/competition-analysis/verified-backtest-02
+$archivePath = '<ANNUAL_RAR_ARCHIVE>'
+$unrarPath = '<UNRAR_EXECUTABLE>'
+$backtestDir = '<BACKTEST_CSV_DIR>'
+$metadataDir = '<PRIVATE_METADATA_DIR>'
+python -m chanjiao_evidence warehouse unpack --archive $archivePath --member '上市公司招聘数据2024.csv' --unrar $unrarPath --destination (Join-Path $backtestDir '上市公司招聘数据2024.csv') --output (Join-Path $metadataDir 'extract-2024.json')
+python -m chanjiao_evidence warehouse unpack --archive $archivePath --member '上市公司招聘数据2025.csv' --unrar $unrarPath --destination (Join-Path $backtestDir '上市公司招聘数据2025.csv') --output (Join-Path $metadataDir 'extract-2025.json')
+python analysis/competition/workbench.py --input-dir $inputDir --years 2016 2023 2024 2025 --annual-input-dir $backtestDir --backtest --output (Join-Path $outputRoot 'backtest-01')
+python analysis/competition/workbench.py --input-dir $inputDir --years 2016 2023 2024 2025 --annual-input-dir $backtestDir --backtest --output (Join-Path $outputRoot 'backtest-02')
 ```
 
 `--backtest` 要求 2023/2024/2025，2016 可选；默认不启用，三个年度画像仍输出 11 文件。
@@ -84,8 +93,8 @@ Top-5 只排正提及率，并列按技能名排序；重叠数除以 5，即便
 不替换全年对照。下列两个输出目录必须为新路径：
 
 ```powershell
-python analysis/competition/workbench.py --years 2016 2023 2024 2025 --annual-input-dir .local/analysis-data --matched-backtest --output artifacts/competition-analysis/verified-matched-final-01
-python analysis/competition/workbench.py --years 2016 2023 2024 2025 --annual-input-dir .local/analysis-data --matched-backtest --output artifacts/competition-analysis/verified-matched-final-02
+python analysis/competition/workbench.py --input-dir $inputDir --years 2016 2023 2024 2025 --annual-input-dir $backtestDir --matched-backtest --output (Join-Path $outputRoot 'matched-01')
+python analysis/competition/workbench.py --input-dir $inputDir --years 2016 2023 2024 2025 --annual-input-dir $backtestDir --matched-backtest --output (Join-Path $outputRoot 'matched-02')
 ```
 
 新增 `matched-backtest.json`，这组四年输入共生成 14 个文件。
@@ -145,8 +154,9 @@ Top-5 改善按重叠率严格大于基线，误差类指标按严格小于；�
 
 薪资仅接受上下限为有限数且 `0 < 下限 <= 上限` 的月薪区间。
 中位数与四分位数针对**区间中点**，分箱也用中点；四分位数为线性插值。
-不把面议当零，不补薪数、奖金、工时或通胀。单位按字段“最低/最高月薪”解释为元/月，
-赛方没有字典确认。它是各经验层次的报价，不能叫毕业生起薪。
+0与空月薪均作为未标明报价排除，原始文本空缺率和有效薪资覆盖率分别保留。
+不补薪数、奖金、工时或通胀。产物按“最低/最高月薪”标示元/月，币种和薪数等平台细节随来源核对。
+它是各经验层次的报价，学生起薪另需毕业生观测。
 学历映射保留缺失、未明确和其他，经验只保留原类目，避免跨年等义假设。
 
 ## 产物与复核

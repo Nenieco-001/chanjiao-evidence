@@ -1,6 +1,6 @@
 # 当前任务
 
-本文件是唯一活动任务板。协调者为 root，当前 revision 29。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
+本文件是唯一活动任务板。协调者为 root，当前 revision 31。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
 
 ## F1 · 文档收敛
 
@@ -185,13 +185,16 @@
 
 ## G11 · 官方数据字典支撑材料
 
-- 负责人为 root（Codex），revision 29，状态为进行中。写范围仅代码与支撑材料：`analysis/competition/workbench.py`、`analysis/competition/README.md`、相关测试、`requirements*.txt`、`.github/workflows/ci.yml`、必要的 `data/` schema/样例。不得修改 H5 的软材料范围（README.md、docs/status.md、docs/project.md、docs/roadmap.md、OFFICIAL-MATERIALS.md、PDF/PPT/最终包），不改 `docs/tasks.md`。
+- 负责人为 root（Codex），revision 30，状态为验收通过。写范围仅代码与支撑材料：`analysis/competition/workbench.py`、`analysis/competition/README.md`、相关测试、`requirements*.txt`、`.github/workflows/ci.yml`、必要的 `data/` schema/样例。不得修改 H5 的软材料范围（README.md、docs/status.md、docs/project.md、docs/roadmap.md、OFFICIAL-MATERIALS.md、PDF/PPT/最终包），不改 `docs/tasks.md`。
+- 实测表头：全量24列、2022单年23列，差异「来源平台」；`来源`列存在。新增24/23列、重排列序、BOM、日期trim、月薪0/空、招聘人数「若干」、股票代码字符串、长描述字段上限测试；2022年度仍在白名单外，CLI正确拒绝。CI 增加 Python 3.12。
+- Lead 独立验收：427 passed、1 skipped；Ruff/format、0.4.0 build 通过；24/23列 CLI 两次一致，2022年度门禁退出2。
 - 数据字典已取得：全量 24 列；2022 单年表 23 列且缺「来源平台」；当前代码使用「来源」而非「来源平台」。任务：用 24 列/23 列 fixture 验证真实兼容性，修正 README 中过头的“不能直接套”表述；补官方数据 schema 测试（utf-8-sig、日期 trim、月薪 0/空、招聘人数「若干」、字符串代码）；把 D:\ 硬编码命令改成可替换参数/占位符；补 3.12 CI 或约束；记录数据来源/许可见 `docs/status.md` 的边界，不改研究结论。
 - 验收：专项与全量 pytest、Ruff/format、build；23/24 列行为有测试；不得把原始数据或群聊个人信息写入仓库。完成后交 Lead，由 Lead 决定是否重打最终包。
 
 ## H5 · 软材料与官方口径同步
 
-- 负责人为 lead，revision 29，状态为进行中。写范围：`README.md`、`docs/status.md`、`docs/project.md`、`docs/roadmap.md`、`analysis/competition/OFFICIAL-MATERIALS.md`、`.local/submission-phase-r17/build_polished.py` 及 `artifacts/` 下的 PDF/PPT/最终包；不改源码、测试、G11 文档或 `docs/tasks.md` 的 G11 段。
+- 负责人为 lead，revision 31，状态为验收通过（最终提交包）。写范围：`README.md`、`docs/status.md`、`docs/project.md`、`docs/roadmap.md`、`analysis/competition/OFFICIAL-MATERIALS.md`、`.local/submission-phase-r17/build_polished.py` 及 `artifacts/` 下的 PDF/PPT/最终包；不改源码、测试、G11 文档或 `docs/tasks.md` 的 G11 段。
+- 最终提交包已重打：99 文件、100 条目、`review_only` 11 项；报告 8 页、答辩 12 页、视频 232 秒；正文/报告/PPT 无 G/H/F/M 开发编号；`--require-ready` 退出 2、不发布正式包。SHA-256 `9E39D84B7ACFF3F9135781E4AE9F4DD6A55C74E51A15E9A9CE13F79D001D81F3`。
 - 任务：修正 README 的 393→411；加入最终提交包/独立报告链接；同步官方“PDF 无模板、一个专业足够、数据量不设硬指标”；修正 2022 单年表表述；在报告第 8 页补官方数据字典来源；按 G10 建议补 G7 偏差公式与封面“实施授权”口径；重出 PDF/PPT，必要时重打最终包并更新 SHA。
 
 ## H1 · 文本去防御口癖

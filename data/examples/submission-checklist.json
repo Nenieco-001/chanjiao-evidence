@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "title": "产教智对 G8 冻结一致性审阅材料",
+  "title": "产教智对 提交候选包",
   "requirements": [
     {
       "requirement_id": "T1.skills",
@@ -53,13 +53,13 @@
     {
       "requirement_id": "T3.validation",
       "status": "partial",
-      "note": "G7 已补课程项目设计、流程对照与大学亚组 SMD 参照（0.116，CI [0.027,0.204]）及零/负/上行情景；目标措施仍 unidentified，本校效果论证待补。",
+      "note": "课程项目证据已补课程项目设计、流程对照与大学亚组 SMD 参照（0.116，CI [0.027,0.204]）及零/负/上行情景；目标措施仍 unidentified，本校效果论证待补。",
       "evidence": [
         "数据支撑/strategy-review.json",
         "数据支撑/data/evidence/course-projects.json",
         "数据支撑/data/examples/project-effect-scenarios.json",
-        "数据支撑/G7/strategy-review.json",
-        "数据支撑/G7/metric-scope.json"
+        "数据支撑/课程项目证据/strategy-review.json",
+        "数据支撑/课程项目证据/metric-scope.json"
       ]
     },
     {
@@ -282,11 +282,6 @@
     {
       "role": "source",
       "path": "代码/docs/status.md",
-      "permission": "public"
-    },
-    {
-      "role": "source",
-      "path": "代码/docs/tasks.md",
       "permission": "public"
     },
     {
@@ -600,23 +595,33 @@
       "permission": "public"
     },
     {
-      "path": "数据支撑/G7/manifest.json",
+      "path": "数据支撑/课程项目证据/manifest.json",
       "role": "data",
       "permission": "public"
     },
     {
-      "path": "数据支撑/G7/review.md",
+      "path": "数据支撑/课程项目证据/review.md",
       "role": "data",
       "permission": "public"
     },
     {
-      "path": "数据支撑/G7/strategy-review.json",
+      "path": "数据支撑/课程项目证据/strategy-review.json",
       "role": "data",
       "permission": "public"
     },
     {
-      "path": "数据支撑/G7/metric-scope.json",
+      "path": "数据支撑/课程项目证据/metric-scope.json",
       "role": "data",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/analysis/competition/OFFICIAL-MATERIALS.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_official_recruitment_schema.py",
       "permission": "public"
     }
   ],
@@ -657,7 +662,7 @@
       }
     },
     {
-      "manifest_path": "数据支撑/G7/manifest.json",
+      "manifest_path": "数据支撑/课程项目证据/manifest.json",
       "inputs": {
         "comparison": "数据支撑/data/examples/comparison-assumptions.json",
         "demand": "数据支撑/data/examples/demand-beijing-2026.json",
@@ -668,8 +673,8 @@
         "program": "数据支撑/data/curricula/cufe-2025-program.json"
       },
       "outputs": {
-        "review.md": "数据支撑/G7/review.md",
-        "strategy-review.json": "数据支撑/G7/strategy-review.json"
+        "review.md": "数据支撑/课程项目证据/review.md",
+        "strategy-review.json": "数据支撑/课程项目证据/strategy-review.json"
       },
       "source_sha256": {
         "__init__.py": "代码/src/chanjiao_evidence/__init__.py",
