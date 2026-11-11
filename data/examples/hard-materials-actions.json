@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "scenario_assumptions",
+  "merges": [
+    {
+      "candidate_id": "merge_core",
+      "source_course_ids": ["0610110", "0630137"],
+      "proposed_course": {
+        "course_id": "proposed_se_project",
+        "title": "软件工程与综合项目实践（拟设）",
+        "module_id": "professional_core",
+        "credits": 5,
+        "hours": 80,
+        "semesters": [5, 6]
+      },
+      "assumptions": [
+        "拟合并现有软件工程与专业综合实践，保留两课80总学时和5学分，统一组织需求、设计、测试与验收。",
+        "proposed_se_project为本项目情景标识，学校课程代码、跨学期登记与学分认定待教务审议。",
+        "课程目标、考核等价、先修和指导资源待核，新增与删除目录项均为情景。"
+      ]
+    }
+  ],
+  "planned_skill_carriers": [
+    {"skill": "SQL", "course_id": "0610169", "proposal": "拟在数据库系统课程及综合项目中核验SQL查询和数据处理任务。"},
+    {"skill": "Git", "course_id": "0610110", "proposal": "拟在软件工程中采用版本控制与评审记录。"},
+    {"skill": "Docker", "course_id": "0630137", "proposal": "拟在专业综合实践中安排可复现部署验收。"},
+    {"skill": "软件测试", "course_id": "0610110", "proposal": "拟用固定测试任务核验软件工程与综合实践的内容承接。"}
+  ],
+  "risk_controls": {
+    "module_floor": {
+      "timing": "课程动作审议及每次毕业条件重算时",
+      "indicator": "各路径调整后模块学分减对应公开底线",
+      "threshold": "任一模块差额小于0，或修改总学分与该路径基线不守恒",
+      "response": "终止该候选，核对课程是否已选，重新计算同模块候选。"
+    },
+    "content_loss": {
+      "timing": "第5学期课程调整前及学期末验收时",
+      "indicator": "被压缩或合并课程目标的承接表与固定评分任务",
+      "threshold": "课程目标承接缺项大于0，或承接材料缺失",
+      "response": "保留原方案，补齐课程目标映射与同一评分任务后复审。"
+    },
+    "teaching_capacity": {
+      "timing": "第6学期排课及项目分组前",
+      "indicator": "新增实践指导需求与已核定教师、机房容量",
+      "threshold": "核定资源低于排课需求，或班额、分组与导师资料缺失",
+      "response": "按已核定容量缩小实施范围，并核对学生排定课时与教师工时。"
+    },
+    "direction_overflow": {
+      "timing": "第4学期分流报名及名单公布前",
+      "indicator": "各方向达门槛志愿人数减方向容量",
+      "threshold": "任一方向超额人数大于0，或志愿和成绩资料缺失",
+      "response": "执行公开志愿、成绩及同分审核规则，记录调剂和申诉结果。"
+    },
+    "delayed_feedback": {
+      "timing": "同专业固定时间窗就业统计发布后的年度招生审议",
+      "indicator": "就业反馈缺项、观测时间窗、相对招生调幅",
+      "threshold": "反馈资料缺失、时间窗不一致或建议调幅达到配置上限",
+      "response": "保持原规模，补齐反馈口径并完成带培养时滞的压力测试。"
+    }
+  }
+}

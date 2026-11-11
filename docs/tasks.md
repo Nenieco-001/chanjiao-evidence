@@ -1,6 +1,6 @@
 # 当前任务
 
-本文件是唯一活动任务板。协调者为 root，当前 revision 32。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
+本文件是唯一活动任务板。协调者为 root，当前 revision 33。F1–F5 为 revision 15 的已验收基线。目标、研究口径、路线和偏移分别由 project.md、roadmap.md、status.md 维护。历史交接已做本机备份，原始数据与计算产物留在本机。
 
 ## F1 · 文档收敛
 
@@ -193,9 +193,11 @@
 
 ## G12 · 官方四任务硬材料收口
 
-- 负责人为 root（Codex），revision 32，状态为进行中。写范围仅硬材料：`analysis/competition/`、`src/chanjiao_evidence/`、`tests/`、`data/`。不得修改 `README.md`、`docs/`、`OFFICIAL-MATERIALS.md`、论文/PPT/视频/压缩包，不改任务板；不 commit/push。
+- 负责人为 root（Codex），revision 32，状态为验收通过。写范围仅硬材料：`analysis/competition/`、`src/chanjiao_evidence/`、`tests/`、`data/`。不得修改 `README.md`、`docs/`、`OFFICIAL-MATERIALS.md`、论文/PPT/视频/压缩包，不改任务板；不 commit/push。
 - 目标：逐条对照官方任务 1–4，输出可复核硬材料覆盖矩阵；优先补任务 2 的课程新增/删除/合并及具体学时清单（须同时满足147学分和模块底线，无法核定的写成显式情景，不冒充学校已批准方案）；补方向/规模/招生反馈/四年条件预测/风险影响与应对的可计算或可复核材料；使用官方数据字典口径；新增行为配测试。
-- 口径：三情景可作为任务 3 的最低验收路径；不虚构数据、不把文献效应当本校效果；官方没有提供的数据必须标注缺失或情景假设。完成后交 Lead 做展示材料重构与最终验收。
+- 口径：三情景可作为任务 3 的最低验收路径；不虚构数据、不把文献效应当本校效果；官方没有提供的数据必须标注缺失或情景假设。
+- 交付：`analysis/competition/HARD-MATERIALS-20261112.md`、`analysis/competition/hard_materials.py`、`src/chanjiao_evidence/hard_materials.py`、`tests/test_hard_materials.py`、`data/examples/hard-materials-actions.json`、`artifacts/competition-analysis/hard-final-20261112/`。
+- 验收：专项 15 passed；全量 442 passed、1 skipped；Ruff/format、0.4.0 build 通过。合并情景删除软件工程48h/3+专业综合实践32h/2、新增软件工程与综合项目实践80h/5，三条路径147/147/148且模块底线通过；跨模块候选仍失败。T1/T2 为 PARTIAL（同校观测、课程代码/师资/教务审批待补），T3/T4 为 PASS。
 
 ## H5 · 软材料与官方口径同步
 
@@ -205,8 +207,9 @@
 
 ## H6 · 最终展示材料从零重构
 
-- 负责人为 lead，revision 32，状态为等待 G12。写范围：`README.md`、`docs/status.md`、`docs/project.md`、`docs/roadmap.md`、`OFFICIAL-MATERIALS.md`、`.local/submission-phase-r18/` 及 `artifacts/` 下论文/PPT/视频/压缩包；不改源码、测试、G12 硬材料。
+- 负责人为 lead，revision 32，状态为验收通过。写范围：`README.md`、`docs/status.md`、`docs/project.md`、`docs/roadmap.md`、`OFFICIAL-MATERIALS.md`、`.local/submission-phase-r18/` 及 `artifacts/` 下论文/PPT/视频/压缩包；不改源码、测试、G12 硬材料。
 - 任务：在 G12 完成后，不以旧版展示材料为模板，按官方四任务和学术论文结构从零生成论文 PDF、答辩 PPTX（含讲稿）和五分钟内视频脚本/成片；四件交付物同源；产品包不含内部验收状态；队伍/指导教师信息由用户补充。
+- 交付：论文 5 页、答辩 12 页（12 页均有讲稿备注）、视频 4:08 H264 1280×720、`视频脚本.md`、产品包 15 文件。产品包 SHA-256 `F2AEAFE17134F1C97CC7B275EDBCABED656C9AECCBC517B7ED3B0E5AC3CB6447`；论文/答辩/视频/说明均无 `review_only`、`partial`、`审阅版`、内部验收表或 G/H 开发编号。
 
 ## H1 · 文本去防御口癖
 
