@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "scenario_assumptions",
+  "curriculum_scenarios": [
+    {
+      "scenario_id": "cross_module",
+      "config": {
+        "schema_version": 1,
+        "evidence_mode": "scenario_assumptions",
+        "label": "实践教学课时转移的待审情景",
+        "target_course_id": "0630137",
+        "donor_course_id": "0610300",
+        "hour_options": [
+          16,
+          32
+        ],
+        "credit_delta": 1,
+        "minimum_hours": {
+          "0630137": 32,
+          "0610300": 32
+        },
+        "minimum_credits": {
+          "0630137": 2,
+          "0610300": 2
+        },
+        "capacity_added_hours": 16,
+        "rationale": "供教师审议是否将部分进阶选修教学投入转向综合实践，同时核对被替代内容的承接。",
+        "assumption_notes": [
+          "公开方案只提供原始课程事实，转移课时、转移学分、底线与容量均为本项目设置的待审情景。",
+          "两门课程均在第6学期，跨必修与选修类别的学分结构和毕业要求需要教务核定。",
+          "16课时转移1学分仅为本情景，不据此推断学校其他课程的学时学分换算。",
+          "方案尚未获学校或教师批准，没有学生能力、就业率或起薪收益的估计。"
+        ]
+      }
+    },
+    {
+      "scenario_id": "within_core",
+      "config": {
+        "schema_version": 1,
+        "evidence_mode": "scenario_assumptions",
+        "label": "同一核心模块内调整",
+        "target_course_id": "0630137",
+        "donor_course_id": "0610110",
+        "hour_options": [
+          16
+        ],
+        "credit_delta": 1,
+        "minimum_hours": {
+          "0630137": 32,
+          "0610110": 32
+        },
+        "minimum_credits": {
+          "0630137": 2,
+          "0610110": 2
+        },
+        "capacity_added_hours": 16,
+        "rationale": "将软件工程部分项目教学与综合实践衔接，保留核心模块学分。压缩内容、师资和学期衔接需要教师审核。",
+        "assumption_notes": [
+          "将第5学期核心必修软件工程的16学时/1学分转至第6学期核心必修专业综合实践，作为待审议的课程衔接情景。",
+          "两课均属专业核心模块。核心总学分保留25，课程底线32学时和2学分、新增16学时容量均为分析者假设。",
+          "需核对被替代的软件工程内容、学生实际选课、学期负担和教师资源。尚未获得学校批准或学生结果观测。"
+        ]
+      }
+    }
+  ],
+  "student_paths": [
+    {
+      "path_id": "minimum_with_donor",
+      "module_credits": {
+        "general_electives": 8,
+        "politics": 21,
+        "foreign_languages": 10,
+        "mathematics": 17,
+        "sports": 4,
+        "discipline_foundation": 27,
+        "professional_core": 25,
+        "professional_advanced": 17,
+        "professional_extension": 5,
+        "practical_components": 13
+      },
+      "selected_course_ids": [
+        "0610174",
+        "0610297",
+        "0610321",
+        "0610081",
+        "0630121",
+        "0610158",
+        "0610160",
+        "0610169",
+        "0630151",
+        "0630122",
+        "0610292",
+        "0610028",
+        "0630152",
+        "0610006",
+        "0610110",
+        "0610124",
+        "0610226",
+        "0630173",
+        "0610322",
+        "0630137",
+        "1610017",
+        "1610021",
+        "9900021",
+        "1710003",
+        "2100612",
+        "9900032",
+        "9900031",
+        "9900013",
+        "0610013",
+        "0310024",
+        "0610300",
+        "0630158",
+        "0610195",
+        "0630116",
+        "0630204",
+        "0630205",
+        "0610317E"
+      ]
+    },
+    {
+      "path_id": "minimum_without_donor",
+      "module_credits": {
+        "general_electives": 8,
+        "politics": 21,
+        "foreign_languages": 10,
+        "mathematics": 17,
+        "sports": 4,
+        "discipline_foundation": 27,
+        "professional_core": 25,
+        "professional_advanced": 17,
+        "professional_extension": 5,
+        "practical_components": 13
+      },
+      "selected_course_ids": [
+        "0610174",
+        "0610297",
+        "0610321",
+        "0610081",
+        "0630121",
+        "0610158",
+        "0610160",
+        "0610169",
+        "0630151",
+        "0630122",
+        "0610292",
+        "0610028",
+        "0630152",
+        "0610006",
+        "0610110",
+        "0610124",
+        "0610226",
+        "0630173",
+        "0610322",
+        "0630137",
+        "1610017",
+        "1610021",
+        "9900021",
+        "1710003",
+        "2100612",
+        "9900032",
+        "9900031",
+        "9900013",
+        "0610013",
+        "0310024",
+        "0610318E",
+        "0630158",
+        "0610195",
+        "0630116",
+        "0630204",
+        "0630205",
+        "0610317E"
+      ]
+    },
+    {
+      "path_id": "advanced_surplus",
+      "module_credits": {
+        "general_electives": 8,
+        "politics": 21,
+        "foreign_languages": 10,
+        "mathematics": 17,
+        "sports": 4,
+        "discipline_foundation": 27,
+        "professional_core": 25,
+        "professional_advanced": 18,
+        "professional_extension": 5,
+        "practical_components": 13
+      },
+      "selected_course_ids": [
+        "0610174",
+        "0610297",
+        "0610321",
+        "0610081",
+        "0630121",
+        "0610158",
+        "0610160",
+        "0610169",
+        "0630151",
+        "0630122",
+        "0610292",
+        "0610028",
+        "0630152",
+        "0610006",
+        "0610110",
+        "0610124",
+        "0610226",
+        "0630173",
+        "0610322",
+        "0630137",
+        "1610017",
+        "1610021",
+        "9900021",
+        "1710003",
+        "2100612",
+        "9900032",
+        "9900031",
+        "9900013",
+        "0610013",
+        "0310024",
+        "0610300",
+        "0630158",
+        "0610195",
+        "0610318E",
+        "0630116",
+        "0630204",
+        "0630205"
+      ]
+    }
+  ],
+  "selection_semester": 4,
+  "directions": [
+    {
+      "direction_id": "software_delivery",
+      "label": "软件工程与交付",
+      "job_family": "软件开发",
+      "course_ids": [
+        "0610110",
+        "0630137",
+        "0610169"
+      ],
+      "capacity": 30,
+      "minimum_score": 0.7
+    },
+    {
+      "direction_id": "data_engineering",
+      "label": "数据工程与智能应用",
+      "job_family": "数据分析与工程",
+      "course_ids": [
+        "0630158",
+        "0610195",
+        "0610300"
+      ],
+      "capacity": 20,
+      "minimum_score": 0.7
+    }
+  ],
+  "admissions": {
+    "baseline_enrollment": null,
+    "minimum_enrollment": null,
+    "maximum_enrollment": null,
+    "observed_employment_rate": null,
+    "observed_feedback_year": null,
+    "target_rate": 0.85,
+    "gain": 0.1,
+    "max_relative_change": 0.05,
+    "feedback_lag_years": 4,
+    "feedback_interval_years": 1
+  },
+  "risks": [
+    {
+      "risk_id": "module_floor",
+      "action_id": "cross_module",
+      "probability_range": [
+        0,
+        1
+      ],
+      "impact": "进阶学分恰好17的路径减少1学分后降至16，无法满足原公开底线。发生概率随实际选课路径而变，当前未观测。",
+      "owner": "专业负责人和教务处",
+      "trigger": "任一路径professional_advanced<17",
+      "response": "停止跨模块方案，重算同一核心模块内调整并核对毕业条件。"
+    },
+    {
+      "risk_id": "content_loss",
+      "action_id": "within_core",
+      "probability_range": [
+        0,
+        1
+      ],
+      "impact": "软件工程减少16课时可能损失需求分析、设计或测试内容，尚无教学大纲和学习结果测量。",
+      "owner": "课程负责人",
+      "trigger": "被压缩课程目标未在新实践考核中承接",
+      "response": "暂停调整，保留原方案，补齐内容映射及固定评分任务。"
+    },
+    {
+      "risk_id": "teaching_capacity",
+      "action_id": "within_core",
+      "probability_range": [
+        0,
+        1
+      ],
+      "impact": "综合实践增加16学时，对修读者每人增加16排定学时。师资工时取决于班额与分组，尚未核定。",
+      "owner": "学院教学委员会",
+      "trigger": "指导教师容量或实验资源不足",
+      "response": "按可核定容量缩小实施范围，优先保留原方案。"
+    },
+    {
+      "risk_id": "direction_overflow",
+      "action_id": "directions",
+      "probability_range": [
+        0,
+        1
+      ],
+      "impact": "两方向容量30与20为设计假设，学生意愿人数未知，可能超额或空缺。",
+      "owner": "专业分流工作组",
+      "trigger": "达门槛申请人数超过方向容量",
+      "response": "按已公布成绩和志愿规则依次录取，保留未分配者与申诉通道。"
+    },
+    {
+      "risk_id": "delayed_feedback",
+      "action_id": "admissions",
+      "probability_range": [
+        0,
+        1
+      ],
+      "impact": "就业反馈对应往届培养，可能放大招生波动。当前缺专业规模、就业观测与响应函数。",
+      "owner": "招生与就业部门",
+      "trigger": "反馈未齐或调幅触顶",
+      "response": "冻结规模，补齐同窗就业指标，完成带四年时滞的压力测试后再审议。"
+    }
+  ],
+  "assumption_notes": [
+    "选课路径均为按公开课程目录构造的情景，未观察真实学生选课。",
+    "方向名称、30/20容量、0.7成绩门槛、0.85就业目标和控制系数均为未校准决策假设。",
+    "风险概率[0,1]表达完全未知，不能读成发生概率估计。",
+    "新增/删减/合并课程尚未执行。拟将软件工程项目教学与专业综合实践衔接，名称与内容待教师审核。"
+  ]
+}

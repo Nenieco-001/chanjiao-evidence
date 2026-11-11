@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "published_curriculum",
+  "school": "中央财经大学",
+  "major": "计算机科学与技术",
+  "program_version": "2025级",
+  "coverage": "selected_courses",
+  "coverage_notes": "选取专业教育课程中的10门课程，保留公开课程表的学分、总学时与开课学期。完整培养方案的模块学分要求、选课规则及毕业条件需结合原文另行审查。",
+  "source": {
+    "title": "计算机科学与技术学分制培养方案（信息学院2025级本科生分专业培养方案附件）",
+    "url": "https://jwc.cufe.edu.cn/PDF-2025/16.jisuanjikexueyujishuxuefenzhipeiyangfangan.pdf",
+    "sha256": "ae12a228e7c11e1377273b50c4faeab3c22d23426f6c0107e4ba77b1b10f61b0",
+    "location": "PDF第5页（按文件顺序从1计数，原文未印页码），六、课程设置与指导性教学计划，计算机科学与技术专业指导性教学计划表。版本与附件归属见教务处发布页。",
+    "publication_url": "https://jwc.cufe.edu.cn/info/1342/6996.htm",
+    "publication_location": "发布页标题、发布日期及“计算机科学与技术学分制培养方案”附件链接",
+    "published_on": "2025-09-02"
+  },
+  "courses": [
+    {
+      "course_id": "0610297",
+      "title": "程序设计语言",
+      "credits": 4,
+      "hours": 64,
+      "semester": 1,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，学科基础课，课程代码0610297行，学分4、总学时64、开课学期1。"
+    },
+    {
+      "course_id": "0630121",
+      "title": "数据结构与算法",
+      "credits": 3,
+      "hours": 48,
+      "semester": 2,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，学科基础课，课程代码0630121行，学分3、总学时48、开课学期2。"
+    },
+    {
+      "course_id": "0630122",
+      "title": "数据结构与算法课程设计",
+      "credits": 1,
+      "hours": 16,
+      "semester": 2,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，专业核心课，课程代码0630122行，学分1、总学时16、开课学期2。"
+    },
+    {
+      "course_id": "0610110",
+      "title": "软件工程",
+      "credits": 3,
+      "hours": 48,
+      "semester": 5,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，专业核心课，课程代码0610110行，学分3、总学时48、开课学期5。"
+    },
+    {
+      "course_id": "0610226",
+      "title": "计算机网络课程设计",
+      "credits": 1,
+      "hours": 16,
+      "semester": 5,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，专业核心课，课程代码0610226行，学分1、总学时16、开课学期5。"
+    },
+    {
+      "course_id": "0630137",
+      "title": "专业综合实践",
+      "credits": 2,
+      "hours": 32,
+      "semester": 6,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，专业核心课，课程代码0630137行，学分2、总学时32、开课学期6。"
+    },
+    {
+      "course_id": "0630158",
+      "title": "Python程序设计",
+      "credits": 3,
+      "hours": 48,
+      "semester": 3,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，专业进阶课，课程代码0630158行，学分3、总学时48、开课学期3。"
+    },
+    {
+      "course_id": "0630204",
+      "title": "机器学习",
+      "credits": 2,
+      "hours": 32,
+      "semester": 5,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，专业进阶课，课程代码0630204行，学分2、总学时32、开课学期5。"
+    },
+    {
+      "course_id": "0630205",
+      "title": "信息检索",
+      "credits": 2,
+      "hours": 32,
+      "semester": 5,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，专业进阶课，课程代码0630205行，学分2、总学时32、开课学期5。"
+    },
+    {
+      "course_id": "0610300",
+      "title": "云计算与大数据技术",
+      "credits": 3,
+      "hours": 48,
+      "semester": 6,
+      "prerequisites": [],
+      "prerequisites_status": "not_published",
+      "source_location": "PDF第5页，指导性教学计划表，专业进阶课，课程代码0610300行，学分3、总学时48、开课学期6。"
+    }
+  ],
+  "limitations": [
+    "原文未列课程先修关系，prerequisites_status=not_published表示材料缺项，需取得课程大纲或向教务部门核对后审查先修约束。",
+    "本切片记录课程设置事实。候选课时与学分转移需单独标记情景假设，并由学校审查课程内容、模块学分和毕业要求。",
+    "课程表缺少师资、教室、实验资源容量、调整成本及学生结果数据，课程投入变化与就业率、起薪、能力变化之间的效果需要额外证据。"
+  ]
+}

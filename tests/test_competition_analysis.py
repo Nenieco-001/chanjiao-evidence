@@ -141,6 +141,42 @@ def test_nonempty_trailing_column_is_counted_and_excluded(wb, tmp_path):
     assert sample["selected_rows"] == 2
 
 
+@pytest.mark.parametrize("winerror", [5, 32])
+def test_publication_retries_transient_windows_lock(wb, tmp_path, monkeypatch, winerror):
+    import time
+
+    path = make_input(tmp_path)
+    original = Path.rename
+    calls = []
+
+    def locked_once(source, target):
+        calls.append(target)
+        if len(calls) == 1:
+            error = PermissionError("synthetic Windows publication lock")
+            error.winerror = winerror
+            raise error
+        return original(source, target)
+
+    monkeypatch.setattr(Path, "rename", locked_once)
+    monkeypatch.setattr(time, "sleep", lambda seconds: None)
+    wb.run({2026: path}, tmp_path / "out")
+    assert len(calls) == 2
+    assert (tmp_path / "out/manifest.json").is_file()
+
+
+def test_publication_keeps_permanent_failure_and_cleans_staging(wb, tmp_path, monkeypatch):
+    path = make_input(tmp_path)
+
+    def denied(source, target):
+        raise PermissionError("permanent publication permission failure")
+
+    monkeypatch.setattr(Path, "rename", denied)
+    with pytest.raises(PermissionError, match="permanent"):
+        wb.run({2026: path}, tmp_path / "out")
+    assert not (tmp_path / "out").exists()
+    assert not list(tmp_path.glob(".out-*"))
+
+
 def test_evidence_offsets_refer_to_original_cell_including_whitespace(wb, tmp_path):
     path = make_input(tmp_path)
     with path.open(encoding="utf-8-sig", newline="") as stream:

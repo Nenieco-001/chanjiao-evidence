@@ -1,0 +1,695 @@
+{
+  "schema_version": 1,
+  "title": "产教智对 G8 冻结一致性审阅材料",
+  "requirements": [
+    {
+      "requirement_id": "T1.skills",
+      "status": "partial",
+      "note": "补同校同届课程目标、能力观测、需求标签及共同口径的技能差距。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    },
+    {
+      "requirement_id": "T1.directions",
+      "status": "partial",
+      "note": "补现行方向人数及岗位族映射，计算方向差异。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    },
+    {
+      "requirement_id": "T1.scale",
+      "status": "partial",
+      "note": "补招生与毕业人数、有效岗位规模及代表性说明。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    },
+    {
+      "requirement_id": "T2.courses",
+      "status": "partial",
+      "note": "补新增、删减、合并或不采用理由，核定完整选课、内容承接和师资。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    },
+    {
+      "requirement_id": "T2.directions",
+      "status": "partial",
+      "note": "补方向容量来源与学生分流压力测试。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    },
+    {
+      "requirement_id": "T2.admissions",
+      "status": "partial",
+      "note": "补同窗就业反馈、规模上下界以及长期时滞稳定性。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    },
+    {
+      "requirement_id": "T3.validation",
+      "status": "partial",
+      "note": "G7 已补课程项目设计、流程对照与大学亚组 SMD 参照（0.116，CI [0.027,0.204]）及零/负/上行情景；目标措施仍 unidentified，本校效果论证待补。",
+      "evidence": [
+        "数据支撑/strategy-review.json",
+        "数据支撑/data/evidence/course-projects.json",
+        "数据支撑/data/examples/project-effect-scenarios.json",
+        "数据支撑/G7/strategy-review.json",
+        "数据支撑/G7/metric-scope.json"
+      ]
+    },
+    {
+      "requirement_id": "T4.risks",
+      "status": "partial",
+      "note": "复核至少三项动作绑定风险与具体应对，补影响依据与执行安排。概率量化作为内部完善项。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    },
+    {
+      "requirement_id": "S.evolution",
+      "status": "partial",
+      "note": "已验证有限候选失败触发修订与重新计算。自动从需求和课程关系提出更广方案仍待验证。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    },
+    {
+      "requirement_id": "D.report",
+      "status": "verified",
+      "note": "已核对本版文件与冻结结果。研究完整性由对应任务条目另外登记。",
+      "evidence": [
+        "方案报告_审阅版.pdf"
+      ]
+    },
+    {
+      "requirement_id": "D.data",
+      "status": "verified",
+      "note": "已核对本版文件与冻结结果。研究完整性由对应任务条目另外登记。",
+      "evidence": [
+        "数据支撑/strategy-review.json",
+        "数据支撑/manifest.json"
+      ]
+    },
+    {
+      "requirement_id": "D.video",
+      "status": "verified",
+      "note": "232秒H264 1280x720无旁白结果演示，已完整解码。",
+      "evidence": [
+        "演示_审阅版.mp4"
+      ]
+    },
+    {
+      "requirement_id": "D.slides",
+      "status": "verified",
+      "note": "已核对本版文件与冻结结果。研究完整性由对应任务条目另外登记。",
+      "evidence": [
+        "答辩_审阅版.pptx"
+      ]
+    },
+    {
+      "requirement_id": "C.licensing",
+      "status": "partial",
+      "note": "补数据取得路径、使用范围、组件许可与公开材料核对。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    },
+    {
+      "requirement_id": "C.reproduce",
+      "status": "partial",
+      "note": "在新环境重现关键结果并保存命令及哈希。",
+      "evidence": [
+        "数据支撑/strategy-review.json"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "role": "source",
+      "path": "代码/AGENTS.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/analysis/competition/curriculum-placeholder.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/analysis/competition/curriculum.schema.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/analysis/competition/README.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/analysis/competition/RESULTS.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/analysis/competition/workbench.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/CHANGELOG.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/CONTRIBUTING.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/curricula/cufe-2025-program.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/curricula/official-cs-extract.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/evidence/employment-benchmarks.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/evidence/internships.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/comparison-assumptions.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/curriculum-scenario.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/demand-beijing-2026.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/effect-scenarios.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/generate.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/metadata.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/null_metadata.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/null_panel.csv",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/panel.csv",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/plans.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/program-policy.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/README.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/submission-checklist.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/docs/architecture.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/docs/data-contract.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/docs/open-source.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/docs/project.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/docs/roadmap.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/docs/status.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/docs/tasks.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/LICENSE",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/MANIFEST.in",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/pyproject.toml",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/README.md",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/requirements-py313.txt",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/__init__.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/__main__.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/archives.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/cli.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/comparison.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/curriculum.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/dataset.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/estimation.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/evidence.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/pipeline.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/planning.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/reporting.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/scenarios.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/strategy.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/submission.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/src/chanjiao_evidence/warehouse.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/conftest.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_archives.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_comparison.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_competition_analysis.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_curriculum.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_curriculum_cli.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_dataset.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_estimation.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_evidence.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_pipeline.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_planning.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_reporting.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_scenarios.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_strategy.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_strategy_cli.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_submission.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_warehouse.py",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_warehouse_cli.py",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/curricula/cufe-2025-program.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/curricula/official-cs-extract.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/evidence/employment-benchmarks.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/evidence/internships.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/examples/comparison-assumptions.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/examples/demand-beijing-2026.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/examples/effect-scenarios.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/examples/program-policy.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/manifest.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/review.md",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/strategy-review.json",
+      "permission": "public"
+    },
+    {
+      "role": "report",
+      "path": "方案报告_审阅版.pdf",
+      "permission": "public"
+    },
+    {
+      "role": "video",
+      "path": "演示_审阅版.mp4",
+      "permission": "public"
+    },
+    {
+      "role": "slides",
+      "path": "答辩_审阅版.pptx",
+      "permission": "public"
+    },
+    {
+      "role": "readme",
+      "path": "阅读说明.md",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "提交验收.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/evidence/course-projects.json",
+      "permission": "public"
+    },
+    {
+      "role": "data",
+      "path": "数据支撑/data/examples/project-effect-scenarios.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/evidence/course-projects.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/data/examples/project-effect-scenarios.json",
+      "permission": "public"
+    },
+    {
+      "role": "source",
+      "path": "代码/tests/test_project_evidence.py",
+      "permission": "public"
+    },
+    {
+      "path": "代码/src/chanjiao_evidence/provenance.py",
+      "role": "source",
+      "permission": "public"
+    },
+    {
+      "path": "代码/tests/test_provenance.py",
+      "role": "source",
+      "permission": "public"
+    },
+    {
+      "path": "数据支撑/G7/manifest.json",
+      "role": "data",
+      "permission": "public"
+    },
+    {
+      "path": "数据支撑/G7/review.md",
+      "role": "data",
+      "permission": "public"
+    },
+    {
+      "path": "数据支撑/G7/strategy-review.json",
+      "role": "data",
+      "permission": "public"
+    },
+    {
+      "path": "数据支撑/G7/metric-scope.json",
+      "role": "data",
+      "permission": "public"
+    }
+  ],
+  "provenance": [
+    {
+      "manifest_path": "数据支撑/manifest.json",
+      "inputs": {
+        "comparison": "数据支撑/data/examples/comparison-assumptions.json",
+        "demand": "数据支撑/data/examples/demand-beijing-2026.json",
+        "effects": "数据支撑/data/examples/effect-scenarios.json",
+        "evidence": "数据支撑/data/evidence/internships.json",
+        "plan": "数据支撑/data/curricula/official-cs-extract.json",
+        "policy": "数据支撑/data/examples/program-policy.json",
+        "program": "数据支撑/data/curricula/cufe-2025-program.json"
+      },
+      "outputs": {
+        "review.md": "数据支撑/review.md",
+        "strategy-review.json": "数据支撑/strategy-review.json"
+      },
+      "source_sha256": {
+        "__init__.py": "代码/src/chanjiao_evidence/__init__.py",
+        "__main__.py": "代码/src/chanjiao_evidence/__main__.py",
+        "archives.py": "代码/src/chanjiao_evidence/archives.py",
+        "cli.py": "代码/src/chanjiao_evidence/cli.py",
+        "comparison.py": "代码/src/chanjiao_evidence/comparison.py",
+        "curriculum.py": "代码/src/chanjiao_evidence/curriculum.py",
+        "dataset.py": "代码/src/chanjiao_evidence/dataset.py",
+        "estimation.py": "代码/src/chanjiao_evidence/estimation.py",
+        "evidence.py": "代码/src/chanjiao_evidence/evidence.py",
+        "pipeline.py": "代码/src/chanjiao_evidence/pipeline.py",
+        "planning.py": "代码/src/chanjiao_evidence/planning.py",
+        "provenance.py": "代码/src/chanjiao_evidence/provenance.py",
+        "reporting.py": "代码/src/chanjiao_evidence/reporting.py",
+        "scenarios.py": "代码/src/chanjiao_evidence/scenarios.py",
+        "strategy.py": "代码/src/chanjiao_evidence/strategy.py",
+        "submission.py": "代码/src/chanjiao_evidence/submission.py",
+        "warehouse.py": "代码/src/chanjiao_evidence/warehouse.py"
+      }
+    },
+    {
+      "manifest_path": "数据支撑/G7/manifest.json",
+      "inputs": {
+        "comparison": "数据支撑/data/examples/comparison-assumptions.json",
+        "demand": "数据支撑/data/examples/demand-beijing-2026.json",
+        "effects": "数据支撑/data/examples/project-effect-scenarios.json",
+        "evidence": "数据支撑/data/evidence/course-projects.json",
+        "plan": "数据支撑/data/curricula/official-cs-extract.json",
+        "policy": "数据支撑/data/examples/program-policy.json",
+        "program": "数据支撑/data/curricula/cufe-2025-program.json"
+      },
+      "outputs": {
+        "review.md": "数据支撑/G7/review.md",
+        "strategy-review.json": "数据支撑/G7/strategy-review.json"
+      },
+      "source_sha256": {
+        "__init__.py": "代码/src/chanjiao_evidence/__init__.py",
+        "__main__.py": "代码/src/chanjiao_evidence/__main__.py",
+        "archives.py": "代码/src/chanjiao_evidence/archives.py",
+        "cli.py": "代码/src/chanjiao_evidence/cli.py",
+        "comparison.py": "代码/src/chanjiao_evidence/comparison.py",
+        "curriculum.py": "代码/src/chanjiao_evidence/curriculum.py",
+        "dataset.py": "代码/src/chanjiao_evidence/dataset.py",
+        "estimation.py": "代码/src/chanjiao_evidence/estimation.py",
+        "evidence.py": "代码/src/chanjiao_evidence/evidence.py",
+        "pipeline.py": "代码/src/chanjiao_evidence/pipeline.py",
+        "planning.py": "代码/src/chanjiao_evidence/planning.py",
+        "provenance.py": "代码/src/chanjiao_evidence/provenance.py",
+        "reporting.py": "代码/src/chanjiao_evidence/reporting.py",
+        "scenarios.py": "代码/src/chanjiao_evidence/scenarios.py",
+        "strategy.py": "代码/src/chanjiao_evidence/strategy.py",
+        "submission.py": "代码/src/chanjiao_evidence/submission.py",
+        "warehouse.py": "代码/src/chanjiao_evidence/warehouse.py"
+      }
+    }
+  ]
+}

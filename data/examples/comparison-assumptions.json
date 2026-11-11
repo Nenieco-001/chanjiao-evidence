@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "scenario_assumptions",
+  "skill_links": [
+    {
+      "skill": "Python",
+      "course_id": "0630158",
+      "source_location": "官方PDF第5页，Python程序设计课程名称"
+    },
+    {
+      "skill": "Java",
+      "course_id": "0610318E",
+      "source_location": "官方PDF第5页，Java程序设计（全英语）课程名称"
+    },
+    {
+      "skill": "机器学习",
+      "course_id": "0630204",
+      "source_location": "官方PDF第5页，机器学习课程名称"
+    },
+    {
+      "skill": "数据结构",
+      "course_id": "0630121",
+      "source_location": "官方PDF第5页，数据结构与算法课程名称"
+    }
+  ],
+  "planned_skills": [
+    "SQL",
+    "Git",
+    "Docker",
+    "软件测试"
+  ],
+  "proposed_direction_shares": {
+    "数据分析与工程": 0.4,
+    "算法与机器学习": 0,
+    "系统运维与安全": 0,
+    "软件开发": 0.6,
+    "软件测试": 0
+  },
+  "baseline_direction_hypotheses": [
+    {
+      "scenario_id": "matches_sample",
+      "shares": {
+        "数据分析与工程": 0.11842105263157894,
+        "算法与机器学习": 0.1513157894736842,
+        "系统运维与安全": 0.13157894736842105,
+        "软件开发": 0.5723684210526315,
+        "软件测试": 0.02631578947368421
+      }
+    },
+    {
+      "scenario_id": "software_heavy",
+      "shares": {
+        "数据分析与工程": 0.2,
+        "算法与机器学习": 0,
+        "系统运维与安全": 0,
+        "软件开发": 0.8,
+        "软件测试": 0
+      }
+    },
+    {
+      "scenario_id": "data_heavy",
+      "shares": {
+        "数据分析与工程": 0.6,
+        "算法与机器学习": 0,
+        "系统运维与安全": 0,
+        "软件开发": 0.4,
+        "软件测试": 0
+      }
+    }
+  ],
+  "scale_scenarios": [
+    {
+      "scenario_id": "low_access",
+      "cohort_index": 100,
+      "jobseeker_fraction": 0.8,
+      "sample_access_share": 0.1,
+      "positions_per_record": 1
+    },
+    {
+      "scenario_id": "middle_access",
+      "cohort_index": 100,
+      "jobseeker_fraction": 0.7,
+      "sample_access_share": 0.3,
+      "positions_per_record": 1
+    },
+    {
+      "scenario_id": "high_access",
+      "cohort_index": 100,
+      "jobseeker_fraction": 0.6,
+      "sample_access_share": 0.5,
+      "positions_per_record": 1
+    }
+  ],
+  "assumption_source": "课程名称关系来自官方PDF第5页。SQL/Git/Docker/软件测试为拟定综合项目内容，尚无获批教学大纲。60/40方向比例来自30/20设计容量。原方向的三种假设用于压力测试。届别指数100、求职比例0.6至0.8、样本可达份额0.1至0.5及每条岗位1人均为未校准分析假设。"
+}

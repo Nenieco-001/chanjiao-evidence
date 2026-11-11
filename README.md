@@ -1,90 +1,86 @@
-# 产教智对 · 用历史改革证据验证培养方案
+# 产教智对
 
-[![CI](https://github.com/Nenieco-001/chanjiao-evidence/actions/workflows/ci.yml/badge.svg)](https://github.com/Nenieco-001/chanjiao-evidence/actions/workflows/ci.yml)
+项目研究怎样调整一个真实本科专业的培养方案，以及怎样在没有线下试点时论证调整效果。需求分析提供线索，课程与资源决定动作，历史改革证据约束效果范围。
 
-先看学校过去调整培养方案时，学生结果发生了什么变化，再用这些变化判断当前方案值不值得改。本轮将北京市大学生“人工智能+”创新大赛第 1 题“产教智对”的估计与方案比较，整理成可直接查阅和分享的中文报告。
+## 当前重点
 
-具体到这一版：新增企业实习，是否提高了毕业半年内的就业率？假设 A 校 2010 年增加企业实习，要扣除同期相近专业的变化，才能估计实习本身带来多少帮助。示例数据是合成的，代码和结论都能复现；真实学校的历史效应需要另行收集和识别。
+当前已具备本地招聘数据处理、限定需求画像、回顾性回测及合成改革基线。工作重心已转回真实培养方案、具体课程动作和可信验证。公开课程切片与情景假设分别输入，计算得到的可行性仅覆盖建模范围，就业效果缺证据时保持未识别。G7 已补课程项目证据与大学亚组 SMD 参照，目标效果仍为 unidentified。
 
-## 现在能做什么
+## 全局文档
 
-- 校验三年平衡面板和指标元数据：单位、时间窗、来源、`synthetic` / `historical` 标识。
-- 估计双重差分（DiD），附改革前伪改革、逐单位删除等诊断。
-- 在总学分、基础课最低学分、实习容量和预算约束下，比较“保持原方案”和“一项改革”。
-- 用迁移系数和偏差预算做敏感性分析；证据不足时保留原方案。
-- 输出 JSON 报告、输入/源码哈希和依赖版本；相同输入结果一致。
-- 生成离线 HTML 和 Markdown，展示学分调整、资源约束、诊断和敏感性格点。
-- 接入真实论文卡片，逐篇显示研究指标、方法、来源和数据缺口。文献与当前面板分别展示。
+- [项目说明](docs/project.md) 定义目标、赛题要求、研究问题和证据口径。
+- [路线图](docs/roadmap.md) 定义推进顺序、产出和验收条件。
+- [状态与偏移](docs/status.md) 记录当前能力、缺口及纠偏结果。
+- [唯一任务板](docs/tasks.md) 记录任务负责人、版本、范围和状态。
+- [数据契约](docs/data-contract.md) 定义各入口输入与产物。
+- [架构](docs/architecture.md) 说明实际模块和运行关系。
+- [开源引用](docs/open-source.md) 记录依赖、许可证和借鉴范围。
 
-示例数据只用来验证代码和已知真值。真实就业率、收入、岗位对口和任务能力的效应要分别测量，学校层面的就业率不能替代学生能力。
+协作遵循 [AGENTS.md](AGENTS.md) 和 [贡献指南](CONTRIBUTING.md)。历史留言与交付草稿移出活动文档，已完成需求分析保存在 [分析结果](analysis/competition/RESULTS.md)，运行方法见该模块 [README](analysis/competition/README.md)。
 
-## 快速开始
+## 安装
 
-需要 Python 3.11–3.13。安装要联网，安装后示例离线可跑。以下命令在仓库根目录执行。
+Python 3.11–3.13。安装后默认离线运行。
 
 ```powershell
 python -m venv .venv
-# Windows
 .venv\Scripts\Activate.ps1
-# macOS / Linux
-# source .venv/bin/activate
 python -m pip install -e ".[dev]"
-
-chanjiao run --panel data/examples/panel.csv --metadata data/examples/metadata.json --plans data/examples/plans.json --evidence data/evidence/internships.json --output artifacts/example
 ```
 
-直接打开 `artifacts/example/report.html` 查看完整报告，或将 `report.md` 发给老师讨论。`report.json` 保存原始数值，`manifest.json` 记录输入及三个报告的哈希。HTML 为单文件，离线查看和打印都无需启动服务。
-
-正效应示例的估计约为 0.04（4 个百分点），选中 `internship`。零效应示例选中 `unchanged`。敏感性格点显示，迁移系数减小或偏差预算增大后，原方案何时重新占优。所有系数均为输入假设。
-
-`--evidence` 可以省略，原有命令仍可运行，报告会注明没有提供论文卡片。提供文献不会改变面板估计或方案排序。两篇实习研究的指标与当前就业率不同，查阅结论及数据缺口见 [证据核验](docs/evidence-findings.md)。输出目录必须为新路径，重跑时换一个目录。也可以用 `python -m chanjiao_evidence run ...`。
-
-再跑零效应对照、测试和打包：
+## 真实课程切片
 
 ```powershell
-chanjiao run --panel data/examples/null_panel.csv --metadata data/examples/null_metadata.json --plans data/examples/plans.json --output artifacts/null
+chanjiao curriculum --plan data/curricula/official-cs-extract.json --scenario data/examples/curriculum-scenario.json --output artifacts/curriculum-review
+```
+
+公开课程输入保留原始出处，情景文件单独标记决策假设。输出课程动作、约束检查、生成与修订日志，以及效果证据缺项。默认保留原方案，候选供教师审议。完整培养方案与资源核定仍需补齐。
+
+## 专业方案审阅与提交打包
+
+```powershell
+chanjiao strategy --plan data/curricula/official-cs-extract.json --program data/curricula/cufe-2025-program.json --policy data/examples/program-policy.json --evidence data/evidence/internships.json --effects data/examples/effect-scenarios.json --demand data/examples/demand-beijing-2026.json --comparison data/examples/comparison-assumptions.json --output artifacts/strategy-review
+chanjiao bundle --checklist data/examples/submission-checklist.json --materials artifacts/submission-materials --output artifacts/submission-review.zip
+```
+
+策略入口检查147学分与模块底线、三条选课路径、实际修订、方向与招生规则，保留本校未识别效果。源清单已同步交付包状态，T3 含 G7 课程项目证据；当前 11 项研究、许可或复现条件未齐，review 包保持 `review_only`，`--require-ready` 继续拒绝正式包。输入与研究范围见[数据契约](docs/data-contract.md)。
+
+需求聚合与比较配置为可选的一对输入。它们量化课程文本覆盖界限、不同方向基线假设及规范化规模情景，保留未知观测和不优于基线结果。全国就业汇总保存在独立证据卡中。
+
+## 展示材料
+
+当前精排版预览（与正式审阅包分开）：
+
+- [方案报告_精排版.pdf](<artifacts/submission-review-r17-polished/方案报告_精排版.pdf>)：8 页。
+- [答辩_精排版.pptx](<artifacts/submission-review-r17-polished/答辩_精排版.pptx>)：12 页。
+- [答辩_精排版.pdf](<artifacts/submission-review-r17-polished/答辩_精排版.pdf>)：12 页展示版。
+
+[G8 候选审阅包](<artifacts/submission-review-g8/review.zip>) 为 `review_only`，含 G7 证据和 11 项缺口，不替代正式提交。
+
+## 合成改革基线
+
+```powershell
+chanjiao run --panel data/examples/panel.csv --metadata data/examples/metadata.json --plans data/examples/plans.json --evidence data/evidence/internships.json --output artifacts/causal-example
+```
+
+该示例使用合成学校面板，验证 DiD 与方案比较实现。文献作为背景单独展示。
+
+## 本地大数据
+
+```powershell
+chanjiao warehouse ingest --csv .local/input/jobs.csv --database .local/warehouse/jobs.duckdb --dataset-id campus-jobs --version annual-2026 --expected-year 2026 --output .local/warehouse/import.json
+chanjiao warehouse summary --database .local/warehouse/jobs.duckdb --dataset-id campus-jobs --version annual-2026 --limit 10 --output .local/warehouse/summary.json
+```
+
+替换实际输入路径，每个报告使用新路径。完整子命令由 `chanjiao warehouse --help` 查看。原始文件、数据库、描述、定位和个人级记录留在本机，LLM 读取字段、质量计数和有上限的聚合。各数据版本单独查询。
+
+## 验收
+
+```powershell
 python -m pytest -q
 python -m ruff check .
 python -m ruff format --check .
 python -m build
 ```
 
-`requirements-py313.txt` 是本次 Windows / Python 3.13 环境的精确版本，其他受支持解释器按 `pyproject.toml` 解析依赖。
-
-## 本地招聘数据仓库
-
-`warehouse` 子命令把复制来的候选数据按来源和版本登记，先校验再查询。DuckDB 在本机执行扫描与聚合，LLM 只读取元数据和限定数量的汇总。完整说明见 [本地数据仓库](docs/local-data-warehouse.md)。
-
-```powershell
-# 先比对可能重复的两个 ZIP，结果只保存完整性和成员差异
-chanjiao warehouse compare-zip --left "左侧数据包.zip" --right "右侧数据包.zip" --output .local/warehouse/zip-comparison.json
-
-# 将已校验的一个 CSV 版本入库，按源和版本查询
-chanjiao warehouse ingest --csv .local/warehouse/input/jobs.csv --database .local/warehouse/jobs.duckdb --dataset-id campus-jobs --version annual-2026 --expected-year 2026 --output .local/warehouse/import.json
-chanjiao warehouse summary --database .local/warehouse/jobs.duckdb --dataset-id campus-jobs --version annual-2026 --limit 10 --output .local/warehouse/summary.json
-chanjiao warehouse export --database .local/warehouse/jobs.duckdb --dataset-id campus-jobs --version annual-2026 --destination .local/warehouse/jobs-2026.parquet --output .local/warehouse/export.json
-```
-
-示例路径需换成实际输入。每次生成元数据报告使用新路径，同一数据版本重复导入可复用已有内容。各版本分开查询，减少总表和分年版重复计数。原始字段及质量异常保留在数据库中，汇总报告提供异常计数。
-
-## 项目文件
-
-```text
-src/chanjiao_evidence/  数据校验、估计、方案比较、文献接入、报告与 CLI
-tests/                  手算、负例、零效应和正常入口测试
-data/examples/          合成数据、方案与生成器
-data/evidence/          公开论文证据卡片
-docs/                   设计、规划、契约与决策记录
-.github/                CI、Issue 和 PR 模板
-artifacts/              本地产物，Git 忽略
-```
-
-## 继续开发
-
-先读 [研究规划](docs/research-plan.md)、[设计](docs/design.md) 和 [数据契约](docs/data-contract.md)，再从 [路线图](docs/roadmap.md) 挑任务。本轮分工和验收见 [任务板](docs/development-tasks.md)，实际命令及结果见 [核验记录](docs/verification.md)。提交遵循 [贡献指南](CONTRIBUTING.md)，多个 agent 协作按 [AGENTS.md](AGENTS.md) 分工。
-
-## 开源与公开边界
-
-统计依赖是 statsmodels，工程组织参考 Cookiecutter Data Science，研究流程借鉴 DoWhy，版本和许可证见 [开源参考](docs/open-source.md)。原创代码、文档和合成示例用 MIT，外部论文与数据遵循各自授权。
-
-原始数据放在 Git 忽略的 `data/raw/`。可公开的数据要先核对来源、许可、清洗和统计口径；私人邮件、个人信息、凭据和受限数据不要进公开仓库。
+运行通过说明代码和复现流程可检查。当前全量为 393 passed、1 skipped，Ruff 与 0.4.0 构建通过。学生能力、就业和改革收益的结论按项目说明的研究标准独立验收。
