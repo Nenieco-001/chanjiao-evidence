@@ -60,7 +60,7 @@ files 是显式白名单，每项提供 role、path、permission=public。role �
 
 ZIP 使用固定元数据，同一输入生成相同字节。manifest.json 登记实际文件字节、SHA-256、清单字节哈希、视频容器时长、缺项及要求状态。程序核对材料与贡献者登记的结论，科学证据、视觉质量和实际播放由独立审核记录支持。十五项形式与记录通过后状态为 ready，最终赛事模板、报名资格和提交通道另按官方要求核对。
 
-### G8 冻结清单绑定
+### 提交清单冻结绑定
 
 提交清单可增加 provenance 列表。每项提供 manifest_path，以及 inputs、outputs、source_sha256 三组“原清单角色到白名单文件”的绑定。三组角色须与研究清单完整对应，所有路径已列入 files。打包器使用本次实际读取的字节核对 SHA-256，输入、结果或源码失配记为 provenance 缺项。review_only 包保留该缺项，正式模式拒绝发布。未声明 provenance 的既有清单保持兼容。
 

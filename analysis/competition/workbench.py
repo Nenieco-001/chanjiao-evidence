@@ -212,6 +212,8 @@ def _analyse(year, path, evidence, records=None):
     source_missing, cohort_missing, semantic = Counter(), Counter(), {}
     platforms, selected_platforms, seen, examples = Counter(), Counter(), set(), Counter()
     dates = []
+    # 官方字典建议放宽长描述字段；此值兼容Windows的32位C long参数。
+    csv.field_size_limit(max(csv.field_size_limit(), 2**31 - 1))
     with path.open(encoding="utf-8-sig", newline="") as stream:
         reader = csv.reader(stream, strict=True)
         header = next(reader, [])
